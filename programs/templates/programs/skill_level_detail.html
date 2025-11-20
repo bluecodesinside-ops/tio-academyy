@@ -1,0 +1,143 @@
+{% extends 'programs/base_programs.html' %}
+{% load static %}
+{% load program_extras %}
+
+{% block title %}{{ page_title }} - Tio Academy{% endblock %}
+
+{% block programs_content %}
+<!-- Header Section -->
+<div class="section-header">
+    <div class="container">
+        <div style="margin-bottom: var(--spacing-2xl);">
+            {% if category.image %}
+                <img 
+                    src="{{ category.image.url }}" 
+                    alt="{{ category.name }}"
+                    style="width: 80px; height: 80px; margin: 0 auto; border-radius: 50%; object-fit: cover; box-shadow: var(--shadow-lg);"
+                >
+            {% else %}
+                <div style="width: 80px; height: 80px; margin: 0 auto; background: var(--color-gray-200); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-lg);">
+                    <i class="fas fa-dance" style="font-size: var(--font-size-2xl); color: var(--color-gray-600);"></i>
+                </div>
+            {% endif %}
+        </div>
+        
+        <h1 class="section-title">{{ skill_level.get_level_display }} {{ category.name }}</h1>
+        <p class="section-subtitle">{{ dance_style.name }}</p>
+        {% if skill_level.description %}
+            <p class="section-subtitle" style="margin-top: var(--spacing-lg);">{{ skill_level.description }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Videos Grid -->
+{% if videos %}
+    <section class="programs-section">
+        <div class="programs-grid">
+            {% for video in videos %}
+            <div class="video-card">
+                <a href="{{ video.get_absolute_url }}" class="block">
+                    <div class="relative">
+                        {% if video.thumbnail %}
+                            <img 
+                                src="{{ video.thumbnail.url }}" 
+                                alt="{{ video.title }}"
+                                class="video-card__image"
+                                loading="lazy"
+                            >
+                        {% else %}
+                            <div class="video-card__placeholder">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Video Badge -->
+                        <div class="video-card__badge">
+                            {% if video.access_type == 'free' %}
+                                <span class="badge-free">
+                                    <i class="fas fa-gift" style="margin-right: var(--spacing-xs);"></i>
+                                    FREE
+                                </span>
+                            {% elif video.has_access %}
+                                <span class="badge-purchased">
+                                    <i class="fas fa-check" style="margin-right: var(--spacing-xs);"></i>
+                                    {% if video.access_type == 'subscription' %}
+                                        INCLUDED
+                                    {% else %}
+                                        PURCHASED
+                                    {% endif %}
+                                </span>
+                            {% else %}
+                                <span class="badge-paid">
+                                    <i class="fas fa-lock" style="margin-right: var(--spacing-xs);"></i>
+                                    {% if video.upgrade_required %}
+                                        UPGRADE
+                                    {% else %}
+                                        ${{ video.price }}
+                                    {% endif %}
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Duration -->
+                        <div class="video-card__duration">
+                            {{ video.duration|format_duration }}
+                        </div>
+                    </div>
+                    
+                    <div class="video-card__content">
+                        <h3 class="video-card__title">{{ video.title }}</h3>
+                        
+                        <div class="video-card__meta">
+                            <div class="video-card__instructor">
+                                <i class="fas fa-user"></i>
+                                {{ video.instructor_name|default:"Tio Academy" }}
+                            </div>
+                            <div class="video-card__views">
+                                <i class="fas fa-eye"></i>
+                                {{ video.view_count }}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+{% else %}
+    <!-- No Videos Message -->
+    <section class="programs-section">
+        <div style="text-align: center; padding: var(--spacing-6xl) var(--spacing-xl);">
+            <div style="width: 80px; height: 80px; margin: 0 auto var(--spacing-2xl); background: var(--color-gray-200); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-video" style="font-size: var(--font-size-2xl); color: var(--color-gray-600);"></i>
+            </div>
+            <h3 style="font-family: var(--font-family-display); font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin-bottom: var(--spacing-lg);">
+                No Videos Available
+            </h3>
+            <p style="font-size: var(--font-size-lg); color: var(--color-gray-600); margin-bottom: var(--spacing-2xl);">
+                Videos for this skill level are coming soon. Check back later!
+            </p>
+            <a href="{% url 'programs:explore_programs' %}" style="display: inline-flex; align-items: center; background: var(--color-primary); color: var(--color-white); padding: var(--spacing-lg) var(--spacing-2xl); border-radius: var(--radius-lg); text-decoration: none; font-weight: var(--font-weight-semibold); transition: var(--transition-fast);">
+                <i class="fas fa-arrow-left" style="margin-right: var(--spacing-sm);"></i>
+                Back to Programs
+            </a>
+        </div>
+    </section>
+{% endif %}
+
+<!-- Call to Action -->
+<section class="cta-section" style="background: var(--color-white); padding: var(--spacing-6xl) 0; text-align: center;">
+    <div class="container">
+        <h2 style="font-family: var(--font-family-display); font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin-bottom: var(--spacing-lg);">
+            Master {{ skill_level.get_level_display }} {{ category.name }}
+        </h2>
+        <p style="font-size: var(--font-size-xl); color: var(--color-gray-600); margin-bottom: var(--spacing-2xl); max-width: 600px; margin-left: auto; margin-right: auto;">
+            Take your {{ category.name }} skills to the {{ skill_level.get_level_display|lower }} level with our comprehensive video library.
+        </p>
+        <a href="{% url 'pricing:pricing_page' %}" style="display: inline-flex; align-items: center; background: var(--color-primary); color: var(--color-white); padding: var(--spacing-lg) var(--spacing-2xl); border-radius: var(--radius-lg); text-decoration: none; font-weight: var(--font-weight-semibold); transition: var(--transition-fast);">
+            View Pricing Plans
+            <i class="fas fa-arrow-right" style="margin-left: var(--spacing-sm);"></i>
+        </a>
+    </div>
+</section>
+{% endblock %}

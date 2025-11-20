@@ -1,0 +1,518 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Courses - Tio Academy" %}{% endblock %}
+
+{% block content %}
+<div class="courses-overview-page">
+    <!-- Page Header -->
+    <section class="courses-header">
+        <div class="container">
+            <div class="courses-header__content">
+                <h1 class="courses-header__title">{% trans "Latin Dance Courses" %}</h1>
+                <p class="courses-header__subtitle">{% trans "Master the art of Latin dance with our premium course collection" %}</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Grid -->
+    <section class="courses-grid-section">
+        <div class="container">
+            <div class="courses-grid">
+                {% for course in courses %}
+                    <article class="course-card" onclick="location.href='{% url 'course_detail' course.id %}'">
+                        <div class="course-card__image">
+                            {% if course.image %}
+                                <img src="{{ course.image.url }}" alt="{{ course.title }}" loading="lazy">
+                            {% else %}
+                                <div class="course-card__placeholder">
+                                    <i class="fas fa-music"></i>
+                                </div>
+                            {% endif %}
+                            <div class="course-card__level-badge">{{ course.get_level_display }}</div>
+                        </div>
+                        
+                        <div class="course-card__content">
+                            <h3 class="course-card__title">{{ course.title }}</h3>
+                            <p class="course-card__description">{{ course.description|truncatewords:15 }}</p>
+                            
+                            <div class="course-card__meta">
+                                <div class="course-meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>{{ course.duration|default:"12 hours" }}</span>
+                                </div>
+                                <div class="course-meta-item">
+                                    <i class="fas fa-layer-group"></i>
+                                    <span>3 Levels</span>
+                                </div>
+                                <div class="course-meta-item">
+                                    <i class="fas fa-star"></i>
+                                    <span>{{ course.rating|default:"4.9" }}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="course-card__features">
+                                <ul class="feature-list">
+                                    <li><i class="fas fa-check"></i> 4 Sessions per Level</li>
+                                    <li><i class="fas fa-video"></i> HD Video Content</li>
+                                    <li><i class="fas fa-chart-line"></i> Progress Tracking</li>
+                                    <li><i class="fas fa-certificate"></i> Completion Certificate</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="course-card__footer">
+                                <div class="course-card__price">
+                                    {% if course.price %}
+                                        <span class="price">${{ course.price }}</span>
+                                    {% else %}
+                                        <span class="price-included">{% trans "Included" %}</span>
+                                    {% endif %}
+                                </div>
+                                <button class="course-card__button">
+                                    {% trans "Start Learning" %}
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                {% empty %}
+                    <div class="no-courses">
+                        <i class="fas fa-music"></i>
+                        <h3>{% trans "No courses available" %}</h3>
+                        <p>{% trans "Check back soon for new courses!" %}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="courses-cta">
+        <div class="container">
+            <div class="courses-cta__content">
+                <h2 class="courses-cta__title">{% trans "Ready to Start Your Dance Journey?" %}</h2>
+                <p class="courses-cta__subtitle">{% trans "Join thousands of students learning Latin dance with our expert instructors" %}</p>
+                <div class="courses-cta__stats">
+                    <div class="stat-item">
+                        <span class="stat-number">2,847</span>
+                        <span class="stat-label">{% trans "Students" %}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">6</span>
+                        <span class="stat-label">{% trans "Courses" %}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">4.9</span>
+                        <span class="stat-label">{% trans "Rating" %}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Courses Overview Page Styles */
+.courses-overview-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-gray-100) 100%);
+}
+
+/* Page Header */
+.courses-header {
+    padding: var(--spacing-5xl) 0 var(--spacing-4xl);
+    background: linear-gradient(135deg, var(--color-gray-900) 0%, var(--color-gray-800) 100%);
+    color: var(--color-white);
+    text-align: center;
+}
+
+.courses-header__content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.courses-header__title {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-5xl);
+    font-weight: var(--font-weight-light);
+    margin-bottom: var(--spacing-xl);
+    letter-spacing: -0.02em;
+}
+
+.courses-header__subtitle {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-light);
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+/* Courses Grid Section */
+.courses-grid-section {
+    padding: var(--spacing-5xl) 0;
+}
+
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-3xl);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Course Cards */
+.course-card {
+    background: var(--color-white);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    transition: var(--transition-normal);
+    cursor: pointer;
+    border: 1px solid var(--color-gray-100);
+}
+
+.course-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-2xl);
+    border-color: var(--color-accent-light);
+}
+
+.course-card__image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.course-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-slow);
+}
+
+.course-card:hover .course-card__image img {
+    transform: scale(1.05);
+}
+
+.course-card__placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--color-accent-light) 0%, var(--color-accent) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.course-card__placeholder i {
+    font-size: 3rem;
+    color: var(--color-white);
+    opacity: 0.8;
+}
+
+.course-card__level-badge {
+    position: absolute;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    background: var(--color-accent);
+    color: var(--color-white);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.course-card__content {
+    padding: var(--spacing-3xl);
+}
+
+.course-card__title {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-gray-900);
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.3;
+}
+
+.course-card__description {
+    color: var(--color-gray-600);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-xl);
+}
+
+.course-card__meta {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    flex-wrap: wrap;
+}
+
+.course-meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-600);
+}
+
+.course-meta-item i {
+    color: var(--color-accent);
+    width: 16px;
+    text-align: center;
+}
+
+.course-card__features {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.feature-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.feature-list li {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-700);
+}
+
+.feature-list i {
+    color: var(--color-accent);
+    font-size: var(--font-size-xs);
+    width: 16px;
+    text-align: center;
+}
+
+.course-card__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid var(--color-gray-100);
+}
+
+.course-card__price .price {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-900);
+}
+
+.course-card__price .price-included {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--radius-full);
+}
+
+.course-card__button {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg) var(--spacing-2xl);
+    background: var(--color-gray-900);
+    color: var(--color-white);
+    border: 1px solid var(--color-gray-900);
+    border-radius: var(--radius-lg);
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.course-card__button:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    transform: translateY(-1px);
+}
+
+.course-card__button i {
+    font-size: var(--font-size-sm);
+    transition: var(--transition-fast);
+}
+
+.course-card__button:hover i {
+    transform: translateX(2px);
+}
+
+/* No Courses State */
+.no-courses {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--spacing-5xl);
+    color: var(--color-gray-600);
+}
+
+.no-courses i {
+    font-size: 4rem;
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-xl);
+}
+
+.no-courses h3 {
+    font-size: var(--font-size-2xl);
+    color: var(--color-gray-900);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Call to Action */
+.courses-cta {
+    background: var(--color-gray-900);
+    color: var(--color-white);
+    padding: var(--spacing-5xl) 0;
+    text-align: center;
+}
+
+.courses-cta__content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.courses-cta__title {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-light);
+    margin-bottom: var(--spacing-xl);
+}
+
+.courses-cta__subtitle {
+    font-size: var(--font-size-xl);
+    opacity: 0.9;
+    margin-bottom: var(--spacing-3xl);
+    line-height: 1.6;
+}
+
+.courses-cta__stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-4xl);
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-sm);
+}
+
+.stat-label {
+    font-size: var(--font-size-base);
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .courses-header {
+        padding: var(--spacing-4xl) 0 var(--spacing-3xl);
+    }
+    
+    .courses-header__title {
+        font-size: var(--font-size-4xl);
+    }
+    
+    .courses-header__subtitle {
+        font-size: var(--font-size-lg);
+    }
+    
+    .courses-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-2xl);
+    }
+    
+    .course-card__meta {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+    
+    .course-card__footer {
+        flex-direction: column;
+        gap: var(--spacing-lg);
+        align-items: stretch;
+    }
+    
+    .course-card__button {
+        justify-content: center;
+    }
+    
+    .courses-cta__stats {
+        gap: var(--spacing-2xl);
+    }
+    
+    .courses-cta__title {
+        font-size: var(--font-size-3xl);
+    }
+}
+
+@media (max-width: 480px) {
+    .courses-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .course-card__content {
+        padding: var(--spacing-2xl);
+    }
+    
+    .courses-cta__stats {
+        flex-direction: column;
+        gap: var(--spacing-xl);
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Add smooth scroll animations
+document.addEventListener('DOMContentLoaded', function() {
+    // Add staggered animation to course cards
+    const courseCards = document.querySelectorAll('.course-card');
+    courseCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.classList.add('fade-in-up');
+    });
+});
+
+// Add CSS for animations
+const animationStyles = `
+<style>
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+}
+</style>
+`;
+
+document.head.insertAdjacentHTML('beforeend', animationStyles);
+</script>
+{% endblock %}
+

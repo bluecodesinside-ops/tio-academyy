@@ -1,0 +1,311 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Payment Cancelled - Tio Academy{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cancel-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: var(--spacing-6xl) var(--spacing-xl);
+        text-align: center;
+    }
+    
+    .cancel-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--color-gray-400);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto var(--spacing-2xl);
+    }
+    
+    .cancel-icon i {
+        font-size: var(--font-size-3xl);
+        color: var(--color-white);
+    }
+    
+    .cancel-title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-4xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .cancel-message {
+        font-size: var(--font-size-xl);
+        color: var(--color-gray-600);
+        margin-bottom: var(--spacing-4xl);
+        line-height: 1.6;
+    }
+    
+    .reasons-section {
+        background: var(--color-white);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-4xl);
+        margin: var(--spacing-4xl) 0;
+        text-align: left;
+    }
+    
+    .reasons-title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-2xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-lg);
+        text-align: center;
+    }
+    
+    .reasons-description {
+        color: var(--color-gray-600);
+        margin-bottom: var(--spacing-2xl);
+        text-align: center;
+    }
+    
+    .reasons-list {
+        list-style: none;
+        padding: 0;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .reasons-list li {
+        padding: var(--spacing-md) 0;
+        display: flex;
+        align-items: center;
+        color: var(--color-gray-700);
+    }
+    
+    .reasons-list li:before {
+        content: "•";
+        color: var(--color-accent);
+        font-weight: var(--font-weight-bold);
+        margin-right: var(--spacing-lg);
+        font-size: var(--font-size-xl);
+    }
+    
+    .next-steps {
+        background: var(--color-gray-50);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-4xl);
+        margin: var(--spacing-4xl) 0;
+        text-align: left;
+    }
+    
+    .next-steps__title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-2xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-2xl);
+        text-align: center;
+    }
+    
+    .next-step {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: var(--spacing-2xl);
+    }
+    
+    .next-step__number {
+        background: var(--color-accent-light);
+        color: var(--color-accent);
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: var(--font-weight-bold);
+        margin-right: var(--spacing-lg);
+        flex-shrink: 0;
+        margin-top: var(--spacing-xs);
+    }
+    
+    .next-step__content h4 {
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .next-step__content p {
+        color: var(--color-gray-600);
+        line-height: 1.6;
+    }
+    
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+        margin: var(--spacing-4xl) 0;
+    }
+    
+    .action-button {
+        display: inline-block;
+        padding: var(--spacing-lg) var(--spacing-2xl);
+        border-radius: var(--radius-lg);
+        text-decoration: none;
+        font-weight: var(--font-weight-semibold);
+        font-size: var(--font-size-lg);
+        transition: var(--transition-fast);
+        text-align: center;
+    }
+    
+    .action-button--primary {
+        background: var(--color-primary);
+        color: var(--color-white);
+    }
+    
+    .action-button--primary:hover {
+        background: var(--color-primary-light);
+        transform: translateY(-2px);
+    }
+    
+    .action-button--secondary {
+        background: var(--color-white);
+        color: var(--color-primary);
+        border: 2px solid var(--color-primary);
+    }
+    
+    .action-button--secondary:hover {
+        background: var(--color-primary);
+        color: var(--color-white);
+    }
+    
+    .support-info {
+        margin-top: var(--spacing-4xl);
+        text-align: center;
+    }
+    
+    .support-info p {
+        color: var(--color-gray-600);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .support-links {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+        align-items: center;
+    }
+    
+    .support-links a {
+        color: var(--color-accent);
+        text-decoration: none;
+        font-weight: var(--font-weight-medium);
+    }
+    
+    .support-links a:hover {
+        text-decoration: underline;
+    }
+    
+    @media (min-width: 768px) {
+        .action-buttons {
+            flex-direction: row;
+            justify-content: center;
+        }
+        
+        .support-links {
+            flex-direction: row;
+            gap: var(--spacing-2xl);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cancel-container">
+    <!-- Cancel Icon -->
+    <div class="cancel-icon">
+        <i class="fas fa-times"></i>
+    </div>
+    
+    <!-- Cancel Message -->
+    <h1 class="cancel-title">Payment Cancelled</h1>
+    <p class="cancel-message">
+        No worries! Your payment was cancelled and you haven't been charged.
+    </p>
+    
+    <!-- Why Cancel? -->
+    <div class="reasons-section">
+        <h3 class="reasons-title">Why did you cancel?</h3>
+        <p class="reasons-description">
+            We'd love to understand what we can improve. Here are some common reasons:
+        </p>
+        
+        <ul class="reasons-list">
+            <li>Changed your mind about the package</li>
+            <li>Found a better deal elsewhere</li>
+            <li>Need more time to decide</li>
+            <li>Technical issues during checkout</li>
+            <li>Want to try a different package</li>
+            <li>Budget concerns</li>
+        </ul>
+    </div>
+    
+    <!-- What's Next -->
+    <div class="next-steps">
+        <h3 class="next-steps__title">What's Next?</h3>
+        
+        <div class="next-step">
+            <div class="next-step__number">1</div>
+            <div class="next-step__content">
+                <h4>Try Our Free Content</h4>
+                <p>Explore our free videos to see what we offer before committing.</p>
+            </div>
+        </div>
+        
+        <div class="next-step">
+            <div class="next-step__number">2</div>
+            <div class="next-step__content">
+                <h4>Contact Us</h4>
+                <p>Have questions? We're here to help you find the right plan.</p>
+            </div>
+        </div>
+        
+        <div class="next-step">
+            <div class="next-step__number">3</div>
+            <div class="next-step__content">
+                <h4>Come Back Anytime</h4>
+                <p>You can always return to complete your purchase when you're ready.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="{% url 'pricing:pricing_page' %}" class="action-button action-button--primary">
+            <i class="fas fa-arrow-left" style="margin-right: var(--spacing-sm);"></i>
+            Back to Pricing
+        </a>
+        
+        <a href="{% url 'programs:explore_programs' %}" class="action-button action-button--secondary">
+            <i class="fas fa-play" style="margin-right: var(--spacing-sm);"></i>
+            Try Free Content
+        </a>
+    </div>
+    
+    <!-- Support Info -->
+    <div class="support-info">
+        <p>Need help choosing the right plan? We're here to help!</p>
+        <div class="support-links">
+            <a href="mailto:support@tioacademy.com">
+                <i class="fas fa-envelope" style="margin-right: var(--spacing-sm);"></i>
+                support@tioacademy.com
+            </a>
+            <a href="/contact/">
+                <i class="fas fa-phone" style="margin-right: var(--spacing-sm);"></i>
+                Contact Support
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

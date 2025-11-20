@@ -1,0 +1,73 @@
+{% extends 'programs/base_programs.html' %}
+{% load static %}
+{% load program_extras %}
+
+{% block title %}{{ page_title }} - Tio Academy{% endblock %}
+
+{% block programs_content %}
+<!-- Hero Section -->
+<section class="programs-hero">
+    <div class="container">
+        <h1 class="programs-hero__title">Explore Dance Programs</h1>
+        <p class="programs-hero__subtitle">
+            Discover our comprehensive dance programs. Choose your style and start your dance journey today!
+        </p>
+    </div>
+</section>
+
+<!-- Dance Styles Grid -->
+<section class="programs-section">
+    <div class="programs-grid">
+        {% for style in dance_styles %}
+        <div class="program-card">
+            <a href="{{ style.get_absolute_url }}" class="block">
+                <div class="relative">
+                    {% if style.image %}
+                        <img 
+                            src="{{ style.image.url }}" 
+                            alt="{{ style.name }}"
+                            class="program-card__image"
+                            loading="lazy"
+                        >
+                    {% else %}
+                        <div class="program-card__placeholder">
+                            <i class="fas fa-music"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Overlay -->
+                    <div class="program-card__overlay">
+                        <i class="fas fa-arrow-right program-card__play-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="program-card__content">
+                    <h3 class="program-card__title">{{ style.name }}</h3>
+                    <p class="program-card__description">{{ style.description|truncatewords:20 }}</p>
+                    <span class="program-card__button">
+                        Explore {{ style.name }}
+                        <i class="fas fa-arrow-right"></i>
+                    </span>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section" style="background: var(--color-white); padding: var(--spacing-6xl) 0; text-align: center;">
+    <div class="container">
+        <h2 style="font-family: var(--font-family-display); font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin-bottom: var(--spacing-lg);">
+            Ready to Start Dancing?
+        </h2>
+        <p style="font-size: var(--font-size-xl); color: var(--color-gray-600); margin-bottom: var(--spacing-2xl); max-width: 600px; margin-left: auto; margin-right: auto;">
+            Join thousands of students who have transformed their lives through dance.
+        </p>
+        <a href="{% url 'pricing:pricing_page' %}" style="display: inline-flex; align-items: center; background: var(--color-primary); color: var(--color-white); padding: var(--spacing-lg) var(--spacing-2xl); border-radius: var(--radius-lg); text-decoration: none; font-weight: var(--font-weight-semibold); transition: var(--transition-fast);">
+            View Pricing Plans
+            <i class="fas fa-arrow-right" style="margin-left: var(--spacing-sm);"></i>
+        </a>
+    </div>
+</section>
+{% endblock %}

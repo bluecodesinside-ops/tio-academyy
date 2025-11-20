@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tournaments - Latina Dance Academy{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1>Dance Tournaments</h1>
+        <p>Compete and showcase your Latin dance skills</p>
+    </div>
+</section>
+
+<!-- Tournaments Content -->
+<section class="tournaments-content">
+    <div class="container">
+        <div class="section-header">
+            <h2>Upcoming Tournaments</h2>
+            <p>Join our exciting dance competitions and win amazing prizes</p>
+        </div>
+        
+        <div class="tournaments-grid">
+            <div class="tournament-card">
+                <div class="tournament-status registration-open">Registration Open</div>
+                <div class="tournament-image">
+                    <img src="https://images.unsplash.com/photo-1547153760-18fc86324498?w=400&h=250&fit=crop" alt="Salsa Championship">
+                </div>
+                <div class="tournament-content">
+                    <h3>Salsa Championship 2024</h3>
+                    <p>Annual salsa competition featuring the best dancers from around the world. Showcase your passion, technique, and artistry.</p>
+                    <div class="tournament-meta">
+                        <span><i class="fas fa-calendar"></i> December 15, 2024</span>
+                        <span><i class="fas fa-map-marker-alt"></i> Miami, FL</span>
+                        <span><i class="fas fa-trophy"></i> $10,000 Prize Pool</span>
+                        <span><i class="fas fa-users"></i> Open to All Levels</span>
+                    </div>
+                    <a href="#" class="btn btn-primary">Register Now</a>
+                </div>
+            </div>
+            
+            <div class="tournament-card">
+                <div class="tournament-status upcoming">Coming Soon</div>
+                <div class="tournament-image">
+                    <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=250&fit=crop" alt="Bachata Festival">
+                </div>
+                <div class="tournament-content">
+                    <h3>Bachata Sensual Festival</h3>
+                    <p>Celebrate the art of bachata with workshops, performances, and competitions from renowned international instructors.</p>
+                    <div class="tournament-meta">
+                        <span><i class="fas fa-calendar"></i> January 20, 2025</span>
+                        <span><i class="fas fa-map-marker-alt"></i> Los Angeles, CA</span>
+                        <span><i class="fas fa-trophy"></i> $5,000 Prize Pool</span>
+                        <span><i class="fas fa-clock"></i> 3-Day Event</span>
+                    </div>
+                    <a href="#" class="btn btn-secondary">Get Notified</a>
+                </div>
+            </div>
+
+            <div class="tournament-card">
+                <div class="tournament-status registration-open">Early Bird</div>
+                <div class="tournament-image">
+                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=250&fit=crop" alt="Merengue Masters">
+                </div>
+                <div class="tournament-content">
+                    <h3>Merengue Masters Cup</h3>
+                    <p>Fast-paced merengue competition celebrating the Dominican Republic's national dance with authentic rhythm and energy.</p>
+                    <div class="tournament-meta">
+                        <span><i class="fas fa-calendar"></i> March 8, 2025</span>
+                        <span><i class="fas fa-map-marker-alt"></i> New York, NY</span>
+                        <span><i class="fas fa-trophy"></i> $7,500 Prize Pool</span>
+                        <span><i class="fas fa-star"></i> Professional & Amateur</span>
+                    </div>
+                    <a href="#" class="btn btn-primary">Early Registration</a>
+                </div>
+            </div>
+
+            <div class="tournament-card">
+                <div class="tournament-status upcoming">Coming Soon</div>
+                <div class="tournament-image">
+                    <img src="https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?w=400&h=250&fit=crop" alt="Latin Mix Championship">
+                </div>
+                <div class="tournament-content">
+                    <h3>Latin Mix Championship</h3>
+                    <p>Multi-style competition featuring salsa, bachata, merengue, and cha-cha. Show your versatility across all Latin dances.</p>
+                    <div class="tournament-meta">
+                        <span><i class="fas fa-calendar"></i> May 15, 2025</span>
+                        <span><i class="fas fa-map-marker-alt"></i> Las Vegas, NV</span>
+                        <span><i class="fas fa-trophy"></i> $15,000 Prize Pool</span>
+                        <span><i class="fas fa-dance"></i> Multi-Style Event</span>
+                    </div>
+                    <a href="#" class="btn btn-secondary">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="tournaments-cta">
+    <div class="container">
+        <h3>Ready to Compete?</h3>
+        <p>Join our dance community and take your skills to the next level. Whether you're a beginner or professional, there's a tournament perfect for you.</p>
+        <div class="cta-buttons">
+            <a href="#" class="btn btn-primary">View All Tournaments</a>
+            <a href="#" class="btn btn-secondary">Join Our Community</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

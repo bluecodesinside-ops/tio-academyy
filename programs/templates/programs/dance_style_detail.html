@@ -1,0 +1,87 @@
+{% extends 'programs/base_programs.html' %}
+{% load static %}
+{% load program_extras %}
+
+{% block title %}{{ page_title }} - Tio Academy{% endblock %}
+
+{% block programs_content %}
+<!-- Header Section -->
+<div class="section-header">
+    <div class="container">
+        <div style="margin-bottom: var(--spacing-2xl);">
+            {% if dance_style.image %}
+                <img 
+                    src="{{ dance_style.image.url }}" 
+                    alt="{{ dance_style.name }}"
+                    style="width: 80px; height: 80px; margin: 0 auto; border-radius: 50%; object-fit: cover; box-shadow: var(--shadow-lg);"
+                >
+            {% else %}
+                <div style="width: 80px; height: 80px; margin: 0 auto; background: var(--color-gray-200); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-lg);">
+                    <i class="fas fa-music" style="font-size: var(--font-size-2xl); color: var(--color-gray-600);"></i>
+                </div>
+            {% endif %}
+        </div>
+        
+        <h1 class="section-title">{{ dance_style.name }} Programs</h1>
+        {% if dance_style.description %}
+            <p class="section-subtitle">{{ dance_style.description }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Categories Grid -->
+<section class="programs-section">
+    <div class="programs-grid">
+        {% for category in categories %}
+        <div class="program-card">
+            <a href="{{ category.get_absolute_url }}" class="block">
+                <div class="relative">
+                    {% if category.image %}
+                        <img 
+                            src="{{ category.image.url }}" 
+                            alt="{{ category.name }}"
+                            class="program-card__image"
+                            loading="lazy"
+                        >
+                    {% else %}
+                        <div class="program-card__placeholder">
+                            <i class="fas fa-dance"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Overlay -->
+                    <div class="program-card__overlay">
+                        <i class="fas fa-arrow-right program-card__play-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="program-card__content">
+                    <h3 class="program-card__title">{{ category.name }}</h3>
+                    <p class="program-card__description">{{ category.description|truncatewords:20 }}</p>
+                    <span class="program-card__button">
+                        Explore {{ category.name }}
+                        <i class="fas fa-arrow-right"></i>
+                    </span>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section" style="background: var(--color-white); padding: var(--spacing-6xl) 0; text-align: center;">
+    <div class="container">
+        <h2 style="font-family: var(--font-family-display); font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin-bottom: var(--spacing-lg);">
+            Master {{ dance_style.name }} Dancing
+        </h2>
+        <p style="font-size: var(--font-size-xl); color: var(--color-gray-600); margin-bottom: var(--spacing-2xl); max-width: 600px; margin-left: auto; margin-right: auto;">
+            Take your {{ dance_style.name }} skills to the next level with our comprehensive programs.
+        </p>
+        <a href="{% url 'pricing:pricing_page' %}" style="display: inline-flex; align-items: center; background: var(--color-primary); color: var(--color-white); padding: var(--spacing-lg) var(--spacing-2xl); border-radius: var(--radius-lg); text-decoration: none; font-weight: var(--font-weight-semibold); transition: var(--transition-fast);">
+            View Pricing Plans
+            <i class="fas fa-arrow-right" style="margin-left: var(--spacing-sm);"></i>
+        </a>
+    </div>
+</section>
+{% endblock %}

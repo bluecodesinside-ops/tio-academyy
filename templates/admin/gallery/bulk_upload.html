@@ -1,0 +1,134 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Bulk Upload Media | Django site admin{% endblock %}
+
+{% block content %}
+<h1>📁 Bulk Upload Media</h1>
+
+<form method="post" enctype="multipart/form-data" style="max-width: 800px; margin-bottom: 40px;">
+    {% csrf_token %}
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+        <div>
+            <label for="{{ form.media_type.id_for_label }}" style="display: block; font-weight: bold; margin-bottom: 5px;">📷 Upload Type:</label>
+            {{ form.media_type }}
+        </div>
+        
+        <div>
+            <label for="{{ form.location.id_for_label }}" style="display: block; font-weight: bold; margin-bottom: 5px;">📍 Category:</label>
+            {{ form.location }}
+        </div>
+    </div>
+    
+    <div style="margin-bottom: 20px;">
+        <label for="id_files" style="display: block; font-weight: bold; margin-bottom: 5px;">📁 Select Files (30+ supported):</label>
+        <input type="file" name="files" id="id_files" multiple accept="image/*,video/*" style="width: 100%; padding: 12px; border: 2px dashed #417690; border-radius: 8px; background: #f8f9fa; cursor: pointer; font-size: 16px;">
+        
+        <div style="margin-top: 15px; padding: 15px; background: #e3f2fd; border-radius: 6px; border-left: 4px solid #417690;">
+            <h4 style="margin: 0 0 10px 0; color: #417690;">📋 How to select 30+ files:</h4>
+            <ul style="margin: 0; padding-left: 20px; color: #555;">
+                <li><strong>Method 1:</strong> Hold <kbd>Ctrl</kbd> (Windows) or <kbd>Cmd</kbd> (Mac) + click each file</li>
+                <li><strong>Method 2:</strong> Click first file → Hold <kbd>Shift</kbd> → Click last file (selects range)</li>
+                <li><strong>Method 3:</strong> Use <kbd>Ctrl+A</kbd> in file dialog to select all files in folder</li>
+            </ul>
+        </div>
+        
+        <div id="file-count" style="margin-top: 15px; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 4px; font-weight: bold; color: #417690; text-align: center; min-height: 20px;"></div>
+    </div>
+    
+    <div style="margin-top: 30px;">
+        <input type="submit" value="🚀 Upload Files" class="default" style="padding: 12px 24px; background: #417690; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold;">
+        <a href="/admin/" style="margin-left: 15px; color: #417690; text-decoration: none; padding: 12px 24px; border: 1px solid #417690; border-radius: 4px;">Cancel</a>
+    </div>
+</form>
+
+<hr style="margin: 40px 0; border: 1px solid #ddd;">
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+    <!-- Photos Section -->
+    <div>
+        <h2 style="color: #417690; margin-bottom: 20px;">📷 Recent Photos ({{ photos|length }})</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 15px; border-radius: 6px;">
+            {% for photo in photos %}
+                <div style="text-align: center; padding: 8px; border: 1px solid #eee; border-radius: 4px; background: #f9f9f9;">
+                    {% if photo.image %}
+                        <img src="{{ photo.image.url }}" alt="Photo" style="width: 100%; height: 80px; object-fit: cover; border-radius: 4px;">
+                    {% elif photo.image_url %}
+                        <img src="{{ photo.image_url }}" alt="Photo" style="width: 100%; height: 80px; object-fit: cover; border-radius: 4px;">
+                    {% else %}
+                        <div style="width: 100%; height: 80px; background: #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #666;">No Image</div>
+                    {% endif %}
+                    <small style="display: block; margin-top: 5px; color: #666;">{{ photo.location }}</small>
+                </div>
+            {% empty %}
+                <p style="color: #666; text-align: center; grid-column: 1 / -1;">No photos uploaded yet</p>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Videos Section -->
+    <div>
+        <h2 style="color: #417690; margin-bottom: 20px;">🎥 Recent Videos ({{ videos|length }})</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 15px; border-radius: 6px;">
+            {% for video in videos %}
+                <div style="text-align: center; padding: 8px; border: 1px solid #eee; border-radius: 4px; background: #f9f9f9;">
+                    {% if video.thumbnail %}
+                        <img src="{{ video.thumbnail.url }}" alt="Video" style="width: 100%; height: 80px; object-fit: cover; border-radius: 4px;">
+                    {% elif video.video_file %}
+                        <div style="width: 100%; height: 80px; background: #333; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white;">🎥</div>
+                    {% else %}
+                        <div style="width: 100%; height: 80px; background: #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #666;">No Video</div>
+                    {% endif %}
+                    <small style="display: block; margin-top: 5px; color: #666;">{{ video.location }}</small>
+                </div>
+            {% empty %}
+                <p style="color: #666; text-align: center; grid-column: 1 / -1;">No videos uploaded yet</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('id_files');
+    const fileCountDiv = document.getElementById('file-count');
+    const mediaTypeSelect = document.getElementById('id_media_type');
+    
+    // Update file input accept attribute based on media type
+    function updateFileAccept() {
+        const mediaType = mediaTypeSelect.value;
+        if (mediaType === 'photo') {
+            fileInput.setAttribute('accept', 'image/*,image/jpeg,image/jpg,image/png,image/gif,image/webp');
+        } else if (mediaType === 'video') {
+            fileInput.setAttribute('accept', 'video/*,video/mp4,video/mov,video/avi,video/mkv,video/webm');
+        } else {
+            fileInput.setAttribute('accept', 'image/*,video/*');
+        }
+    }
+    
+    if (mediaTypeSelect) {
+        mediaTypeSelect.addEventListener('change', updateFileAccept);
+        updateFileAccept(); // Set initial value
+    }
+    
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            const fileCount = this.files.length;
+            if (fileCount > 0) {
+                const mediaType = mediaTypeSelect.value === 'photo' ? 'photo(s)' : 'video(s)';
+                fileCountDiv.innerHTML = `✅ ${fileCount} ${mediaType} selected`;
+                console.log(`Selected ${fileCount} files:`, Array.from(this.files).map(f => f.name));
+            } else {
+                fileCountDiv.innerHTML = '';
+            }
+        });
+    }
+    
+    // Force multiple attribute
+    if (fileInput && !fileInput.hasAttribute('multiple')) {
+        fileInput.setAttribute('multiple', 'multiple');
+    }
+});
+</script>
+{% endblock %}

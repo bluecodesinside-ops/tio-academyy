@@ -1,0 +1,29 @@
+Welcome to {{ package.name }} - Tio Academy
+
+Hello {{ user.first_name|default:user.username }}!
+
+Thank you for choosing Tio Academy! Your subscription to {{ package.name }} is now active and you have access to all the features included in your plan.
+
+PACKAGE DETAILS:
+- Package: {{ package.name }}
+- Billing Cycle: {{ subscription.billing_cycle|title }}
+- Next Billing Date: {{ subscription.current_period_end|date:"F j, Y" }}
+
+WHAT'S INCLUDED:
+{% for feature in package.get_features_list %}
+- {{ feature }}
+{% endfor %}
+
+You can now access all your premium content and start your dance journey with us!
+
+Get started: {{ site_url }}explore-programs/
+
+If you have any questions or need assistance, please don't hesitate to contact our support team.
+
+Happy dancing!
+The Tio Academy Team
+
+---
+This email was sent to {{ user.email }}
+Tio Academy - Learn to Dance with Passion
+

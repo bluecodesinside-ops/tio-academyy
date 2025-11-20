@@ -1,0 +1,371 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ session.title }} - {{ session.level.course.title }}{% endblock %}
+
+{% block content %}
+<!-- Session Header -->
+<section class="session-header">
+    <div class="container">
+        <div class="session-navigation">
+            <a href="{% url 'course_detail' session.level.course.id %}" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Course
+            </a>
+            <div class="session-breadcrumb">
+                <span>{{ session.level.course.title }}</span>
+                <i class="fas fa-chevron-right"></i>
+                <span>{{ session.level.name }}</span>
+                <i class="fas fa-chevron-right"></i>
+                <span>{{ session.title }}</span>
+            </div>
+        </div>
+        
+        <div class="session-info">
+            <h1>{{ session.title }}</h1>
+            <p>{{ session.description }}</p>
+            <div class="session-meta">
+                <span><i class="fas fa-clock"></i> {{ session.duration }} minutes</span>
+                <span><i class="fas fa-play-circle"></i> Session {{ session.order }}</span>
+                <span><i class="fas fa-signal"></i> {{ session.level.name }}</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Video Player Section -->
+<section class="video-section">
+    <div class="container">
+        <div class="video-container">
+            {% if session.video_file %}
+                <!-- Uploaded Video File -->
+                <div class="video-player" id="videoPlayer">
+                    <video 
+                        id="video" 
+                        controls 
+                        preload="metadata"
+                        data-session-id="{{ session.id }}"
+                        data-last-position="{{ progress.last_watched_position }}"
+                    >
+                        <source src="{{ session.video_file.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    
+                    <!-- Custom Video Controls -->
+                    <div class="video-controls" id="videoControls">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="videoProgress"></div>
+                        </div>
+                        <div class="control-buttons">
+                            <button class="control-btn" id="playPauseBtn">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <div class="time-display">
+                                <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
+                            </div>
+                            <button class="control-btn" id="fullscreenBtn">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% elif session.video_url and session.is_youtube_url %}
+                <!-- YouTube Video -->
+                <div class="video-player youtube-player" id="videoPlayer">
+                    <iframe 
+                        id="youtubeVideo"
+                        width="100%" 
+                        height="500" 
+                        src="https://www.youtube.com/embed/HyHNuVaZJ-k?si=6G4rOLSJ99rzPNi-&rel=0&modestbranding=1&showinfo=0&controls=1&autoplay=0" 
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        referrerpolicy="strict-origin-when-cross-origin" 
+                        allowfullscreen
+                        data-session-id="{{ session.id }}"
+                        data-last-position="{{ progress.last_watched_position }}"
+                    ></iframe>
+                    
+                    <!-- YouTube Progress Tracking -->
+                    <div class="youtube-progress-info">
+                        <p><i class="fas fa-info-circle"></i> YouTube video progress tracking is limited. Use the "Mark as Complete" button when finished.</p>
+                    </div>
+                </div>
+            {% elif session.video_url %}
+                <!-- External Video URL -->
+                <div class="video-player external-video" id="videoPlayer">
+                    <video 
+                        id="video" 
+                        controls 
+                        preload="metadata"
+                        data-session-id="{{ session.id }}"
+                        data-last-position="{{ progress.last_watched_position }}"
+                    >
+                        <source src="{{ session.video_url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    
+                    <!-- Custom Video Controls -->
+                    <div class="video-controls" id="videoControls">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="videoProgress"></div>
+                        </div>
+                        <div class="control-buttons">
+                            <button class="control-btn" id="playPauseBtn">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <div class="time-display">
+                                <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
+                            </div>
+                            <button class="control-btn" id="fullscreenBtn">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="video-placeholder">
+                    <i class="fas fa-video"></i>
+                    <h3>Video Coming Soon</h3>
+                    <p>This session video will be available soon.</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Session Progress -->
+        <div class="session-progress-panel">
+            <div class="progress-info">
+                <h3>Your Progress</h3>
+                <div class="progress-stats">
+                    <div class="stat">
+                        <span class="stat-label">Session Progress</span>
+                        <span class="stat-value" id="sessionProgress">0%</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Time Watched</span>
+                        <span class="stat-value" id="timeWatched">0:00</span>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="sessionProgressBar"></div>
+                </div>
+            </div>
+            
+            <div class="session-actions">
+                {% if next_session %}
+                <a href="{% url 'session_detail' next_session.id %}" class="btn btn-primary" id="nextSessionBtn" style="display: none;">
+                    Next Session <i class="fas fa-arrow-right"></i>
+                </a>
+                {% endif %}
+                <button class="btn btn-secondary" id="markCompleteBtn">
+                    Mark as Complete
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Session Content -->
+<section class="session-content">
+    <div class="container">
+        <div class="content-grid">
+            <div class="main-content">
+                <h2>Session Overview</h2>
+                <div class="session-description">
+                    {{ session.description|linebreaks }}
+                </div>
+                
+                <div class="session-tips">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li>Focus on proper technique and form</li>
+                        <li>Practice the movements slowly at first</li>
+                        <li>Pay attention to timing and rhythm</li>
+                        <li>Don't rush - quality over quantity</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="course-progress">
+                    <h3>Course Progress</h3>
+                    <div class="level-progress">
+                        {% for level in session.level.course.levels.all %}
+                        <div class="level-item">
+                            <div class="level-header">
+                                <span class="level-name">{{ level.name }}</span>
+                                <span class="level-sessions">{{ level.sessions.count }} sessions</span>
+                            </div>
+                            <div class="level-progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="session-navigation">
+                    <h3>Session Navigation</h3>
+                    <div class="nav-links">
+                        {% if session.order > 1 %}
+                        <a href="#" class="nav-link prev" data-session-id="{{ session.id|add:'-1' }}">
+                            <i class="fas fa-chevron-left"></i>
+                            Previous Session
+                        </a>
+                        {% endif %}
+                        
+                        {% if next_session %}
+                        <a href="{% url 'session_detail' next_session.id %}" class="nav-link next">
+                            Next Session
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const video = document.getElementById('video');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const sessionId = {{ session.id }};
+    let progressUpdateInterval;
+    
+    if (video) {
+        initializeVideoPlayer();
+    }
+    
+    function initializeVideoPlayer() {
+        // Set initial position if user has watched before
+        const lastPosition = parseInt(video.dataset.lastPosition) || 0;
+        if (lastPosition > 0) {
+            video.currentTime = lastPosition;
+        }
+        
+        // Update progress every 5 seconds
+        progressUpdateInterval = setInterval(updateProgress, 5000);
+        
+        // Update progress on video events
+        video.addEventListener('timeupdate', updateProgress);
+        video.addEventListener('ended', onVideoEnded);
+        
+        // Custom controls
+        setupCustomControls();
+    }
+    
+    function updateProgress() {
+        if (video.paused) return;
+        
+        const currentTime = video.currentTime;
+        const duration = video.duration;
+        const progressPercentage = (currentTime / duration) * 100;
+        
+        // Update progress bars
+        document.getElementById('videoProgress').style.width = progressPercentage + '%';
+        document.getElementById('sessionProgressBar').style.width = progressPercentage + '%';
+        document.getElementById('sessionProgress').textContent = Math.round(progressPercentage) + '%';
+        
+        // Update time display
+        document.getElementById('currentTime').textContent = formatTime(currentTime);
+        document.getElementById('totalTime').textContent = formatTime(duration);
+        document.getElementById('timeWatched').textContent = formatTime(currentTime);
+        
+        // Send progress to server
+        sendProgressToServer(progressPercentage, currentTime);
+    }
+    
+    function onVideoEnded() {
+        // Mark as complete when video ends
+        markSessionComplete();
+    }
+    
+    function sendProgressToServer(progressPercentage, currentTime) {
+        const formData = new FormData();
+        formData.append('progress_percentage', Math.round(progressPercentage));
+        formData.append('last_position', Math.round(currentTime));
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        
+        fetch(`/session/${sessionId}/progress/`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.completed) {
+                showCompletionMessage();
+            }
+        })
+        .catch(error => console.error('Error updating progress:', error));
+    }
+    
+    function markSessionComplete() {
+        const formData = new FormData();
+        formData.append('progress_percentage', 100);
+        formData.append('last_position', video.duration);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        
+        fetch(`/session/${sessionId}/progress/`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.completed) {
+                showCompletionMessage();
+            }
+        })
+        .catch(error => console.error('Error marking complete:', error));
+    }
+    
+    function showCompletionMessage() {
+        document.getElementById('markCompleteBtn').textContent = 'Completed!';
+        document.getElementById('markCompleteBtn').classList.add('completed');
+        
+        {% if next_session %}
+        document.getElementById('nextSessionBtn').style.display = 'inline-block';
+        {% endif %}
+    }
+    
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+    
+    function setupCustomControls() {
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        
+        playPauseBtn.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                video.pause();
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        });
+        
+        fullscreenBtn.addEventListener('click', () => {
+            if (video.requestFullscreen) {
+                video.requestFullscreen();
+            }
+        });
+    }
+    
+    // Mark complete button
+    document.getElementById('markCompleteBtn').addEventListener('click', markSessionComplete);
+    
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+        if (progressUpdateInterval) {
+            clearInterval(progressUpdateInterval);
+        }
+    });
+});
+</script>
+{% endblock %}

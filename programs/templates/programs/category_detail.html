@@ -1,0 +1,80 @@
+{% extends 'programs/base_programs.html' %}
+{% load static %}
+{% load program_extras %}
+
+{% block title %}{{ page_title }} - Tio Academy{% endblock %}
+
+{% block programs_content %}
+<!-- Header Section -->
+<div class="section-header">
+    <div class="container">
+        <div style="margin-bottom: var(--spacing-2xl);">
+            {% if category.image %}
+                <img 
+                    src="{{ category.image.url }}" 
+                    alt="{{ category.name }}"
+                    style="width: 80px; height: 80px; margin: 0 auto; border-radius: 50%; object-fit: cover; box-shadow: var(--shadow-lg);"
+                >
+            {% else %}
+                <div style="width: 80px; height: 80px; margin: 0 auto; background: var(--color-gray-200); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-lg);">
+                    <i class="fas fa-dance" style="font-size: var(--font-size-2xl); color: var(--color-gray-600);"></i>
+                </div>
+            {% endif %}
+        </div>
+        
+        <h1 class="section-title">{{ category.name }} - {{ dance_style.name }}</h1>
+        {% if category.description %}
+            <p class="section-subtitle">{{ category.description }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Skill Levels -->
+<section class="programs-section">
+    <div class="skill-levels">
+        {% for skill_level in skill_levels %}
+        <div class="skill-level-card">
+            <div class="skill-level-card__icon">
+                {% if skill_level.level == 'basic' %}
+                    <i class="fas fa-seedling"></i>
+                {% elif skill_level.level == 'intermediate' %}
+                    <i class="fas fa-chart-line"></i>
+                {% else %}
+                    <i class="fas fa-crown"></i>
+                {% endif %}
+            </div>
+            
+            <h3 class="skill-level-card__title">{{ skill_level.get_level_display }}</h3>
+            <p class="skill-level-card__description">
+                {% if skill_level.description %}
+                    {{ skill_level.description }}
+                {% else %}
+                    Master {{ skill_level.get_level_display }} {{ category.name }} techniques and build your confidence on the dance floor.
+                {% endif %}
+            </p>
+            
+            <a href="{{ skill_level.get_absolute_url }}" class="skill-level-card__button">
+                <i class="fas fa-play"></i>
+                Start {{ skill_level.get_level_display }} Level
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section" style="background: var(--color-white); padding: var(--spacing-6xl) 0; text-align: center;">
+    <div class="container">
+        <h2 style="font-family: var(--font-family-display); font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin-bottom: var(--spacing-lg);">
+            Perfect Your {{ category.name }} Skills
+        </h2>
+        <p style="font-size: var(--font-size-xl); color: var(--color-gray-600); margin-bottom: var(--spacing-2xl); max-width: 600px; margin-left: auto; margin-right: auto;">
+            From basic steps to advanced techniques, master every aspect of {{ category.name }} dancing.
+        </p>
+        <a href="{% url 'pricing:pricing_page' %}" style="display: inline-flex; align-items: center; background: var(--color-primary); color: var(--color-white); padding: var(--spacing-lg) var(--spacing-2xl); border-radius: var(--radius-lg); text-decoration: none; font-weight: var(--font-weight-semibold); transition: var(--transition-fast);">
+            View Pricing Plans
+            <i class="fas fa-arrow-right" style="margin-left: var(--spacing-sm);"></i>
+        </a>
+    </div>
+</section>
+{% endblock %}

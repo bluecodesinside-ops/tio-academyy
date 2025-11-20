@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Upload Media - Latina Dance Academy" %}{% endblock %}
+
+{% block content %}
+<style>
+.upload-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    background: #fff;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+.form-group {
+    margin-bottom: 1.5rem;
+}
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+.upload-method-radio {
+    display: flex;
+    gap: 1rem;
+    margin: 0.5rem 0;
+}
+.upload-method-radio input[type="radio"] {
+    margin-right: 0.5rem;
+}
+.file-counter {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e74c3c;
+    margin-top: 0.5rem;
+}
+.upload-btn {
+    width: 100%;
+    padding: 15px;
+    background: #e74c3c;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+.upload-btn:hover {
+    background: #c0392b;
+}
+</style>
+
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1>{% trans "Upload Media" %}</h1>
+        <p>{% trans "Simple upload: Category → Content Type → Files → Done" %}</p>
+    </div>
+</section>
+
+<!-- Upload Form -->
+<section class="upload-section">
+    <div class="upload-container">
+        <form method="post" enctype="multipart/form-data" class="upload-form" id="upload-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.category.id_for_label }}">Category:</label>
+                {{ form.category }}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.media_type.id_for_label }}">Content Type:</label>
+                {{ form.media_type }}
+            </div>
+            
+            <div class="form-group">
+                <label>Upload Method:</label>
+                {{ form.upload_method }}
+            </div>
+            
+            <div class="form-group" id="file_input_group">
+                <label for="media_files">Choose Multiple Files (20-30 at once):</label>
+                <input type="file" name="media_files" id="media_files" multiple accept="image/*,video/*" class="form-control multiple-file-input">
+                <div class="file-counter" id="file-counter">No files selected</div>
+            </div>
+            
+            <div class="form-group" id="url_input_group" style="display: none;">
+                <label for="{{ form.media_url.id_for_label }}">Media URL:</label>
+                {{ form.media_url }}
+            </div>
+            
+            <button type="submit" class="upload-btn">Upload</button>
+        </form>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadMethodRadios = document.querySelectorAll('input[name="upload_method"]');
+    const fileGroup = document.getElementById('file_input_group');
+    const urlGroup = document.getElementById('url_input_group');
+    const fileInput = document.getElementById('media_files');
+    const fileCounter = document.getElementById('file-counter');
+    
+    function toggleInputs() {
+        const selectedMethod = document.querySelector('input[name="upload_method"]:checked').value;
+        if (selectedMethod === 'file') {
+            fileGroup.style.display = 'block';
+            urlGroup.style.display = 'none';
+        } else {
+            fileGroup.style.display = 'none';
+            urlGroup.style.display = 'block';
+        }
+    }
+    
+    function updateFileCounter() {
+        const count = fileInput.files.length;
+        if (count === 0) {
+            fileCounter.textContent = 'No files selected';
+            fileCounter.style.color = '#666';
+        } else {
+            fileCounter.textContent = `${count} files selected`;
+            fileCounter.style.color = '#28a745';
+        }
+    }
+    
+    uploadMethodRadios.forEach(radio => {
+        radio.addEventListener('change', toggleInputs);
+    });
+    
+    fileInput.addEventListener('change', updateFileCounter);
+    
+    // Initialize
+    toggleInputs();
+});
+</script>
+{% endblock %}

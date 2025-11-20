@@ -1,0 +1,19 @@
+from modeltranslation.translator import translator, TranslationOptions
+from .models import Course, Level, Session
+
+
+class CourseTranslationOptions(TranslationOptions):
+    fields = ('title', 'description')
+
+
+class LevelTranslationOptions(TranslationOptions):
+    fields = ('name', 'description')
+
+
+class SessionTranslationOptions(TranslationOptions):
+    fields = ('title', 'description')
+
+
+translator.register(Course, CourseTranslationOptions)
+translator.register(Level, LevelTranslationOptions)
+translator.register(Session, SessionTranslationOptions)

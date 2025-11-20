@@ -1,0 +1,198 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-24 17:09+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: newsletter/templates/admin/newsletter/send_newsletter.html:62
+#: templates/base.html:23
+msgid "Home"
+msgstr "Kreu"
+
+#: templates/base.html:24
+msgid "About"
+msgstr "Rreth Nesh"
+
+#: templates/base.html:25 templates/base.html:89
+msgid "Courses"
+msgstr "Kurset"
+
+#: templates/base.html:26 templates/base.html:90
+msgid "Tournaments"
+msgstr "Turnetë"
+
+#: templates/base.html:27 templates/base.html:91
+msgid "Gallery"
+msgstr "Galeria"
+
+#: templates/base.html:28
+msgid "Blog"
+msgstr "Blog"
+
+#: templates/base.html:29
+msgid "Admin"
+msgstr "Admin"
+
+#: templates/base.html:77
+msgid "Teaching authentic Latin dance styles to students worldwide."
+msgstr ""
+
+#: templates/base.html:86
+msgid "Quick Links"
+msgstr ""
+
+#: templates/base.html:88
+#, fuzzy
+#| msgid "About"
+msgid "About Us"
+msgstr "Rreth Nesh"
+
+#: templates/base.html:95
+msgid "Support"
+msgstr ""
+
+#: templates/base.html:97
+msgid "Contact"
+msgstr ""
+
+#: templates/base.html:98
+msgid "FAQ"
+msgstr ""
+
+#: templates/base.html:99
+msgid "Privacy Policy"
+msgstr ""
+
+#: templates/base.html:100
+msgid "Terms of Service"
+msgstr "Kushtet e Shërbimit"
+
+#: templates/base.html:104
+msgid "Contact Info"
+msgstr "Informacion Kontakti"
+
+#: templates/base.html:110
+msgid "All rights reserved."
+msgstr "Të gjitha të drejtat të rezervuara."
+
+#: templates/courses.html:5
+msgid "Courses - Latina Dance Academy"
+msgstr "Kurset - Akademia e Kërcimit Latino"
+
+#: templates/courses.html:11
+#, fuzzy
+#| msgid "Explore Courses"
+msgid "Our Dance Courses"
+msgstr "Kurset Tona të Kërcimit"
+
+#: templates/courses.html:12
+msgid "Master authentic Latin dance styles with our comprehensive curriculum"
+msgstr "Zotëroni stile autentike kërcimi latino me kurrikulën tonë gjithëpërfshirëse"
+
+#: templates/courses.html:20
+#, fuzzy
+#| msgid "Courses"
+msgid "All Courses"
+msgstr "Kurset"
+
+#: templates/courses.html:21
+msgid "Beginner"
+msgstr ""
+
+#: templates/courses.html:22
+msgid "Intermediate"
+msgstr ""
+
+#: templates/courses.html:23
+msgid "Advanced"
+msgstr ""
+
+#: templates/courses.html:24
+msgid "Popular"
+msgstr ""
+
+#: templates/gallery.html:5
+msgid "Gallery - Latina Dance Academy"
+msgstr ""
+
+#: templates/gallery.html:11
+msgid "Photo & Video Gallery"
+msgstr ""
+
+#: templates/gallery.html:12
+msgid "Explore our collection of dance moments and performances"
+msgstr ""
+
+#: templates/gallery.html:20
+msgid "Photos"
+msgstr ""
+
+#: templates/gallery.html:21
+msgid "Videos"
+msgstr ""
+
+#: templates/index.html:5
+msgid "Latina Dance Academy - Learn Authentic Latin Dance"
+msgstr "Akademia e Kërcimit Latino - Mëso Kërcime Autentike Latino"
+
+#: templates/index.html:119
+msgid "Master the Art of Latin Dance"
+msgstr "Zotëro Artin e Kërcimit Latino"
+
+#: templates/index.html:120
+msgid ""
+"Learn authentic Latin dance styles from professional instructors. From "
+"beginner to advanced, discover the rhythm and passion of Latin culture."
+msgstr ""
+"Mëso stile autentike kërcimi latino nga instruktorë profesionalë. Nga "
+"fillestar deri tek i përparuar, zbulo ritmin dhe pasionin e kulturës latino."
+
+#: templates/index.html:122
+msgid "Explore Courses"
+msgstr "Eksploro Kurset"
+
+#: templates/index.html:123
+msgid "Watch Preview"
+msgstr "Shiko Parapreken"
+
+#: templates/index.html:233
+msgid "Join Our Dance Family!"
+msgstr "Bashkohu me Familjen Tonë të Kërcimit!"
+
+#: templates/index.html:234
+msgid ""
+"Get exclusive dance tips, course updates, and special offers delivered to "
+"your inbox. Be the first to know about new tutorials and events!"
+msgstr ""
+"Merr këshilla ekskluzive kërcimi, përditësime kursesh dhe oferta të veçanta "
+"direkt në email. Bëhu i pari që di për tutoriale të reja dhe evenimente!"
+
+#: templates/index.html:239
+msgid "First Name"
+msgstr "Emri"
+
+#: templates/index.html:240
+msgid "Last Name"
+msgstr "Mbiemri"
+
+#: templates/index.html:243
+msgid "Enter your email address"
+msgstr "Shkruani adresën tuaj të email-it"
+
+#: templates/index.html:245
+msgid "Subscribe Now"
+msgstr "Abonohuni Tani"

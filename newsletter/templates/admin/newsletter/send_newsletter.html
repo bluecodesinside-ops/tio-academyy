@@ -1,0 +1,137 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    .newsletter-form {
+        max-width: 800px;
+        margin: 20px 0;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .form-group input, .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+    .form-group textarea {
+        min-height: 200px;
+        font-family: monospace;
+    }
+    .submit-row {
+        margin-top: 30px;
+        padding: 20px 0;
+        border-top: 1px solid #eee;
+    }
+    .submit-row input {
+        background: #79aec8;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .submit-row input:hover {
+        background: #417690;
+    }
+    .help-text {
+        color: #666;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+    .preview-section {
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 4px;
+        margin: 20px 0;
+    }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{% url 'admin:newsletter_newslettersubscription_changelist' %}">Newsletter subscriptions</a>
+    &rsaquo; Send Newsletter
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <h1>Send Newsletter to All Subscribers</h1>
+    
+    <div class="preview-section">
+        <h3>📊 Newsletter Statistics</h3>
+        <p><strong>Active Subscribers:</strong> {{ opts.model.objects.filter.is_active=True.count }}</p>
+        <p><strong>Total Subscribers:</strong> {{ opts.model.objects.count }}</p>
+    </div>
+    
+    <form method="post" class="newsletter-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="subject">Newsletter Subject *</label>
+            <input type="text" id="subject" name="subject" required 
+                   placeholder="e.g., New Salsa Tutorial Available!">
+            <div class="help-text">Make it catchy to increase open rates!</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="html_content">HTML Content *</label>
+            <textarea id="html_content" name="html_content" required 
+                      placeholder="<h1>Your Newsletter Title</h1><p>Your content here...</p>">
+&lt;h1 style="color: #e74c3c;"&gt;🎉 New Dance Tutorial Available!&lt;/h1&gt;
+&lt;p&gt;Hello dance family!&lt;/p&gt;
+&lt;p&gt;We're excited to announce our new Salsa tutorial is now live.&lt;/p&gt;
+&lt;div style="text-align: center; margin: 30px 0;"&gt;
+    &lt;a href="http://localhost:8000/courses/" style="background: #e74c3c; color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px;"&gt;Watch Now&lt;/a&gt;
+&lt;/div&gt;
+&lt;p&gt;Happy dancing!&lt;br&gt;The Latina Dance Academy Team&lt;/p&gt;</textarea>
+            <div class="help-text">Use HTML tags for formatting. Include links to your website!</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="text_content">Plain Text Content (Optional)</label>
+            <textarea id="text_content" name="text_content" 
+                      placeholder="Plain text version for email clients that don't support HTML">
+New Dance Tutorial Available!
+
+Hello dance family!
+
+We're excited to announce our new Salsa tutorial is now live.
+
+Watch Now: http://localhost:8000/courses/
+
+Happy dancing!
+The Latina Dance Academy Team</textarea>
+            <div class="help-text">Plain text version for better email deliverability</div>
+        </div>
+        
+        <div class="submit-row">
+            <input type="submit" value="📧 Send Newsletter to All Subscribers" 
+                   onclick="return confirm('Are you sure you want to send this newsletter to ALL subscribers? This action cannot be undone.')">
+        </div>
+    </form>
+    
+    <div class="preview-section">
+        <h3>💡 Newsletter Tips</h3>
+        <ul>
+            <li><strong>Subject Line:</strong> Keep it under 50 characters, use emojis, create urgency</li>
+            <li><strong>Content:</strong> Include a clear call-to-action, link to your courses</li>
+            <li><strong>Timing:</strong> Send during active hours (Tuesday-Thursday, 10 AM - 2 PM)</li>
+            <li><strong>Frequency:</strong> Don't spam - once a week is perfect</li>
+            <li><strong>Personalization:</strong> Use subscriber names when possible</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

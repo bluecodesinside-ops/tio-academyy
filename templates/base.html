@@ -1,0 +1,247 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Tio Academy{% endblock %}</title>
+    <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml">
+    <link rel="alternate icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'core.css' %}">
+    <link rel="stylesheet" href="{% static 'components.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;900&family=Playfair+Display:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    {% block extra_css %}
+    <style>
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: var(--spacing-2xl);
+        }
+        
+        /* Language Switcher Dropdown */
+        .dropdown {
+            position: relative;
+        }
+        
+        .dropdown-btn {
+            background: #faf6f0;
+            border: 1px solid var(--color-gray-200);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: var(--font-size-sm);
+            color: var(--color-gray-700);
+            transition: var(--transition-fast);
+        }
+        
+        .dropdown-btn:hover {
+            background: #f0ebe3;
+            border-color: var(--color-gray-300);
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: var(--spacing-sm);
+            background: #faf6f0;
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            min-width: 150px;
+            z-index: 1000;
+        }
+        
+        .dropdown.active .dropdown-content {
+            display: block;
+        }
+        
+        .language-option {
+            display: block;
+            padding: var(--spacing-sm) var(--spacing-md);
+            color: var(--color-gray-700);
+            text-decoration: none;
+            transition: var(--transition-fast);
+        }
+        
+        .language-option:hover {
+            background: #f0ebe3;
+            color: var(--color-gray-900);
+        }
+    </style>
+    {% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar__container">
+            <div class="navbar__logo">
+                <h2>Tio Academy</h2>
+            </div>
+            <ul class="navbar__menu">
+                <li><a href="{% url 'home' %}" class="navbar__link {% if request.resolver_match.url_name == 'home' %}navbar__link--active{% endif %}">{% trans "Home" %}</a></li>
+                <li><a href="{% url 'about' %}" class="navbar__link {% if request.resolver_match.url_name == 'about' %}navbar__link--active{% endif %}">{% trans "About" %}</a></li>
+                <li><a href="{% url 'programs:explore_programs' %}" class="navbar__link {% if 'programs' in request.resolver_match.namespace %}navbar__link--active{% endif %}">{% trans "Explore Programs" %}</a></li>
+                <li><a href="{% url 'pricing:pricing_page' %}" class="navbar__link {% if 'pricing' in request.resolver_match.namespace %}navbar__link--active{% endif %}">{% trans "Pricing" %}</a></li>
+                <li><a href="{% url 'admin:login' %}" class="navbar__link">{% trans "Admin" %}</a></li>
+
+                <!-- Language Switcher -->
+                <li class="language-switcher">
+                    <div class="dropdown" id="languageDropdown">
+                        <button class="dropdown-btn" onclick="toggleLanguageDropdown()">
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% if LANGUAGE_CODE == 'sq' %}
+                                🇦🇱 Shqip
+                            {% else %}
+                                🇺🇸 English
+                            {% endif %}
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            {% get_available_languages as LANGUAGES %}
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% for lang_code, lang_name in LANGUAGES %}
+                                {% if lang_code != LANGUAGE_CODE %}
+                                    <a href="javascript:void(0)" onclick="switchLanguage('{{ lang_code }}')" class="language-option">
+                                        {% if lang_code == 'sq' %}
+                                            🇦🇱 Shqip
+                                        {% else %}
+                                            🇺🇸 English
+                                        {% endif %}
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hidden CSRF Token for JavaScript -->
+    {% csrf_token %}
+
+    {% block content %}{% endblock %}
+
+    {% block extra_js %}{% endblock %}
+
+
+    <!-- Footer - Minimal & Elegant -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__brand">
+                    <h3 class="footer__logo">Tio Academy</h3>
+                    <p class="footer__tagline">{% trans "Premium dance education since 2010" %}</p>
+                </div>
+                
+                <div class="footer__nav">
+                    <ul class="footer__links">
+                        <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
+                        <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
+                    </ul>
+                    
+                    <div class="footer__social-links">
+                        <a href="#" class="footer__social-link" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer__bottom">
+                <p>&copy; 2025 Tio Academy. {% trans "All rights reserved." %} | 
+                   <a href="{% url 'privacy' %}">{% trans "Privacy" %}</a> | 
+                   <a href="{% url 'terms' %}">{% trans "Terms" %}</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/core.js' %}"></script>
+    
+    <!-- Language Switcher Script -->
+    <script>
+    // Language dropdown functionality
+    function toggleLanguageDropdown() {
+        const dropdown = document.getElementById('languageDropdown');
+        dropdown.classList.toggle('active');
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        const dropdown = document.getElementById('languageDropdown');
+        if (dropdown && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+    
+    function switchLanguage(langCode) {
+        // Close dropdown first
+        const dropdown = document.getElementById('languageDropdown');
+        if (dropdown) dropdown.classList.remove('active');
+        // Create a form and submit it to Django's set_language view
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{% url "set_language" %}';
+        
+        // Add CSRF token
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = 'csrfmiddlewaretoken';
+        csrfInput.value = '{{ csrf_token }}';
+        form.appendChild(csrfInput);
+        
+        // Add language code
+        const langInput = document.createElement('input');
+        langInput.type = 'hidden';
+        langInput.name = 'language';
+        langInput.value = langCode;
+        form.appendChild(langInput);
+        
+        // Add current path (without language prefix)
+        const nextInput = document.createElement('input');
+        nextInput.type = 'hidden';
+        nextInput.name = 'next';
+        let currentPath = window.location.pathname;
+        // Remove existing language prefix if any
+        if (currentPath.startsWith('/sq/')) {
+            currentPath = currentPath.substring(3);
+        }
+        if (currentPath === '') {
+            currentPath = '/';
+        }
+        nextInput.value = currentPath;
+        form.appendChild(nextInput);
+        
+        // Submit form
+        document.body.appendChild(form);
+        form.submit();
+    }
+    </script>
+    
+    <!-- Hamburger Menu JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+            const navLinks = document

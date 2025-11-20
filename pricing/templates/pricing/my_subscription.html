@@ -1,0 +1,419 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .subscription-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: var(--spacing-4xl) var(--spacing-xl);
+    }
+    
+    .subscription-card {
+        background: var(--color-gray-50);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-4xl);
+        margin-bottom: var(--spacing-4xl);
+    }
+    
+    .subscription-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-2xl);
+        flex-wrap: wrap;
+        gap: var(--spacing-lg);
+    }
+    
+    .subscription-title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-3xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: var(--spacing-sm) var(--spacing-lg);
+        border-radius: var(--radius-full);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-semibold);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    .status-active {
+        background: var(--color-accent);
+        color: var(--color-white);
+    }
+    
+    .status-cancelled {
+        background: var(--color-gray-400);
+        color: var(--color-white);
+    }
+    
+    .status-trialing {
+        background: var(--color-accent-light);
+        color: var(--color-accent);
+    }
+    
+    .subscription-price {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-4xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .subscription-period {
+        color: var(--color-gray-600);
+        font-size: var(--font-size-lg);
+    }
+    
+    .subscription-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--spacing-2xl);
+        margin: var(--spacing-2xl) 0;
+    }
+    
+    .info-item {
+        background: var(--color-white);
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-gray-200);
+    }
+    
+    .info-label {
+        font-size: var(--font-size-sm);
+        color: var(--color-gray-500);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: var(--spacing-xs);
+    }
+    
+    .info-value {
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-primary);
+    }
+    
+    .subscription-features {
+        list-style: none;
+        padding: 0;
+        margin: var(--spacing-2xl) 0;
+    }
+    
+    .subscription-features li {
+        padding: var(--spacing-sm) 0;
+        display: flex;
+        align-items: center;
+        color: var(--color-gray-700);
+    }
+    
+    .subscription-features li:before {
+        content: "✓";
+        color: var(--color-accent);
+        font-weight: var(--font-weight-bold);
+        margin-right: var(--spacing-md);
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--color-accent-light);
+        border-radius: 50%;
+        font-size: var(--font-size-xs);
+    }
+    
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+        margin-top: var(--spacing-2xl);
+    }
+    
+    .action-button {
+        display: inline-block;
+        padding: var(--spacing-lg) var(--spacing-2xl);
+        border-radius: var(--radius-lg);
+        text-decoration: none;
+        font-weight: var(--font-weight-semibold);
+        font-size: var(--font-size-lg);
+        transition: var(--transition-fast);
+        text-align: center;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .action-button--primary {
+        background: var(--color-primary);
+        color: var(--color-white);
+    }
+    
+    .action-button--primary:hover {
+        background: var(--color-primary-light);
+        transform: translateY(-2px);
+    }
+    
+    .action-button--danger {
+        background: #DC2626;
+        color: var(--color-white);
+    }
+    
+    .action-button--danger:hover {
+        background: #B91C1C;
+        transform: translateY(-2px);
+    }
+    
+    .action-button--secondary {
+        background: var(--color-white);
+        color: var(--color-primary);
+        border: 2px solid var(--color-primary);
+    }
+    
+    .action-button--secondary:hover {
+        background: var(--color-primary);
+        color: var(--color-white);
+    }
+    
+    .no-subscription {
+        background: var(--color-white);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-6xl) var(--spacing-4xl);
+        text-align: center;
+    }
+    
+    .no-subscription__icon {
+        font-size: var(--font-size-6xl);
+        color: var(--color-gray-400);
+        margin-bottom: var(--spacing-2xl);
+    }
+    
+    .no-subscription__title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-3xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .no-subscription__message {
+        font-size: var(--font-size-xl);
+        color: var(--color-gray-600);
+        margin-bottom: var(--spacing-4xl);
+        line-height: 1.6;
+    }
+    
+    .help-section {
+        background: var(--color-white);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-4xl);
+        margin-top: var(--spacing-4xl);
+    }
+    
+    .help-title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-2xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .help-description {
+        color: var(--color-gray-600);
+        margin-bottom: var(--spacing-2xl);
+        line-height: 1.6;
+    }
+    
+    .help-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: var(--spacing-2xl);
+    }
+    
+    .help-item h4 {
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .help-item p {
+        color: var(--color-gray-600);
+        font-size: var(--font-size-sm);
+        margin-bottom: var(--spacing-sm);
+        line-height: 1.5;
+    }
+    
+    .help-item a {
+        color: var(--color-accent);
+        text-decoration: none;
+        font-weight: var(--font-weight-medium);
+    }
+    
+    .help-item a:hover {
+        text-decoration: underline;
+    }
+    
+    @media (min-width: 768px) {
+        .action-buttons {
+            flex-direction: row;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="subscription-container">
+    {% if subscription %}
+    <!-- Active Subscription -->
+    <div class="subscription-card">
+        <div class="subscription-header">
+            <div>
+                <h1 class="subscription-title">{{ subscription.package.name }} Package</h1>
+                <span class="status-badge status-{{ subscription.status }}">
+                    {{ subscription.get_status_display }}
+                </span>
+            </div>
+            <div class="text-right">
+                <div class="subscription-price">
+                    ${{ subscription.package.monthly_price|floatformat:0 }}
+                    {% if subscription.billing_cycle == 'yearly' %}
+                        / year
+                    {% else %}
+                        / month
+                    {% endif %}
+                </div>
+                <div class="subscription-period">
+                    {{ subscription.billing_cycle|title }} billing
+                </div>
+            </div>
+        </div>
+        
+        <p class="subscription-description">{{ subscription.package.description }}</p>
+        
+        <!-- Subscription Details -->
+        <div class="subscription-info">
+            <div class="info-item">
+                <div class="info-label">Next Billing Date</div>
+                <div class="info-value">
+                    {{ subscription.current_period_end|date:"F j, Y" }}
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-label">Billing Cycle</div>
+                <div class="info-value">
+                    {{ subscription.billing_cycle|title }}
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-label">Subscription Started</div>
+                <div class="info-value">
+                    {{ subscription.created_at|date:"F j, Y" }}
+                </div>
+            </div>
+            
+            {% if subscription.cancel_at_period_end %}
+            <div class="info-item">
+                <div class="info-label">Cancellation</div>
+                <div class="info-value" style="color: var(--color-accent);">
+                    Ends {{ subscription.current_period_end|date:"F j, Y" }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Features -->
+        <div>
+            <h3 style="font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold); color: var(--color-primary); margin-bottom: var(--spacing-lg);">What's Included:</h3>
+            <ul class="subscription-features">
+                {% for feature in subscription.package.get_features_list %}
+                <li>{{ feature }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="{% url 'programs:explore_programs' %}" class="action-button action-button--primary">
+                <i class="fas fa-play" style="margin-right: var(--spacing-sm);"></i>
+                Access Content
+            </a>
+            
+            {% if not subscription.cancel_at_period_end %}
+            <form method="post" action="{% url 'pricing:cancel_subscription' %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="action-button action-button--danger" 
+                        onclick="return confirm('Are you sure you want to cancel your subscription? You will lose access at the end of your current billing period.')">
+                    <i class="fas fa-times" style="margin-right: var(--spacing-sm);"></i>
+                    Cancel Subscription
+                </button>
+            </form>
+            {% else %}
+            <span class="action-button action-button--secondary">
+                <i class="fas fa-info-circle" style="margin-right: var(--spacing-sm);"></i>
+                Cancelled (ends {{ subscription.current_period_end|date:"M j" }})
+            </span>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% else %}
+    <!-- No Active Subscription -->
+    <div class="no-subscription">
+        <div class="no-subscription__icon">
+            <i class="fas fa-user-slash"></i>
+        </div>
+        <h1 class="no-subscription__title">No Active Subscription</h1>
+        <p class="no-subscription__message">
+            You don't have an active subscription. Choose a plan to get started with your dance journey!
+        </p>
+        
+        <div class="action-buttons">
+            <a href="{% url 'pricing:pricing_page' %}" class="action-button action-button--primary">
+                <i class="fas fa-credit-card" style="margin-right: var(--spacing-sm);"></i>
+                View Pricing Plans
+            </a>
+            
+            <a href="{% url 'programs:explore_programs' %}" class="action-button action-button--secondary">
+                <i class="fas fa-play" style="margin-right: var(--spacing-sm);"></i>
+                Try Free Content
+            </a>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Help Section -->
+    <div class="help-section">
+        <h3 class="help-title">Need Help?</h3>
+        <p class="help-description">
+            Have questions about your subscription or need assistance? We're here to help!
+        </p>
+        
+        <div class="help-grid">
+            <div class="help-item">
+                <h4>Billing Questions</h4>
+                <p>Questions about charges, refunds, or billing cycles.</p>
+                <a href="mailto:billing@tioacademy.com">billing@tioacademy.com</a>
+            </div>
+            
+            <div class="help-item">
+                <h4>Technical Support</h4>
+                <p>Issues with accessing content or account problems.</p>
+                <a href="mailto:support@tioacademy.com">support@tioacademy.com</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

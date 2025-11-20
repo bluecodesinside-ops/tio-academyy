@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Blog - Latina Dance Academy{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1>Dance Blog</h1>
+        <p>Tips, tutorials, and insights from our dance community</p>
+    </div>
+</section>
+
+<!-- Blog Posts -->
+<section class="blog-posts">
+    <div class="container">
+        <div class="blog-grid">
+            {% for post in posts %}
+            <article class="blog-card">
+                {% if post.image %}
+                <div class="blog-image">
+                    <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                </div>
+                {% endif %}
+                <div class="blog-content">
+                    <h2>{{ post.title }}</h2>
+                    <div class="blog-meta">
+                        <span><i class="fas fa-user"></i> {{ post.author.username }}</span>
+                        <span><i class="fas fa-calendar"></i> {{ post.published_at|date:"M d, Y" }}</span>
+                    </div>
+                    <p>{{ post.excerpt|default:post.content|truncatewords:30 }}</p>
+                    <a href="{% url 'blog:post_detail' post.slug %}" class="btn btn-outline">Read More</a>
+                </div>
+            </article>
+            {% empty %}
+            <!-- Fallback content if no blog posts exist -->
+            <article class="blog-card">
+                <div class="blog-image">
+                    <img src="https://images.unsplash.com/photo-1547153760-18fc86324498?w=400&h=250&fit=crop" alt="Salsa Tips">
+                </div>
+                <div class="blog-content">
+                    <h2>10 Essential Salsa Tips for Beginners</h2>
+                    <div class="blog-meta">
+                        <span><i class="fas fa-user"></i> Carlos Rodriguez</span>
+                        <span><i class="fas fa-calendar"></i> Dec 15, 2024</span>
+                    </div>
+                    <p>Master the basics of salsa with these essential tips from our expert instructors. Learn proper technique, timing, and body movement.</p>
+                    <a href="#" class="btn btn-outline">Read More</a>
+                </div>
+            </article>
+            <article class="blog-card">
+                <div class="blog-image">
+                    <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=250&fit=crop" alt="Bachata Guide">
+                </div>
+                <div class="blog-content">
+                    <h2>The Complete Guide to Bachata Sensual</h2>
+                    <div class="blog-meta">
+                        <span><i class="fas fa-user"></i> Maria Santos</span>
+                        <span><i class="fas fa-calendar"></i> Dec 10, 2024</span>
+                    </div>
+                    <p>Discover the romantic and sensual world of bachata. Learn about its history, techniques, and how to master the body movement.</p>
+                    <a href="#" class="btn btn-outline">Read More</a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

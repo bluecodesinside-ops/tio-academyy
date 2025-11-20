@@ -1,0 +1,620 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Pricing page styles matching existing design system */
+    .pricing-hero {
+        background: var(--color-gray-50);
+        padding: var(--spacing-6xl) 0;
+        text-align: center;
+    }
+    
+    .pricing-hero__title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-5xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-lg);
+        line-height: 1.2;
+    }
+    
+    .pricing-hero__subtitle {
+        font-size: var(--font-size-xl);
+        color: var(--color-gray-600);
+        max-width: 600px;
+        margin: 0 auto var(--spacing-4xl);
+        line-height: 1.6;
+    }
+    
+    .billing-toggle {
+        display: inline-flex;
+        background: var(--color-white);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-xs);
+        margin-bottom: var(--spacing-4xl);
+    }
+    
+    .billing-toggle button {
+        padding: var(--spacing-md) var(--spacing-xl);
+        border: none;
+        background: transparent;
+        color: var(--color-gray-600);
+        font-weight: var(--font-weight-medium);
+        cursor: pointer;
+        border-radius: var(--radius-md);
+        transition: var(--transition-fast);
+    }
+    
+    .billing-toggle button.active {
+        background: var(--color-accent);
+        color: var(--color-white);
+    }
+    
+    .yearly-discount {
+        background: var(--color-accent);
+        color: var(--color-white);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: var(--radius-sm);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        margin-left: var(--spacing-sm);
+    }
+    
+    .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: var(--spacing-2xl);
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-xl);
+    }
+    
+    .pricing-card {
+        background: var(--color-white);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-4xl);
+        text-align: center;
+        transition: var(--transition-normal);
+        position: relative;
+    }
+    
+    .pricing-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-xl);
+        border-color: var(--color-accent);
+    }
+    
+    .pricing-card.popular {
+        border-color: var(--color-accent);
+        box-shadow: var(--shadow-lg);
+        transform: scale(1.02);
+    }
+    
+    .pricing-card.popular:hover {
+        transform: scale(1.02) translateY(-4px);
+    }
+    
+    .popular-badge {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--color-accent);
+        color: var(--color-white);
+        padding: var(--spacing-sm) var(--spacing-xl);
+        border-radius: var(--radius-full);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-semibold);
+    }
+    
+    .pricing-card__name {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-2xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .pricing-card__description {
+        color: var(--color-gray-600);
+        margin-bottom: var(--spacing-2xl);
+        line-height: 1.6;
+    }
+    
+    .pricing-card__price {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-5xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .pricing-card__period {
+        color: var(--color-gray-600);
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--spacing-2xl);
+    }
+    
+    .pricing-card__discount {
+        color: var(--color-accent);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-semibold);
+        margin-bottom: var(--spacing-2xl);
+    }
+    
+    .pricing-features {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 var(--spacing-2xl) 0;
+        text-align: left;
+    }
+    
+    .pricing-features li {
+        padding: var(--spacing-sm) 0;
+        display: flex;
+        align-items: center;
+        color: var(--color-gray-700);
+    }
+    
+    .pricing-features li:before {
+        content: "✓";
+        color: var(--color-accent);
+        font-weight: var(--font-weight-bold);
+        margin-right: var(--spacing-md);
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--color-accent-light);
+        border-radius: 50%;
+        font-size: var(--font-size-xs);
+    }
+    
+    .pricing-card__button {
+        display: inline-block;
+        background: var(--color-primary);
+        color: var(--color-white);
+        padding: var(--spacing-lg) var(--spacing-2xl);
+        text-decoration: none;
+        border-radius: var(--radius-lg);
+        font-weight: var(--font-weight-semibold);
+        font-size: var(--font-size-lg);
+        transition: var(--transition-fast);
+        width: 100%;
+        text-align: center;
+    }
+    
+    .pricing-card__button:hover {
+        background: var(--color-primary-light);
+        transform: translateY(-2px);
+    }
+    
+    .pricing-card.popular .pricing-card__button {
+        background: var(--color-accent);
+    }
+    
+    .pricing-card.popular .pricing-card__button:hover {
+        background: var(--color-accent-dark);
+    }
+    
+    .guarantee-section {
+        background: var(--color-gray-50);
+        padding: var(--spacing-6xl) 0;
+        margin: var(--spacing-6xl) 0;
+        text-align: center;
+    }
+    
+    .guarantee-content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-xl);
+    }
+    
+    .guarantee-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--color-accent);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto var(--spacing-2xl);
+    }
+    
+    .guarantee-icon i {
+        font-size: var(--font-size-3xl);
+        color: var(--color-white);
+    }
+    
+    .guarantee-title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-4xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .guarantee-description {
+        font-size: var(--font-size-xl);
+        color: var(--color-gray-600);
+        margin-bottom: var(--spacing-4xl);
+        line-height: 1.6;
+    }
+    
+    .guarantee-stats {
+        display: flex;
+        justify-content: center;
+        gap: var(--spacing-4xl);
+        flex-wrap: wrap;
+    }
+    
+    .guarantee-stat {
+        text-align: center;
+    }
+    
+    .guarantee-stat__number {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-3xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        display: block;
+    }
+    
+    .guarantee-stat__label {
+        color: var(--color-gray-600);
+        font-size: var(--font-size-lg);
+    }
+    
+    .faq-section {
+        padding: var(--spacing-6xl) 0;
+        background: var(--color-white);
+    }
+    
+    .faq-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-xl);
+    }
+    
+    .faq-title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-4xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        text-align: center;
+        margin-bottom: var(--spacing-4xl);
+    }
+    
+    .faq-item {
+        background: var(--color-white);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-2xl);
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .faq-question {
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .faq-answer {
+        color: var(--color-gray-600);
+        line-height: 1.6;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .pricing-grid {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-xl);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .pricing-hero {
+            padding: var(--spacing-4xl) 0;
+        }
+        
+        .pricing-hero__title {
+            font-size: var(--font-size-4xl);
+        }
+        
+        .pricing-hero__subtitle {
+            font-size: var(--font-size-lg);
+            padding: 0 var(--spacing-lg);
+        }
+        
+        .billing-toggle {
+            margin: 0 var(--spacing-lg) var(--spacing-4xl);
+        }
+        
+        .pricing-grid {
+            grid-template-columns: 1fr;
+            gap: var(--spacing-lg);
+            padding: 0 var(--spacing-lg);
+        }
+        
+        .pricing-card {
+            padding: var(--spacing-2xl);
+        }
+        
+        .pricing-card__title {
+            font-size: var(--font-size-xl);
+        }
+        
+        .pricing-card__price {
+            font-size: var(--font-size-4xl);
+        }
+        
+        .guarantee-section {
+            padding: var(--spacing-4xl) 0;
+        }
+        
+        .guarantee-content {
+            padding: 0 var(--spacing-lg);
+        }
+        
+        .guarantee-title {
+            font-size: var(--font-size-3xl);
+        }
+        
+        .guarantee-description {
+            font-size: var(--font-size-lg);
+        }
+        
+        .guarantee-stats {
+            flex-direction: column;
+            gap: var(--spacing-2xl);
+        }
+        
+        .faq-section {
+            padding: var(--spacing-4xl) 0;
+        }
+        
+        .faq-container {
+            padding: 0 var(--spacing-lg);
+        }
+        
+        .faq-title {
+            font-size: var(--font-size-3xl);
+        }
+        
+        .faq-item {
+            padding: var(--spacing-lg);
+        }
+        
+        .faq-question {
+            font-size: var(--font-size-lg);
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .pricing-hero__title {
+            font-size: var(--font-size-3xl);
+        }
+        
+        .pricing-hero__subtitle {
+            font-size: var(--font-size-base);
+        }
+        
+        .billing-toggle {
+            margin: 0 var(--spacing-md) var(--spacing-4xl);
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+        
+        .billing-toggle button {
+            width: 100%;
+        }
+        
+        .pricing-grid {
+            padding: 0 var(--spacing-md);
+        }
+        
+        .pricing-card {
+            padding: var(--spacing-lg);
+        }
+        
+        .pricing-card__title {
+            font-size: var(--font-size-lg);
+        }
+        
+        .pricing-card__price {
+            font-size: var(--font-size-3xl);
+        }
+        
+        .guarantee-title {
+            font-size: var(--font-size-2xl);
+        }
+        
+        .guarantee-description {
+            font-size: var(--font-size-base);
+        }
+        
+        .faq-title {
+            font-size: var(--font-size-2xl);
+        }
+        
+        .faq-item {
+            padding: var(--spacing-md);
+        }
+        
+        .faq-question {
+            font-size: var(--font-size-base);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="pricing-hero">
+    <div class="container">
+        <h1 class="pricing-hero__title">Choose Your Perfect Plan</h1>
+        <p class="pricing-hero__subtitle">
+            Start your dance journey with our comprehensive programs. 
+            All plans include access to our video library and community.
+        </p>
+        
+        <!-- Billing Toggle -->
+        <div class="billing-toggle">
+            <button id="monthly-toggle" class="active" onclick="toggleBilling('monthly')">
+                Monthly
+            </button>
+            <button id="yearly-toggle" onclick="toggleBilling('yearly')">
+                Yearly
+                <span class="yearly-discount" id="yearly-discount">Save 20%</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Cards -->
+<section class="pricing-section">
+    <div class="pricing-grid">
+        {% for package in packages %}
+        <div class="pricing-card {% if package.is_popular %}popular{% endif %}">
+            {% if package.is_popular %}
+            <div class="popular-badge">Most Popular</div>
+            {% endif %}
+            
+            <h3 class="pricing-card__name">{{ package.name }}</h3>
+            <p class="pricing-card__description">{{ package.description }}</p>
+            
+            <div class="pricing-card__price">
+                $<span class="monthly-price">{{ package.monthly_price|floatformat:0 }}</span>
+                <span class="yearly-price hidden">{{ package.yearly_price|floatformat:0 }}</span>
+            </div>
+            <div class="pricing-card__period">
+                <span class="monthly-text">per month</span>
+                <span class="yearly-text hidden">per year</span>
+            </div>
+            {% if package.yearly_price %}
+            <div class="pricing-card__discount yearly-discount-text hidden">
+                Save {{ package.get_yearly_discount_percentage }}% with yearly billing
+            </div>
+            {% endif %}
+            
+            <ul class="pricing-features">
+                {% for feature in package.get_features_list %}
+                <li>{{ feature }}</li>
+                {% endfor %}
+            </ul>
+            
+            <a href="{% url 'pricing:checkout' package.slug %}" class="pricing-card__button">
+                {{ package.button_text }}
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Money-Back Guarantee Section -->
+{% if guarantee_content.is_active %}
+<section class="guarantee-section">
+    <div class="guarantee-content">
+        <div class="guarantee-icon">
+            <i class="{{ guarantee_content.icon }}"></i>
+        </div>
+        
+        <h2 class="guarantee-title">{{ guarantee_content.headline }}</h2>
+        <p class="guarantee-description">{{ guarantee_content.description }}</p>
+        
+        {% if guarantee_content.customer_count or guarantee_content.star_rating %}
+        <div class="guarantee-stats">
+            {% if guarantee_content.customer_count %}
+            <div class="guarantee-stat">
+                <span class="guarantee-stat__number">{{ guarantee_content.customer_count|floatformat:0 }}+</span>
+                <span class="guarantee-stat__label">Happy Students</span>
+            </div>
+            {% endif %}
+            
+            {% if guarantee_content.star_rating %}
+            <div class="guarantee-stat">
+                <span class="guarantee-stat__number">{{ guarantee_content.star_rating }}/5</span>
+                <span class="guarantee-stat__label">Average Rating</span>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+<!-- FAQ Section -->
+<section class="faq-section">
+    <div class="faq-container">
+        <h2 class="faq-title">Frequently Asked Questions</h2>
+        
+        <div class="faq-item">
+            <h3 class="faq-question">Can I change my plan later?</h3>
+            <p class="faq-answer">
+                Yes! You can upgrade or downgrade your plan at any time. Changes will be prorated and take effect immediately.
+            </p>
+        </div>
+        
+        <div class="faq-item">
+            <h3 class="faq-question">What payment methods do you accept?</h3>
+            <p class="faq-answer">
+                We accept all major credit cards (Visa, MasterCard, American Express) through our secure Stripe payment processor.
+            </p>
+        </div>
+        
+        <div class="faq-item">
+            <h3 class="faq-question">Can I cancel anytime?</h3>
+            <p class="faq-answer">
+                Absolutely! You can cancel your subscription at any time. You'll continue to have access until the end of your current billing period.
+            </p>
+        </div>
+        
+        <div class="faq-item">
+            <h3 class="faq-question">Do you offer refunds?</h3>
+            <p class="faq-answer">
+                Yes! We offer a {{ guarantee_content.days }}-day money-back guarantee. If you're not satisfied, we'll refund your payment, no questions asked.
+            </p>
+        </div>
+    </div>
+</section>
+
+<script>
+function toggleBilling(cycle) {
+    const monthlyToggle = document.getElementById('monthly-toggle');
+    const yearlyToggle = document.getElementById('yearly-toggle');
+    const monthlyPrices = document.querySelectorAll('.monthly-price');
+    const yearlyPrices = document.querySelectorAll('.yearly-price');
+    const monthlyTexts = document.querySelectorAll('.monthly-text');
+    const yearlyTexts = document.querySelectorAll('.yearly-text');
+    const yearlyDiscountTexts = document.querySelectorAll('.yearly-discount-text');
+    
+    if (cycle === 'monthly') {
+        monthlyToggle.classList.add('active');
+        yearlyToggle.classList.remove('active');
+        
+        monthlyPrices.forEach(price => price.classList.remove('hidden'));
+        yearlyPrices.forEach(price => price.classList.add('hidden'));
+        monthlyTexts.forEach(text => text.classList.remove('hidden'));
+        yearlyTexts.forEach(text => text.classList.add('hidden'));
+        yearlyDiscountTexts.forEach(text => text.classList.add('hidden'));
+    } else {
+        yearlyToggle.classList.add('active');
+        monthlyToggle.classList.remove('active');
+        
+        monthlyPrices.forEach(price => price.classList.add('hidden'));
+        yearlyPrices.forEach(price => price.classList.remove('hidden'));
+        monthlyTexts.forEach(text => text.classList.add('hidden'));
+        yearlyTexts.forEach(text => text.classList.remove('hidden'));
+        yearlyDiscountTexts.forEach(text => text.classList.remove('hidden'));
+    }
+}
+</script>
+{% endblock %}

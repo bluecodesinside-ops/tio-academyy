@@ -1,0 +1,1860 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Gallery - Tio Academy" %}{% endblock %}
+
+{% block content %}
+<!-- Gallery Hero Section -->
+<section class="gallery-hero">
+    <div class="hero-background">
+        <div class="hero-gradient"></div>
+        <div class="hero-pattern"></div>
+    </div>
+    <div class="container hero-content">
+        <div class="hero-text fade-in-up">
+            <h1 class="hero-title">{% trans "Gallery" %}</h1>
+            <p class="hero-subtitle">{% trans "Download and enjoy our premium collection of dance photos and videos" %}</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">{{ photos|length|default:"0" }}</span>
+                    <span class="stat-label">{% trans "Photos" %}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{ videos|length|default:"0" }}</span>
+                    <span class="stat-label">{% trans "Videos" %}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{% trans "Free" %}</span>
+                    <span class="stat-label">{% trans "Downloads" %}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Navigation -->
+<section class="gallery-nav">
+    <div class="container">
+        <div class="gallery-nav__tabs">
+            <button class="gallery-nav__tab {% if photos and not videos %}gallery-nav__tab--active{% endif %}" data-tab="photos">
+                <i class="fas fa-camera"></i>
+                <span>{% trans "Photos" %}</span>
+                <span class="tab-count">{{ photos|length|default:"0" }}</span>
+            </button>
+            <button class="gallery-nav__tab {% if videos %}gallery-nav__tab--active{% endif %}" data-tab="videos">
+                <i class="fas fa-video"></i>
+                <span>{% trans "Videos" %}</span>
+                <span class="tab-count">{{ videos|length|default:"0" }}</span>
+                {% if videos|length > 0 %}
+                    <span class="tab-badge">{% trans "NEW" %}</span>
+                {% endif %}
+            </button>
+        </div>
+        
+        <div class="gallery-nav__filters">
+            <a class="gallery-nav__filter {% if current_location == 'all' %}gallery-nav__filter--active{% endif %}" 
+               href="{% url 'gallery:gallery' %}">
+                <i class="fas fa-globe"></i>
+                {% trans "All" %}
+            </a>
+            {% for loc in locations %}
+            <a class="gallery-nav__filter {% if current_location == loc.value %}gallery-nav__filter--active{% endif %}" 
+               href="{% url 'gallery:gallery' %}?location={{ loc.value }}">
+                <i class="fas fa-map-marker-alt"></i>
+                {{ loc.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Premium Photos Section -->
+<section id="photos" class="gallery-section {% if photos and not videos %}gallery-section--active{% endif %}">
+    <div class="container">
+        {% if photos %}
+            <div class="gallery-grid">
+                {% for photo in photos %}
+                    {% if photo.get_image_url %}
+                        <article class="gallery-item" 
+                             data-src="{{ photo.get_image_url }}" 
+                             data-title="{{ photo.title }}" 
+                             data-description="{{ photo.description|default:'' }}"
+                             data-location="{{ photo.get_location_display|default:'' }}"
+                             data-date="{{ photo.created_at|date:'M d, Y' }}"
+                             data-type="image">
+                            <div class="gallery-card">
+                                <div class="gallery-card__image">
+                                    <img src="{{ photo.get_image_url }}" alt="{{ photo.title }}" loading="lazy">
+                                    <div class="gallery-overlay">
+                                        <div class="gallery-overlay__content">
+                                            <h4>{{ photo.title }}</h4>
+                                            {% if photo.description %}
+                                                <p>{{ photo.description|truncatewords:8 }}</p>
+                    {% endif %}
+                                            <div class="gallery-overlay__meta">
+                                                {% if photo.location %}
+                                                    <span class="gallery-overlay__meta-tag">
+                                                        <i class="fas fa-map-marker-alt"></i>
+                                                        {{ photo.get_location_display }}
+                                                    </span>
+            {% endif %}
+                                                <span class="gallery-overlay__meta-tag">
+                                                    <i class="fas fa-calendar"></i>
+                                                    {{ photo.created_at|date:"M d, Y" }}
+                                                </span>
+        </div>
+                            </div>
+                                        <div class="gallery-overlay__actions">
+                                            <button class="gallery-action-btn lightbox-trigger" 
+                                                    data-index="{{ forloop.counter0 }}"
+                                                    data-action="expand"
+                                                    aria-label="View {{ photo.title }} in lightbox">
+                                                <i class="fas fa-expand"></i>
+                                    </button>
+                                            <button class="gallery-action-btn download-trigger" 
+                                                    data-src="{{ photo.get_image_url }}" 
+                                                    data-title="{{ photo.title }}"
+                                                    data-action="download"
+                                                    aria-label="Download {{ photo.title }}">
+                                        <i class="fas fa-download"></i>
+                                            </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        </article>
+                    {% endif %}
+            {% endfor %}
+        </div>
+        
+            <!-- Enhanced Pagination -->
+        {% if photos.has_other_pages %}
+                <div class="pagination-modern">
+                    <div class="pagination-info">
+                        <span>{% trans "Showing" %} {{ photos.start_index }}-{{ photos.end_index }} {% trans "of" %} {{ photos.paginator.count }} {% trans "photos" %}</span>
+                    </div>
+                    
+                    <div class="pagination-controls">
+            {% if photos.has_previous %}
+                            <a href="?photo_page=1{% if current_location != 'all' %}&location={{ current_location }}{% endif %}" class="pagination-btn pagination-btn--first">
+                                <i class="fas fa-angle-double-left"></i>
+                            </a>
+                            <a href="?photo_page={{ photos.previous_page_number }}{% if current_location != 'all' %}&location={{ current_location }}{% endif %}" class="pagination-btn">
+                                <i class="fas fa-chevron-left"></i>
+                                {% trans "Previous" %}
+                </a>
+            {% endif %}
+            
+                        <div class="pagination-pages">
+                            {% for page_num in photos.paginator.page_range %}
+                                {% if page_num == photos.number %}
+                                    <span class="pagination-page pagination-page--current">{{ page_num }}</span>
+                                {% elif page_num > photos.number|add:'-3' and page_num < photos.number|add:'3' %}
+                                    <a href="?photo_page={{ page_num }}{% if current_location != 'all' %}&location={{ current_location }}{% endif %}" class="pagination-page">{{ page_num }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+            
+            {% if photos.has_next %}
+                            <a href="?photo_page={{ photos.next_page_number }}{% if current_location != 'all' %}&location={{ current_location }}{% endif %}" class="pagination-btn">
+                                {% trans "Next" %}
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <a href="?photo_page={{ photos.paginator.num_pages }}{% if current_location != 'all' %}&location={{ current_location }}{% endif %}" class="pagination-btn pagination-btn--last">
+                                <i class="fas fa-angle-double-right"></i>
+                </a>
+            {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h3>{% trans "No Photos Available" %}</h3>
+                <p>{% trans "Photos will appear here once they're uploaded to the gallery." %}</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Premium Videos Section -->
+<section id="videos" class="gallery-section {% if videos %}gallery-section--active{% endif %}">
+    <div class="container">
+        {% if videos %}
+            <div class="gallery-grid">
+            {% for video in videos %}
+            {% if video.get_media_url %}
+                        <article class="gallery-item" 
+                             data-src="{{ video.get_media_url }}" 
+                             data-title="{{ video.title }}" 
+                             data-description="{{ video.description|default:'' }}"
+                             data-location="{{ video.get_location_display|default:'' }}"
+                             data-date="{{ video.created_at|date:'M d, Y' }}"
+                             data-type="video">
+                            <div class="gallery-card">
+                                <div class="gallery-card__image">
+                        {% if video.thumbnail %}
+                                        <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" loading="lazy">
+                        {% else %}
+                                        <div class="video-container" style="width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; position: relative; min-height: 200px;">
+                                            <video muted playsinline preload="metadata" style="width: 100%; height: 100%; object-fit: cover; background: #000;">
+                                                <source src="{{ video.get_media_url }}" type="video/quicktime">
+                                                <source src="{{ video.get_media_url }}" type="video/mp4">
+                                            </video>
+                                            <div class="video-placeholder" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center; z-index: 2;">
+                                                <i class="fas fa-video" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                                                <div>{{ video.title|default:"Video" }}</div>
+                                            </div>
+                                        </div>
+                        {% endif %}
+                                    <div class="gallery-video-indicator" data-action="play-video">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                    <div class="gallery-overlay">
+                                        <div class="gallery-overlay__content">
+                                            <h4>{{ video.title }}</h4>
+                                            {% if video.description %}
+                                                <p>{{ video.description|truncatewords:8 }}</p>
+                                            {% endif %}
+                                            <div class="gallery-overlay__meta">
+                                                {% if video.location %}
+                                                    <span class="gallery-overlay__meta-tag">
+                                                        <i class="fas fa-map-marker-alt"></i>
+                                                        {{ video.get_location_display }}
+                                                    </span>
+                                                {% endif %}
+                                                <span class="gallery-overlay__meta-tag">
+                                                    <i class="fas fa-calendar"></i>
+                                                    {{ video.created_at|date:"M d, Y" }}
+                                                </span>
+                            </div>
+                        </div>
+                                        <div class="gallery-overlay__actions">
+                                            <button class="gallery-action-btn lightbox-trigger" 
+                                                    data-index="{{ forloop.counter0 }}"
+                                                    data-action="expand"
+                                                    aria-label="View {{ video.title }} in lightbox">
+                                                <i class="fas fa-expand"></i>
+                                            </button>
+                                            <button class="gallery-action-btn download-trigger" 
+                                                    data-src="{{ video.get_media_url }}" 
+                                                    data-title="{{ video.title }}"
+                                                    data-action="download"
+                                                    aria-label="Download {{ video.title }}">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        </article>
+            {% endif %}
+            {% endfor %}
+        </div>
+        
+            <!-- Enhanced Pagination -->
+        {% if videos.has_other_pages %}
+                <div class="pagination-modern">
+                    <div class="pagination-info">
+                        <span>{% trans "Showing" %} {{ videos.start_index }}-{{ videos.end_index }} {% trans "of" %} {{ videos.paginator.count }} {% trans "videos" %}</span>
+                    </div>
+                    
+                    <div class="pagination-controls">
+            {% if videos.has_previous %}
+                            <a href="?video_page=1{% if current_location != 'all' %}&location={{ current_location }}{% endif %}" class="pagination-btn pagination-btn--first">
+                                <i class="fas fa-angle-double-left"></i>
+                            </a>
+                            <a href="?video_page={{ videos.previous_page_number }}{% if current_location != 'all' %}&location={{ current_location }}{% endif %}" class="pagination-btn">
+                                <i class="fas fa-chevron-left"></i>
+                                {% trans "Previous" %}
+                </a>
+            {% endif %}
+            
+                        <div class="pagination-pages">
+                            {% for page_num in videos.paginator.page_range %}
+                                {% if page_num == videos.number %}
+                                    <span class="pagination-page pagination-page--current">{{ page_num }}</span>
+                                {% elif page_num > videos.number|add:'-3' and page_num < videos.number|add:'3' %}
+                                    <a href="?video_page={{ page_num }}{% if current_location != 'all' %}&location={{ current_location }}{% endif %}" class="pagination-page">{{ page_num }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+            
+            {% if videos.has_next %}
+                            <a href="?video_page={{ videos.next_page_number }}{% if current_location != 'all' %}&location={{ current_location }}{% endif %}" class="pagination-btn">
+                                {% trans "Next" %}
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <a href="?video_page={{ videos.paginator.num_pages }}{% if current_location != 'all' %}&location={{ current_location }}{% endif %}" class="pagination-btn pagination-btn--last">
+                                <i class="fas fa-angle-double-right"></i>
+                </a>
+            {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h3>{% trans "No Videos Available" %}</h3>
+                <p>{% trans "Videos will appear here once they're uploaded to the gallery." %}</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Modern Lightbox Modal -->
+<div id="photoLightbox" class="lightbox-modal">
+    <div class="lightbox-content">
+        <button class="lightbox-close" onclick="closeLightbox()" aria-label="{% trans 'Close' %}">
+            <i class="fas fa-times"></i>
+        </button>
+        
+        <div class="lightbox-image-container">
+            <img id="lightboxImage" style="display: none; width: 100%; height: 100%; object-fit: contain;" oncontextmenu="showDownloadMessage('Right-click and select \'Save image as...\' to download', 'info')" />
+            <div id="lightboxPlaceholder" class="lightbox-placeholder">
+                <i class="fas fa-image"></i>
+                <div class="placeholder-text">{% trans "Gallery Item" %}</div>
+            </div>
+            <div class="lightbox-navigation">
+                <button class="nav-btn" onclick="previousPhoto()" title="{% trans 'Previous' %}">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-btn" onclick="nextPhoto()" title="{% trans 'Next' %}">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="lightbox-info">
+            <h3 id="lightboxTitle">{% trans "Gallery Item" %}</h3>
+            <p id="lightboxDescription">{% trans "View gallery content" %}</p>
+            <div class="lightbox-meta">
+                <span id="lightboxCounter">1 of 6</span>
+                <button id="lightboxDownload" class="btn btn-primary" style="margin-left: 20px;" onclick="downloadCurrentPhoto()">
+                    <i class="fas fa-download"></i> {% trans "Download" %}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Video Modal -->
+<div id="videoModal" class="lightbox-modal" style="display:none;">
+    <div class="lightbox-content" style="max-width: 960px;">
+        <button id="videoCloseBtn" class="lightbox-close" aria-label="{% trans 'Close' %}">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="lightbox-info" style="padding: 8px 16px;">
+            <h3 id="videoTitle">{% trans "Video" %}</h3>
+        </div>
+        <div class="lightbox-image-container" style="background:#000;">
+            <video id="videoPlayer" style="width:100%; height:100%; outline:none;" controls playsinline></video>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Premium Gallery System -->
+<script src="{% static 'js/gallery-system.js' %}"></script>
+
+<style>
+/* Gallery Hero Section */
+.gallery-hero {
+    position: relative;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: var(--color-gray-900);
+    color: var(--color-white);
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+.hero-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--color-gray-900) 0%, var(--color-gray-800) 100%);
+    opacity: 0.95;
+}
+
+.hero-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(201, 169, 110, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(201, 169, 110, 0.1) 0%, transparent 40%);
+    animation: float 8s ease-in-out infinite;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-title {
+    font-size: var(--font-size-5xl);
+    font-weight: var(--font-weight-thin);
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-white);
+    letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+    font-size: var(--font-size-lg);
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: var(--font-weight-light);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-3xl);
+}
+
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-3xl);
+    margin-top: var(--spacing-2xl);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-sm);
+}
+
+.stat-label {
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Gallery Navigation */
+.gallery-nav {
+    padding: var(--spacing-2xl) 0;
+    background: var(--color-white);
+    border-bottom: 1px solid var(--color-gray-100);
+}
+
+.gallery-nav__tabs {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+}
+
+.gallery-nav__tab {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: var(--color-gray-50);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-full);
+    color: var(--color-gray-600);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: var(--transition-normal);
+    position: relative;
+}
+
+.gallery-nav__tab:hover {
+    background: var(--color-gray-100);
+    border-color: var(--color-gray-300);
+}
+
+.gallery-nav__tab--active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-white);
+}
+
+.tab-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+}
+
+.tab-badge {
+    background: var(--color-accent);
+    color: var(--color-white);
+    padding: 2px 6px;
+    border-radius: var(--radius-full);
+    font-size: 10px;
+    font-weight: var(--font-weight-bold);
+    margin-left: var(--spacing-xs);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.gallery-nav__filters {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.gallery-nav__filter {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-full);
+    color: var(--color-gray-600);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    transition: var(--transition-normal);
+}
+
+.gallery-nav__filter:hover {
+    background: var(--color-gray-50);
+    border-color: var(--color-gray-300);
+    text-decoration: none;
+    color: var(--color-gray-700);
+}
+
+.gallery-nav__filter--active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-white);
+}
+
+/* Gallery Sections */
+.gallery-section {
+    display: none;
+    padding: var(--spacing-4xl) 0;
+    background: var(--color-gray-50);
+}
+
+.gallery-section--active {
+    display: block;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-2xl);
+    margin-bottom: var(--spacing-4xl);
+}
+
+.gallery-item {
+    background: var(--color-white);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-gray-100);
+    transition: var(--transition-normal);
+    cursor: pointer;
+}
+
+.gallery-item:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+}
+
+.gallery-card__image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+    background: var(--color-gray-100);
+}
+
+.gallery-card__image img,
+.gallery-card__image video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-slow);
+}
+
+.gallery-item:hover .gallery-card__image img,
+.gallery-item:hover .gallery-card__image video {
+    transform: scale(1.05);
+}
+
+.gallery-video-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-white);
+    font-size: var(--font-size-lg);
+    transition: var(--transition-normal);
+    cursor: pointer;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.gallery-item:hover .gallery-video-indicator {
+    background: var(--color-accent);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.gallery-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--spacing-lg);
+    opacity: 0;
+    transition: var(--transition-normal);
+}
+
+.gallery-item:hover .gallery-overlay {
+    opacity: 1;
+}
+
+.gallery-overlay__content {
+    color: var(--color-white);
+}
+
+.gallery-overlay__content h4 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-white);
+}
+
+.gallery-overlay__content p {
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.5;
+    margin-bottom: var(--spacing-md);
+}
+
+.gallery-overlay__meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.gallery-overlay__meta-tag {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.gallery-overlay__actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: flex-end;
+}
+
+.gallery-action-btn {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    font-size: var(--font-size-sm);
+}
+
+.gallery-action-btn:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    transform: scale(1.1);
+}
+
+/* Enhanced Pagination */
+.pagination-modern {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-4xl);
+    padding: var(--spacing-xl);
+    background: var(--color-white);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-gray-100);
+}
+
+.pagination-info {
+    color: var(--color-gray-600);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+    text-align: center;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pagination-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-lg);
+    color: var(--color-gray-600);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    transition: var(--transition-normal);
+    font-size: var(--font-size-sm);
+}
+
+.pagination-btn:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-white);
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.pagination-btn--first,
+.pagination-btn--last {
+    padding: var(--spacing-sm);
+    min-width: 40px;
+    justify-content: center;
+}
+
+.pagination-pages {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin: 0 var(--spacing-md);
+}
+
+.pagination-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-lg);
+    color: var(--color-gray-600);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    transition: var(--transition-normal);
+    font-size: var(--font-size-sm);
+}
+
+.pagination-page:hover {
+    background: var(--color-gray-50);
+    border-color: var(--color-gray-300);
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+.pagination-page--current {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-white);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Responsive Pagination */
+@media (max-width: 768px) {
+    .pagination-modern {
+        padding: var(--spacing-lg);
+    }
+    
+    .pagination-controls {
+        gap: var(--spacing-xs);
+    }
+    
+    .pagination-btn {
+        padding: var(--spacing-sm);
+        font-size: var(--font-size-xs);
+    }
+    
+    .pagination-btn span {
+        display: none;
+    }
+    
+    .pagination-pages {
+        margin: 0 var(--spacing-sm);
+    }
+    
+    .pagination-page {
+        width: 35px;
+        height: 35px;
+        font-size: var(--font-size-xs);
+    }
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-6xl) var(--spacing-2xl);
+    color: var(--color-gray-500);
+}
+
+.empty-icon {
+    font-size: var(--font-size-6xl);
+    color: var(--color-gray-300);
+    margin-bottom: var(--spacing-xl);
+}
+
+.empty-state h3 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-md);
+    color: var(--color-gray-600);
+}
+
+.empty-state p {
+    font-size: var(--font-size-lg);
+    color: var(--color-gray-500);
+}
+
+/* Animations */
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(1deg); }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: var(--spacing-xl);
+    }
+    
+    .hero-stats {
+        gap: var(--spacing-2xl);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: var(--font-size-4xl);
+    }
+    
+    .hero-subtitle {
+        font-size: var(--font-size-base);
+    }
+    
+    .hero-stats {
+        flex-direction: column;
+        gap: var(--spacing-lg);
+    }
+    
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+    
+    .gallery-nav__tabs {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .gallery-nav__filters {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: var(--font-size-3xl);
+    }
+    
+    .gallery-card__image {
+        height: 200px;
+    }
+    
+    .gallery-overlay {
+        padding: var(--spacing-md);
+    }
+}
+/* Download Success Animation */
+@keyframes downloadSuccess {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); background: #22c55e; }
+    100% { transform: scale(1); }
+}
+
+.gallery-action-btn.download-success {
+    animation: downloadSuccess 0.6s ease;
+}
+
+/* Download Toast Messages */
+.download-toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    color: var(--color-white);
+    font-weight: var(--font-weight-medium);
+        z-index: 10000;
+    animation: slideInRight 0.3s ease;
+        max-width: 300px;
+    box-shadow: var(--shadow-xl);
+}
+
+.download-toast.success {
+    background: #22c55e;
+}
+
+.download-toast.error {
+    background: #ef4444;
+}
+
+.download-toast.info {
+    background: #3b82f6;
+}
+
+@keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+/* Lightbox Modal Styles */
+.lightbox-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+}
+
+.lightbox-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    background: var(--color-white);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-2xl);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 50%;
+    color: var(--color-white);
+    font-size: var(--font-size-lg);
+    cursor: pointer;
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-normal);
+}
+
+.lightbox-close:hover {
+    background: var(--color-accent);
+    transform: scale(1.1);
+}
+
+.lightbox-image-container {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    background: var(--color-gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray-500);
+    font-size: var(--font-size-2xl);
+    position: relative;
+}
+
+.lightbox-placeholder video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+}
+
+.video-play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    text-align: center;
+    color: white;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+}
+
+.video-play-overlay:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: translate(-50%, -50%) scale(1.05);
+}
+
+.placeholder-text {
+    margin-top: var(--spacing-md);
+    font-size: var(--font-size-lg);
+    color: var(--color-gray-600);
+}
+
+.lightbox-navigation {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 var(--spacing-lg);
+    pointer-events: none;
+}
+
+.nav-btn {
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 50%;
+    color: var(--color-white);
+    font-size: var(--font-size-lg);
+    cursor: pointer;
+    pointer-events: all;
+    transition: var(--transition-normal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-btn:hover {
+    background: var(--color-accent);
+    transform: scale(1.1);
+}
+
+.lightbox-info {
+    padding: var(--spacing-xl);
+    background: var(--color-white);
+}
+
+.lightbox-info h3 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-md);
+    color: var(--color-gray-900);
+}
+
+.lightbox-info p {
+    color: var(--color-gray-600);
+    margin-bottom: var(--spacing-lg);
+}
+
+.lightbox-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+.lightbox-meta span {
+    color: var(--color-gray-500);
+    font-size: var(--font-size-sm);
+}
+
+.btn {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: var(--transition-normal);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.btn-primary {
+    background: var(--color-accent);
+    color: var(--color-white);
+}
+
+.btn-primary:hover {
+    background: #e8c44a;
+    transform: translateY(-2px);
+}
+
+/* Responsive Lightbox */
+@media (max-width: 768px) {
+    .lightbox-modal {
+        padding: var(--spacing-md);
+    }
+    
+    .lightbox-content {
+        max-width: 95vw;
+        max-height: 95vh;
+    }
+    
+    .lightbox-image-container {
+        height: 60vh;
+    }
+    
+    .lightbox-info {
+        padding: var(--spacing-lg);
+    }
+    
+    .lightbox-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* Download Toast Notifications */
+.download-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
+    box-shadow: var(--shadow-lg);
+    z-index: 10000;
+    animation: slideInRight 0.3s ease;
+    max-width: 300px;
+}
+
+.download-toast.success {
+    border-left: 4px solid #10b981;
+}
+
+.download-toast.error {
+    border-left: 4px solid #ef4444;
+}
+
+.download-toast.info {
+    border-left: 4px solid var(--color-accent);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+</style>
+
+<script>
+// Enhanced Gallery System with Download Functionality
+(function() {
+    'use strict';
+    
+    // Gallery state
+    let currentTab = 'photos';
+    let currentItems = [];
+    let currentIndex = 0;
+    
+    // Initialize gallery system
+    function initGallery() {
+        setupTabSwitching();
+        setupDownloadFunctionality();
+        setupLightbox();
+        setupScrollAnimations();
+        initializeVideos();
+        
+        // Debug: Check if play buttons exist
+        setTimeout(() => {
+            const playButtons = document.querySelectorAll('[data-action="play-video"]');
+            console.log('Found play buttons:', playButtons.length);
+            playButtons.forEach((btn, index) => {
+                console.log(`Play button ${index}:`, btn);
+                // Add direct click listener for testing
+                btn.addEventListener('click', function(e) {
+                    console.log('Direct click on play button!', e);
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Find the video element
+                    const galleryItem = btn.closest('.gallery-item');
+                    const video = galleryItem.querySelector('video');
+                    console.log('Gallery item:', galleryItem);
+                    console.log('Video element:', video);
+                    
+                    if (video) {
+                        if (video.paused) {
+                            video.play().then(() => {
+                                btn.innerHTML = '<i class="fas fa-pause"></i>';
+                                console.log('Video playing');
+                            }).catch(error => {
+                                console.error('Error playing video:', error);
+                            });
+                        } else {
+                            video.pause();
+                            btn.innerHTML = '<i class="fas fa-play"></i>';
+                            console.log('Video paused');
+                        }
+                    } else {
+                        console.error('No video element found');
+                    }
+                });
+            });
+        }, 1000);
+    }
+    
+    // Initialize video loading
+    function initializeVideos() {
+        const videos = document.querySelectorAll('video[preload="metadata"]');
+        videos.forEach(video => {
+            video.addEventListener('loadedmetadata', function() {
+                // Hide placeholder when video loads
+                const placeholder = this.parentElement.querySelector('.video-placeholder');
+                if (placeholder) {
+                    placeholder.style.display = 'none';
+                }
+            });
+            
+            video.addEventListener('error', function() {
+                console.log('Video failed to load:', this.src);
+                // Keep placeholder visible if video fails to load
+            });
+        });
+        
+        // Setup video play functionality
+        setupVideoPlay();
+    }
+    
+    // Setup video play/pause functionality
+    function setupVideoPlay() {
+        console.log('Setting up video play functionality');
+        
+        document.addEventListener('click', function(e) {
+            console.log('Click detected on:', e.target);
+            console.log('Looking for play-video action...');
+            
+            if (e.target.closest('[data-action="play-video"]')) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Play button clicked');
+                
+                const playButton = e.target.closest('[data-action="play-video"]');
+                const galleryItem = playButton.closest('.gallery-item');
+                const video = galleryItem.querySelector('video');
+                
+                if (video) {
+                    if (video.paused) {
+                        video.play().then(() => {
+                            playButton.innerHTML = '<i class="fas fa-pause"></i>';
+                            console.log('Video playing');
+                        }).catch(error => {
+                            console.error('Error playing video:', error);
+                            showToast('Error playing video', 'error');
+                        });
+                    } else {
+                        video.pause();
+                        playButton.innerHTML = '<i class="fas fa-play"></i>';
+                        console.log('Video paused');
+                    }
+                } else {
+                    console.error('No video element found');
+                }
+            }
+        });
+        
+        // Handle video events to update play button
+        document.addEventListener('play', function(e) {
+            if (e.target.tagName === 'VIDEO') {
+                const galleryItem = e.target.closest('.gallery-item');
+                const playButton = galleryItem.querySelector('[data-action="play-video"]');
+                if (playButton) {
+                    playButton.innerHTML = '<i class="fas fa-pause"></i>';
+                }
+            }
+        });
+        
+        document.addEventListener('pause', function(e) {
+            if (e.target.tagName === 'VIDEO') {
+                const galleryItem = e.target.closest('.gallery-item');
+                const playButton = galleryItem.querySelector('[data-action="play-video"]');
+                if (playButton) {
+                    playButton.innerHTML = '<i class="fas fa-play"></i>';
+                }
+            }
+        });
+    }
+    
+    // Tab switching functionality
+    function setupTabSwitching() {
+        const tabButtons = document.querySelectorAll('.gallery-nav__tab');
+        const sections = document.querySelectorAll('.gallery-section');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+            e.preventDefault();
+                const targetTab = this.getAttribute('data-tab');
+                
+                // Update active states
+                tabButtons.forEach(tab => tab.classList.remove('gallery-nav__tab--active'));
+                sections.forEach(section => section.classList.remove('gallery-section--active'));
+                
+                this.classList.add('gallery-nav__tab--active');
+                const targetSection = document.getElementById(targetTab);
+                if (targetSection) {
+                    targetSection.classList.add('gallery-section--active');
+                }
+                
+                currentTab = targetTab;
+                updateCurrentItems();
+            });
+        });
+    }
+    
+    // Update current items based on active tab
+    function updateCurrentItems() {
+        const activeSection = document.querySelector('.gallery-section--active');
+        if (activeSection) {
+            currentItems = Array.from(activeSection.querySelectorAll('.gallery-item'));
+            console.log('Updated current items:', currentItems.length);
+        } else {
+            currentItems = [];
+            console.log('No active section found');
+        }
+    }
+    
+    // Enhanced download functionality
+    function setupDownloadFunctionality() {
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('[data-action="download"]')) {
+                e.preventDefault();
+                console.log('Download button clicked');
+                const button = e.target.closest('[data-action="download"]');
+                const galleryItem = button.closest('.gallery-item');
+                
+                console.log('Gallery item found:', galleryItem);
+                console.log('Button data:', {
+                    src: button.getAttribute('data-src'),
+                    title: button.getAttribute('data-title')
+                });
+                
+                if (galleryItem) {
+                    const src = galleryItem.getAttribute('data-src');
+                    const title = galleryItem.getAttribute('data-title');
+                    
+                    console.log('Item data:', { src, title });
+                    
+                    if (src) {
+                        downloadMedia(src, title || 'gallery_item', button);
+                    } else {
+                        showToast('No media source available', 'error');
+                    }
+                }
+            }
+        });
+    }
+    
+    // Download media with multiple fallback methods
+    async function downloadMedia(url, title, button) {
+        try {
+            // Show loading state
+            const originalContent = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            button.disabled = true;
+            
+            showToast('Starting download...', 'info');
+            
+            // Clean filename
+            const filename = sanitizeFilename(title) + getFileExtension(url);
+            
+            // Method 1: Try server-side proxy first
+            try {
+                const proxyUrl = `/gallery/download/?url=${encodeURIComponent(url)}&filename=${encodeURIComponent(filename)}`;
+                const link = document.createElement('a');
+                link.href = proxyUrl;
+                link.download = filename;
+                link.style.display = 'none';
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showToast('Download started! Check your Downloads folder.', 'success');
+            } catch (proxyError) {
+                console.log('Proxy download failed, trying direct download:', proxyError);
+                
+                // Method 2: Direct download link
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                link.target = '_blank';
+                link.style.display = 'none';
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showToast('Download started! Check your Downloads folder.', 'success');
+            }
+            
+            // Success feedback
+            button.innerHTML = '<i class="fas fa-check"></i>';
+            button.classList.add('download-success');
+            
+            // Reset button after animation
+    setTimeout(() => {
+                button.innerHTML = originalContent;
+                button.classList.remove('download-success');
+                button.disabled = false;
+            }, 2000);
+            
+        } catch (error) {
+            console.error('Download failed:', error);
+            button.innerHTML = originalContent;
+            button.disabled = false;
+            showToast('Download failed. Try right-clicking and "Save as..."', 'error');
+        }
+    }
+    
+    // Sanitize filename for download
+    function sanitizeFilename(filename) {
+        if (!filename || filename === 'None' || filename === 'null') {
+            return 'gallery_item';
+        }
+        return filename
+            .replace(/[^a-z0-9\s-]/gi, '_')
+            .replace(/\s+/g, '_')
+            .toLowerCase()
+            .substring(0, 50);
+    }
+    
+    // Get file extension from URL
+    function getFileExtension(url) {
+        const extension = url.split('.').pop().split('?')[0];
+        return extension ? '.' + extension : '.jpg';
+    }
+    
+    // Show toast notification
+    function showToast(message, type) {
+        // Remove existing toasts
+        const existingToasts = document.querySelectorAll('.download-toast');
+        existingToasts.forEach(toast => toast.remove());
+        
+        // Create new toast
+        const toast = document.createElement('div');
+        toast.className = `download-toast ${type}`;
+        toast.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            </div>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Auto remove after 4 seconds
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.style.animation = 'slideInRight 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }
+        }, 4000);
+    }
+    
+    // Lightbox functionality
+    function setupLightbox() {
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('[data-action="expand"]')) {
+                e.preventDefault();
+                console.log('Expand button clicked');
+                const button = e.target.closest('[data-action="expand"]');
+                const galleryItem = button.closest('.gallery-item');
+                
+                console.log('Gallery item found:', galleryItem);
+                console.log('Button data:', {
+                    index: button.getAttribute('data-index'),
+                    src: button.getAttribute('data-src'),
+                    title: button.getAttribute('data-title')
+                });
+                
+                if (galleryItem) {
+                    // Find the index of this item in the current items array
+                    updateCurrentItems();
+                    const index = Array.from(currentItems).indexOf(galleryItem);
+                    
+                    console.log('Current items count:', currentItems.length);
+                    console.log('Found index:', index);
+                    
+                    if (index !== -1) {
+                        openLightbox(index);
+                    } else {
+                        console.error('Could not find gallery item index');
+                    }
+                }
+            }
+        });
+        
+        // Close lightbox on escape key and add keyboard navigation
+document.addEventListener('keydown', function(e) {
+    const lightbox = document.getElementById('photoLightbox');
+            if (lightbox && lightbox.style.display === 'flex') {
+        switch(e.key) {
+            case 'Escape':
+                closeLightbox();
+                break;
+            case 'ArrowLeft':
+                        e.preventDefault();
+                        previousItem();
+                break;
+            case 'ArrowRight':
+                        e.preventDefault();
+                        nextItem();
+                break;
+        }
+    }
+});
+    }
+    
+    // Open lightbox with media
+    function openLightbox(index) {
+        updateCurrentItems();
+        console.log('Opening lightbox at index:', index, 'Total items:', currentItems.length);
+        
+        if (index >= 0 && index < currentItems.length) {
+            const item = currentItems[index];
+            const src = item.getAttribute('data-src');
+            const title = item.getAttribute('data-title');
+            const description = item.getAttribute('data-description') || 'View gallery content';
+            const type = item.getAttribute('data-type') || 'image';
+            
+            console.log('Lightbox data:', { src, title, description, type });
+            
+            // Create or update lightbox
+            let lightbox = document.getElementById('photoLightbox');
+            if (!lightbox) {
+                createLightbox();
+                lightbox = document.getElementById('photoLightbox');
+            }
+            
+            // Update lightbox content
+            const image = document.getElementById('lightboxImage');
+            const placeholder = document.getElementById('lightboxPlaceholder');
+            const titleEl = document.getElementById('lightboxTitle');
+            const descriptionEl = document.getElementById('lightboxDescription');
+            const counter = document.getElementById('lightboxCounter');
+            
+            if (type === 'video') {
+                // For videos, show video element with play functionality
+                image.style.display = 'none';
+                placeholder.style.display = 'flex';
+                placeholder.innerHTML = `
+                    <video id="lightboxVideo" controls style="width: 100%; height: 100%; object-fit: contain; background: #000;">
+                        <source src="${src}" type="video/quicktime">
+                        <source src="${src}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                `;
+                
+                // Auto-play the video when lightbox opens
+                setTimeout(() => {
+                    const video = document.getElementById('lightboxVideo');
+                    if (video) {
+                        video.play().catch(error => {
+                            console.log('Auto-play failed:', error);
+                            // Show play button if auto-play fails
+                            placeholder.innerHTML = `
+                                <div class="video-play-overlay" onclick="playLightboxVideo()" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: pointer; text-align: center; color: white;">
+                                    <i class="fas fa-play-circle" style="font-size: 4rem; color: var(--color-accent);"></i>
+                                    <div class="placeholder-text">Click to play video</div>
+                                </div>
+                                <video id="lightboxVideo" style="width: 100%; height: 100%; object-fit: contain; background: #000;">
+                                    <source src="${src}" type="video/quicktime">
+                                    <source src="${src}" type="video/mp4">
+                                </video>
+                            `;
+                        });
+                    }
+                }, 100);
+            } else {
+                // For images, show the image
+                image.src = src;
+                image.style.display = 'block';
+                placeholder.style.display = 'none';
+            }
+            
+            titleEl.textContent = title || 'Gallery Item';
+            descriptionEl.textContent = description;
+            counter.textContent = `${index + 1} of ${currentItems.length}`;
+            
+            // Show lightbox
+            lightbox.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            currentIndex = index;
+        } else {
+            console.error('Invalid lightbox index:', index);
+        }
+    }
+    
+    // Create lightbox HTML
+    function createLightbox() {
+        const lightbox = document.createElement('div');
+        lightbox.id = 'photoLightbox';
+        lightbox.className = 'lightbox-modal';
+        lightbox.innerHTML = `
+            <div class="lightbox-content">
+                <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <div class="lightbox-image-container">
+                    <img id="lightboxImage" style="display: none; width: 100%; height: 100%; object-fit: contain;" />
+                    <div id="lightboxPlaceholder" class="lightbox-placeholder">
+                        <i class="fas fa-image"></i>
+                        <div class="placeholder-text">Gallery Item</div>
+                    </div>
+                    <div class="lightbox-navigation">
+                        <button class="nav-btn" onclick="previousItem()" title="Previous">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="nav-btn" onclick="nextItem()" title="Next">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="lightbox-info">
+                    <h3 id="lightboxTitle">Gallery Item</h3>
+                    <p id="lightboxDescription">View gallery content</p>
+                    <div class="lightbox-meta">
+                        <span id="lightboxCounter">1 of 1</span>
+                        <button id="lightboxDownload" class="btn btn-primary" style="margin-left: 20px;" onclick="downloadCurrentItem()">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(lightbox);
+        
+        // Close on background click
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) {
+        closeLightbox();
+    }
+});
+
+        // Add touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        lightbox.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        lightbox.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Swipe left - next item
+                    nextItem();
+                } else {
+                    // Swipe right - previous item
+                    previousItem();
+                }
+            }
+        }
+    }
+
+    // Close lightbox
+    function closeLightbox() {
+        const lightbox = document.getElementById('photoLightbox');
+        if (lightbox) {
+            lightbox.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        }
+    }
+    
+    // Navigation functions
+    window.previousItem = function() {
+        console.log('Previous item clicked, current index:', currentIndex, 'total items:', currentItems.length);
+        if (currentItems.length > 0) {
+            currentIndex = (currentIndex - 1 + currentItems.length) % currentItems.length;
+            console.log('New index:', currentIndex);
+            openLightbox(currentIndex);
+        }
+    };
+    
+    window.nextItem = function() {
+        console.log('Next item clicked, current index:', currentIndex, 'total items:', currentItems.length);
+        if (currentItems.length > 0) {
+            currentIndex = (currentIndex + 1) % currentItems.length;
+            console.log('New index:', currentIndex);
+            openLightbox(currentIndex);
+        }
+    };
+    
+    window.closeLightbox = closeLightbox;
+    
+    // Download current item in lightbox
+    window.downloadCurrentItem = function() {
+        if (currentItems && currentItems.length > 0 && currentItems[currentIndex]) {
+            const item = currentItems[currentIndex];
+            const src = item.getAttribute('data-src');
+            const title = item.getAttribute('data-title');
+            
+            if (src) {
+                downloadMedia(src, title || 'gallery_item', document.getElementById('lightboxDownload'));
+            } else {
+                showToast('No media source available', 'error');
+            }
+        } else {
+            showToast('No media available to download', 'error');
+        }
+    };
+    
+    // Play video in lightbox
+    window.playLightboxVideo = function() {
+        const video = document.getElementById('lightboxVideo');
+        if (video) {
+            video.play().then(() => {
+                console.log('Lightbox video playing');
+                // Hide the play overlay
+                const overlay = document.querySelector('.video-play-overlay');
+                if (overlay) {
+                    overlay.style.display = 'none';
+                }
+            }).catch(error => {
+                console.error('Error playing lightbox video:', error);
+                showToast('Error playing video', 'error');
+            });
+        }
+    };
+    
+    // Scroll animations
+    function setupScrollAnimations() {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all gallery items
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(30px)';
+            item.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            observer.observe(item);
+        });
+    }
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'complete') {
+        initGallery();
+    } else {
+        document.addEventListener('DOMContentLoaded', initGallery);
+    }
+})();
+
+</script>
+{% endblock %}

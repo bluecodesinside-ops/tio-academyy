@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - Latina Dance Academy</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Latina Dance Academy</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="courses.html" class="nav-link active">Courses</a></li>
+                <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+                <li><a href="blog.html" class="nav-link">Blog</a></li>
+                <li><a href="admin/login.html" class="nav-link admin-link">Admin</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Our Dance Courses</h1>
+            <p>Master authentic Latin dance styles with our comprehensive curriculum</p>
+        </div>
+    </section>
+
+    <!-- Course Filters -->
+    <section class="course-filters">
+        <div class="container">
+            <div class="filter-tags">
+                <button class="filter-tag active" data-filter="all">All Courses</button>
+                <button class="filter-tag" data-filter="beginner">Beginner</button>
+                <button class="filter-tag" data-filter="intermediate">Intermediate</button>
+                <button class="filter-tag" data-filter="advanced">Advanced</button>
+                <button class="filter-tag" data-filter="popular">Popular</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- All Courses -->
+    <section class="all-courses">
+        <div class="container">
+            <div class="courses-grid">
+                <!-- Salsa Course -->
+                <div class="course-card filterable-item" data-categories="beginner,popular">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1547153760-18fc86324498?w=400&h=250&fit=crop" alt="Salsa">
+                        <div class="course-overlay">
+                            <span class="course-level">Beginner Friendly</span>
+                        </div>
+                    </div>
+                    <div class="course-content">
+                        <h3>Salsa Fundamentals</h3>
+                        <p>Master the basics of salsa with step-by-step instruction from basic steps to advanced combinations.</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-clock"></i> 3 Levels</span>
+                            <span><i class="fas fa-users"></i> 12 Sessions</span>
+                            <span><i class="fas fa-star"></i> 4.8/5</span>
+                        </div>
+                        <div class="course-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" data-progress="75"></div>
+                            </div>
+                            <span>75% Complete</span>
+                        </div>
+                        <a href="courses/salsa.html" class="btn btn-primary">Start Learning</a>
+                    </div>
+                </div>
+
+                <!-- Bachata Course -->
+                <div class="course-card filterable-item" data-categories="intermediate,popular">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=250&fit=crop" alt="Bachata">
+                        <div class="course-overlay">
+                            <span class="course-level">Romantic</span>
+                        </div>
+                    </div>
+                    <div class="course-content">
+                        <h3>Bachata Sensual</h3>
+                        <p>Learn the romantic and sensual moves of bachata with fluid body movements and connection.</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-clock"></i> 3 Levels</span>
+                            <span><i class="fas fa-users"></i> 12 Sessions</span>
+                            <span><i class="fas fa-star"></i> 4.9/5</span>
+                        </div>
+                        <div class="course-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" data-progress="60"></div>
+                            </div>
+                            <span>60% Complete</span>
+                        </div>
+                        <a href="courses/bachata.html" class="btn btn-primary">Start Learning</a>
+                    </div>
+                </div>
+
+                <!-- Merengue Course -->
+                <div class="course-card filterable-item" data-categories="beginner">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?w=400&h=250&fit=crop" alt="Merengue">
+                        <div class="course-overlay">
+                            <span class="course-level">Fast-paced</span>
+                        </div>
+                    </div>
+                    <div class="course-content">
+                        <h3>Merengue Express</h3>
+                        <p>High-energy merengue moves and techniques perfect for beginners and party dancing.</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-clock"></i> 3 Levels</span>
+                            <span><i class="fas fa-users"></i> 12 Sessions</span>
+                            <span><i class="fas fa-star"></i> 4.7/5</span>
+                        </div>
+                        <div class="course-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" data-progress="90"></div>
+                            </div>
+                            <span>90% Complete</span>
+                        </div>
+                        <a href="courses/merengue.html" class="btn btn-primary">Start Learning</a>
+                    </div>
+                </div>
+
+                <!-- Cha Cha Course -->
+                <div class="course-card filterable-item" data-categories="intermediate">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=400&h=250&fit=crop" alt="Cha Cha">
+                        <div class="course-overlay">
+                            <span class="course-level">Energetic</span>
+                        </div>
+                    </div>
+                    <div class="course-content">
+                        <h3>Cha Cha Cha</h3>
+                        <p>Master the energetic and playful Cha Cha Cha with precise timing and sharp movements.</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-clock"></i> 3 Levels</span>
+                            <span><i class="fas fa-users"></i> 12 Sessions</span>
+                            <span><i class="fas fa-star"></i> 4.6/5</span>
+                        </div>
+                        <div class="course-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" data-progress="45"></div>
+                            </div>
+                            <span>45% Complete</span>
+                        </div>
+                        <a href="courses/chacha.html" class="btn btn-primary">Start Learning</a>
+                    </div>
+                </div>
+
+                <!-- Rumba Course -->
+                <div class="course-card filterable-item" data-categories="advanced">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=250&fit=crop" alt="Rumba">
+                        <div class="course-overlay">
+                            <span class="course-level">Advanced</span>
+                        </div>
+                    </div>
+                    <div class="course-content">
+                        <h3>Rumba Passion</h3>
+                        <p>Advanced rumba techniques focusing on body isolation, hip movement, and emotional expression.</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-clock"></i> 3 Levels</span>
+                            <span><i class="fas fa-users"></i> 12 Sessions</span>
+                            <span><i class="fas fa-star"></i> 4.8/5</span>
+                        </div>
+                        <div class="course-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" data-progress="30"></div>
+                            </div>
+                            <span>30% Complete</span>
+                        </div>
+                        <a href="courses/rumba.html" class="btn btn-primary">Start Learning</a>
+                    </div>
+                </div>
+
+                <!-- Samba Course -->
+                <div class="course-card filterable-item" data-categories="advanced">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1547153760-18fc86324498?w=400&h=250&fit=crop" alt="Samba">
+                        <div class="course-overlay">
+                            <span class="course-level">Advanced</span>
+                        </div>
+                    </div>
+                    <div class="course-content">
+                        <h3>Samba Carnival</h3>
+                        <p>Learn authentic Brazilian samba with carnival-style moves and infectious rhythm patterns.</p>
+                        <div class="course-meta">
+                            <span><i class="fas fa-clock"></i> 3 Levels</span>
+                            <span><i class="fas fa-users"></i> 12 Sessions</span>
+                            <span><i class="fas fa-star"></i> 4.9/5</span>
+                        </div>
+                        <div class="course-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" data-progress="20"></div>
+                            </div>
+                            <span>20% Complete</span>
+                        </div>
+                        <a href="courses/samba.html" class="btn btn-primary">Start Learning</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Features -->
+    <section class="course-features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Choose Our Courses?</h2>
+                <p>Discover what makes our Latin dance courses unique and effective</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>HD Video Lessons</h3>
+                    <p>Crystal clear video instruction with multiple camera angles for perfect learning.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Flexible Schedule</h3>
+                    <p>Learn at your own pace with 24/7 access to all course materials.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h3>Progress Tracking</h3>
+                    <p>Track your progress with detailed analytics and completion certificates.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Community Support</h3>
+                    <p>Join our community of dancers for support, tips, and motivation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Latina Dance Academy</h3>
+                    <p>Teaching authentic Latin dance styles to students worldwide.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="courses.html">Courses</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-envelope"></i> info@latinadanceacademy.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Latina Dance Academy. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
+
+

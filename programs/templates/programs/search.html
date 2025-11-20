@@ -1,0 +1,225 @@
+{% extends 'programs/base_programs.html' %}
+{% load static %}
+{% load program_extras %}
+
+{% block title %}{{ page_title }} - Tio Academy{% endblock %}
+
+{% block programs_content %}
+<!-- Header Section -->
+<div class="text-center mb-12">
+    <h1 class="text-4xl font-bold text-gray-900 mb-4">Search Programs</h1>
+    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Find the perfect dance program for you
+    </p>
+</div>
+
+<!-- Search Bar -->
+<div class="mb-8">
+    <form method="get" action="{% url 'programs:search' %}" class="max-w-2xl mx-auto">
+        <div class="relative">
+            <input 
+                type="text" 
+                name="q" 
+                placeholder="Search dance styles, categories, or videos..." 
+                class="w-full px-4 py-3 pl-12 pr-4 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                value="{{ query }}"
+            >
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <button type="submit" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                <svg class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </button>
+        </div>
+    </form>
+</div>
+
+{% if query %}
+    <!-- Search Results -->
+    <div class="space-y-8">
+        <!-- Dance Styles Results -->
+        {% if results.dance_styles %}
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">
+                    Dance Styles ({{ results.dance_styles|length }})
+                </h2>
+                <div class="grid-responsive">
+                    {% for style in results.dance_styles %}
+                        <div class="program-card bg-white">
+                            <a href="{{ style.get_absolute_url }}" class="block">
+                                <div class="relative">
+                                    {% if style.image %}
+                                        <img 
+                                            src="{{ style.image.url }}" 
+                                            alt="{{ style.name }}"
+                                            class="w-full h-48 object-cover"
+                                            loading="lazy"
+                                        >
+                                    {% else %}
+                                        <div class="w-full h-48 bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+                                            <i class="fas fa-music text-white text-4xl"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="p-6">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ style.name }}</h3>
+                                    {% if style.description %}
+                                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ style.description }}</p>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Categories Results -->
+        {% if results.categories %}
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">
+                    Categories ({{ results.categories|length }})
+                </h2>
+                <div class="grid-responsive">
+                    {% for category in results.categories %}
+                        <div class="program-card bg-white">
+                            <a href="{{ category.get_absolute_url }}" class="block">
+                                <div class="relative">
+                                    {% if category.image %}
+                                        <img 
+                                            src="{{ category.image.url }}" 
+                                            alt="{{ category.name }}"
+                                            class="w-full h-48 object-cover"
+                                            loading="lazy"
+                                        >
+                                    {% else %}
+                                        <div class="w-full h-48 bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+                                            <i class="fas fa-dance text-white text-4xl"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="p-6">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ category.name }}</h3>
+                                    <p class="text-gray-600 text-sm mb-2">{{ category.dance_style.name }}</p>
+                                    {% if category.description %}
+                                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ category.description }}</p>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Videos Results -->
+        {% if results.videos %}
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">
+                    Videos ({{ results.videos|length }})
+                </h2>
+                <div class="grid-responsive-sm">
+                    {% for video in results.videos %}
+                        <div class="video-card bg-white">
+                            <a href="{{ video.get_absolute_url }}" class="block">
+                                <div class="relative">
+                                    {% if video.thumbnail %}
+                                        <img 
+                                            src="{{ video.thumbnail.url }}" 
+                                            alt="{{ video.title }}"
+                                            class="w-full h-40 object-cover"
+                                            loading="lazy"
+                                        >
+                                    {% else %}
+                                        <div class="w-full h-40 bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center">
+                                            <i class="fas fa-play text-white text-3xl"></i>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <!-- Video Badge -->
+                                    <div class="absolute top-2 left-2">
+                                        {% if video.is_free %}
+                                            <span class="badge badge-free">
+                                                <i class="fas fa-gift mr-1"></i>
+                                                FREE
+                                            </span>
+                                        {% else %}
+                                            <span class="badge badge-paid">
+                                                <i class="fas fa-lock mr-1"></i>
+                                                ${{ video.price }}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <!-- Duration -->
+                                    <div class="absolute bottom-2 right-2">
+                                        <span class="bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
+                                            {{ video.duration|format_duration }}
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-4">
+                                    <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">{{ video.title }}</h3>
+                                    <p class="text-sm text-gray-500 mb-2">
+                                        {{ video.skill_level.category.dance_style.name }} - {{ video.skill_level.category.name }} - {{ video.skill_level.get_level_display }}
+                                    </p>
+                                    <div class="flex items-center justify-between text-sm text-gray-500">
+                                        <span>
+                                            <i class="fas fa-user mr-1"></i>
+                                            {{ video.instructor_name }}
+                                        </span>
+                                        <span>
+                                            <i class="fas fa-eye mr-1"></i>
+                                            {{ video.view_count }} views
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- No Results -->
+        {% if not results.dance_styles and not results.categories and not results.videos %}
+            <div class="text-center py-12">
+                <div class="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-search text-gray-400 text-3xl"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">No Results Found</h3>
+                <p class="text-gray-500 mb-6">Try searching with different keywords</p>
+                <a 
+                    href="{% url 'programs:explore_programs' %}" 
+                    class="inline-flex items-center px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors duration-200"
+                >
+                    <i class="fas fa-home mr-2"></i>
+                    Browse All Programs
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% else %}
+    <!-- No Search Query -->
+    <div class="text-center py-12">
+        <div class="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-search text-gray-400 text-3xl"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">Search Our Programs</h3>
+        <p class="text-gray-500 mb-6">Enter a search term above to find dance styles, categories, or videos</p>
+        <a 
+            href="{% url 'programs:explore_programs' %}" 
+            class="inline-flex items-center px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors duration-200"
+        >
+            <i class="fas fa-home mr-2"></i>
+            Browse All Programs
+        </a>
+    </div>
+{% endif %}
+{% endblock %}
+

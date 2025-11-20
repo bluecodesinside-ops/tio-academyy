@@ -1,0 +1,26 @@
+- [x] Create a comprehensive todo list for the task
+- [x] Analyze existing gallery app models and views.
+- [x] Create Photo and Video models with location categories.
+- [x] Implement upload functionality with drag & drop and URL upload.
+- [x] Implement category selection during upload.
+- [x] Implement bulk operations for uploads.
+- [x] Implement drag & drop functionality.
+- [ ] Implement thumbnail generation.
+- [ ] Implement file size optimization.
+- [ ] Implement progress indicators during upload.
+- [ ] Implement error handling with user-friendly messages.
+- [x] Integrate models into Django admin with customizations.
+- [ ] Implement public download feature.
+- [ ] Create templates for media display with a sexy & elegant design.
+- [ ] Implement pagination/lazy loading for fast loading.
+- [ ] Implement mobile responsive design.
+- [x] Fix broken photo display on frontend
+    - [x] Examine `gallery.html` template for image URL generation
+    - [ ] Examine CSS for styling issues
+    - [x] Verify image URLs are correct and accessible
+    - [x] Examine the `Photo` model and the `has_image` method
+    - [ ] Check the `get_image_url` method
+- [ ] Add category filtering tabs
+- [ ] Fix bulk upload in admin
+- [ ] Add search functionality
+- [x] Remove all sample data and Unsplash URLs

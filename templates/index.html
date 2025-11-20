@@ -1,0 +1,1006 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Tio Academy - Premium Dance Education" %}{% endblock %}
+
+{% block content %}
+<!-- 1. HERO BANNER - Premium responsive banner -->
+<section class="hero-banner">
+    <div class="container">
+        <div class="hero-banner__content">
+            <h1 class="hero-banner__title">
+                <span class="hero-banner__title-main">Dance</span> 
+                <span class="hero-banner__title-italic">Education</span> 
+                <span class="hero-banner__title-ampersand">&</span> 
+                <span class="hero-banner__title-main">Training</span>
+            </h1>
+            <p class="hero-banner__subtitle">{% trans "Learn from" %} <strong>{% trans "masters" %}</strong> {% trans "in techniques, dance, fitness and more." %}</p>
+            <div class="hero-banner__actions">
+                <a href="{% url 'programs:explore_programs' %}" class="btn btn--primary btn--lg">
+                    {% trans "Explore Programs" %}
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="hero-banner__stats">
+                <div class="hero-stat">
+                    <span class="hero-stat__number">2989+</span>
+                    <span class="hero-stat__label">{% trans "Members" %}</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat__number">15+</span>
+                    <span class="hero-stat__label">{% trans "Years" %}</span>
+            </div>
+                <div class="hero-stat">
+                    <span class="hero-stat__number">98%</span>
+                    <span class="hero-stat__label">{% trans "Success" %}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 1.5. SLIDESHOW - Dynamic image and video carousel -->
+<section class="slideshow-section">
+    <div class="container">
+        {% include 'slideshow/slideshow.html' %}
+    </div>
+</section>
+
+<!-- 1.6. EXPLORE PROGRAMS - Dance styles preview -->
+<section class="explore-programs-section">
+    <div class="container">
+        <div class="explore-programs__header">
+            <h2 class="explore-programs__title">{% trans "Explore Dance Programs" %}</h2>
+            <p class="explore-programs__subtitle">{% trans "Discover our comprehensive dance programs. Choose your style and start your dance journey today!" %}</p>
+        </div>
+        
+        <div class="explore-programs__grid">
+            {% for style in dance_styles %}
+            <div class="explore-program-card">
+                <a href="{% url 'programs:explore_programs' %}{{ style.slug }}/" class="explore-program-card__link">
+                    <div class="explore-program-card__image-container">
+                        {% if style.image %}
+                            <img 
+                                src="{{ style.image.url }}" 
+                                alt="{{ style.name }}"
+                                class="explore-program-card__image"
+                                loading="lazy"
+                            >
+                        {% else %}
+                            <div class="explore-program-card__placeholder">
+                                <i class="fas fa-music"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Overlay -->
+                        <div class="explore-program-card__overlay">
+                            <i class="fas fa-arrow-right explore-program-card__play-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="explore-program-card__content">
+                        <h3 class="explore-program-card__title">{{ style.name }}</h3>
+                        <p class="explore-program-card__description">{{ style.description|truncatewords:15 }}</p>
+                        <span class="explore-program-card__button">
+                            {% trans "Explore" %} {{ style.name }}
+                            <i class="fas fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <div class="explore-programs__empty">
+                <p>{% trans "No dance programs available at the moment." %}</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="explore-programs__cta">
+            <a href="{% url 'programs:explore_programs' %}" class="btn btn--primary btn--lg">
+                {% trans "View All Programs" %}
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- 2. ABOUT CARDS - 3 cards showcasing class information -->
+<section class="about-cards">
+    <div class="container">
+        <div class="about-cards__header">
+            <h2 class="about-cards__title">{% trans "Why Choose Tio Academy" %}</h2>
+            <p class="about-cards__subtitle">{% trans "Discover what makes our dance education exceptional" %}</p>
+        </div>
+        
+        <div class="about-cards__grid">
+            <div class="about-card">
+                <div class="about-card__icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3 class="about-card__title">{% trans "Expert Instruction" %}</h3>
+                <p class="about-card__description">{% trans "Learn from internationally certified instructors with decades of professional experience in Latin dance traditions." %}</p>
+                <ul class="about-card__features">
+                    <li><i class="fas fa-check"></i> {% trans "Certified professionals" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Personalized attention" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Cultural authenticity" %}</li>
+                </ul>
+            </div>
+            
+            <div class="about-card about-card--featured">
+                <div class="about-card__icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3 class="about-card__title">{% trans "Small Class Sizes" %}</h3>
+                <p class="about-card__description">{% trans "Maximum 12 students per class ensures individual attention and rapid skill development in our intimate learning environment." %}</p>
+                <ul class="about-card__features">
+                    <li><i class="fas fa-check"></i> {% trans "Max 12 students" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Individual feedback" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Accelerated learning" %}</li>
+                </ul>
+            </div>
+            
+            <div class="about-card">
+                <div class="about-card__icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3 class="about-card__title">{% trans "Proven Results" %}</h3>
+                <p class="about-card__description">{% trans "98% student satisfaction rate with graduates performing professionally worldwide and competing at international levels." %}</p>
+                <ul class="about-card__features">
+                    <li><i class="fas fa-check"></i> {% trans "98% satisfaction" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Professional graduates" %}</li>
+                    <li><i class="fas fa-check"></i> {% trans "Competition winners" %}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. MONEY-BACK GUARANTEE - Trust building section -->
+<section class="guarantee-section">
+    <div class="container">
+        <div class="guarantee-content">
+            <div class="guarantee-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h2 class="guarantee-title">{% trans "100% Money-Back Guarantee" %}</h2>
+            <p class="guarantee-description">
+                {% trans "We're so confident in our dance programs that we offer a 100% money-back guarantee. If you're not completely satisfied with your learning experience within 30 days, we'll refund your entire subscription - no questions asked." %}
+            </p>
+            <div class="guarantee-features">
+                <div class="guarantee-feature">
+                    <i class="fas fa-check-circle"></i>
+                    <span>{% trans "30-day risk-free trial" %}</span>
+                </div>
+                <div class="guarantee-feature">
+                    <i class="fas fa-check-circle"></i>
+                    <span>{% trans "Full refund guarantee" %}</span>
+                </div>
+                <div class="guarantee-feature">
+                    <i class="fas fa-check-circle"></i>
+                    <span>{% trans "No questions asked" %}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- 6. NEWSLETTER SUBSCRIPTION - Professional signup form -->
+<section class="newsletter-section">
+    <div class="container">
+        <div class="newsletter-section__content">
+            <h2 class="newsletter-section__title">{% trans "Stay Connected" %}</h2>
+            <p class="newsletter-section__subtitle">{% trans "Exclusive insights and masterclass invitations await." %}</p>
+            
+            <div class="newsletter-section__form">
+            <!-- Django Messages Display -->
+            {% if messages %}
+                {% for message in messages %}
+                        <div class="alert alert--{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% else %}info{% endif %}">
+                            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form class="newsletter-form" method="post" action="/newsletter/subscribe/">
+                {% csrf_token %}
+                    <div class="newsletter-form__single-row">
+                        <input type="email" 
+                               name="email" 
+                               placeholder="{% trans 'Enter your email' %}" 
+                               class="newsletter-form__input"
+                               required>
+                        <button type="submit" class="newsletter-form__submit">
+                        {% trans "Subscribe" %}
+                            <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ===== HOMEPAGE PREMIUM STYLES ===== */
+
+/* Page-specific initialization */
+body {
+    opacity: 0;
+    animation: pageLoad 0.6s ease-out forwards;
+}
+
+@keyframes pageLoad {
+    to { opacity: 1; }
+}
+
+/* 1. Hero Banner */
+.hero-banner {
+    padding: 160px 0 var(--spacing-6xl);
+    background: #faf6f0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -10%;
+    width: 50%;
+    height: 100%;
+    background: radial-gradient(ellipse at center, rgba(201, 169, 110, 0.05) 0%, transparent 70%);
+    transform: rotate(-15deg);
+    animation: float-gentle 8s ease-in-out infinite;
+}
+
+@keyframes float-gentle {
+    0%, 100% { transform: rotate(-15deg) translateY(0px); }
+    50% { transform: rotate(-15deg) translateY(-20px); }
+}
+
+.hero-banner__content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-banner__badge {
+    display: inline-block;
+    background: var(--color-accent);
+    color: var(--color-white);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--spacing-xl);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease-out 0.2s forwards;
+}
+
+.hero-banner__title {
+    font-size: var(--font-size-6xl);
+    font-weight: var(--font-weight-thin);
+    line-height: 1.1;
+    margin-bottom: var(--spacing-xl);
+    color: var(--color-gray-900);
+    letter-spacing: -0.05em;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease-out 0.4s forwards;
+}
+
+.hero-banner__title-main {
+    font-family: var(--font-family-primary);
+    font-weight: var(--font-weight-bold);
+    font-style: normal;
+    display: inline;
+}
+
+.hero-banner__title-italic {
+    font-family: var(--font-family-display);
+    font-weight: var(--font-weight-light);
+    font-style: italic;
+    display: inline;
+}
+
+.hero-banner__title-ampersand {
+    font-family: var(--font-family-primary);
+    font-weight: var(--font-weight-normal);
+    font-style: normal;
+    display: inline;
+}
+
+.hero-banner__subtitle {
+    font-size: var(--font-size-xl);
+    color: var(--color-gray-600);
+    margin-bottom: var(--spacing-3xl);
+    line-height: 1.6;
+    font-weight: var(--font-weight-light);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease-out 0.6s forwards;
+}
+
+.hero-banner__subtitle strong {
+    font-weight: var(--font-weight-black);
+    color: var(--color-gray-900);
+}
+
+.hero-banner__actions {
+    display: flex;
+    gap: var(--spacing-xl);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--spacing-4xl);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease-out 0.8s forwards;
+}
+
+.hero-banner__stats {
+    display: flex;
+    gap: var(--spacing-3xl);
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease-out 1s forwards;
+}
+
+.hero-stat {
+    text-align: center;
+}
+
+.hero-stat__number {
+    display: block;
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-900);
+    margin-bottom: var(--spacing-xs);
+}
+
+.hero-stat__label {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: var(--font-weight-medium);
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 2. About Cards */
+.about-cards {
+    padding: var(--spacing-6xl) 0;
+    background: #faf6f0;
+}
+
+.about-cards__header {
+    text-align: center;
+    margin-bottom: var(--spacing-5xl);
+}
+
+.about-cards__title {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-light);
+    margin-bottom: var(--spacing-xl);
+    color: var(--color-gray-900);
+}
+
+.about-cards__subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--color-gray-600);
+    font-weight: var(--font-weight-light);
+}
+
+.about-cards__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-3xl);
+}
+
+.about-card {
+    background: #faf6f0;
+    border: 1px solid var(--color-gray-100);
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-3xl);
+    text-align: center;
+    transition: var(--transition-normal);
+    position: relative;
+    box-shadow: var(--shadow-sm);
+}
+
+.about-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--color-accent);
+}
+
+.about-card--featured {
+    border-color: var(--color-accent);
+    background: linear-gradient(135deg, var(--color-white) 0%, rgba(201, 169, 110, 0.02) 100%);
+}
+
+.about-card__icon {
+    width: 80px;
+    height: 80px;
+    background: var(--color-gray-50);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-2xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-xl);
+    transition: var(--transition-normal);
+}
+
+.about-card:hover .about-card__icon {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    transform: scale(1.1) rotate(5deg);
+}
+
+.about-card__icon i {
+    font-size: var(--font-size-2xl);
+    color: var(--color-gray-600);
+    transition: var(--transition-fast);
+}
+
+.about-card:hover .about-card__icon i {
+    color: var(--color-white);
+}
+
+.about-card__title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-light);
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-gray-900);
+}
+
+.about-card__description {
+    color: var(--color-gray-600);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-xl);
+}
+
+.about-card__features {
+    list-style: none;
+    text-align: left;
+}
+
+.about-card__features li {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-700);
+}
+
+.about-card__features i {
+    color: var(--color-accent);
+    font-size: var(--font-size-xs);
+}
+
+/* 1.6. Explore Programs Section */
+.explore-programs-section {
+    padding: var(--spacing-6xl) 0;
+    background: #faf6f0;
+}
+
+.explore-programs__header {
+    text-align: center;
+    margin-bottom: var(--spacing-5xl);
+}
+
+.explore-programs__title {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-light);
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-lg);
+}
+
+.explore-programs__subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--color-gray-600);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.explore-programs__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-2xl);
+    margin-bottom: var(--spacing-5xl);
+}
+
+.explore-program-card {
+    background: #faf6f0;
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-normal);
+    border: 1px solid var(--color-gray-100);
+}
+
+.explore-program-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.explore-program-card__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.explore-program-card__image-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.explore-program-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-normal);
+}
+
+.explore-program-card:hover .explore-program-card__image {
+    transform: scale(1.05);
+}
+
+.explore-program-card__placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--color-gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray-400);
+    font-size: var(--font-size-4xl);
+}
+
+.explore-program-card__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: var(--transition-normal);
+}
+
+.explore-program-card:hover .explore-program-card__overlay {
+    opacity: 1;
+}
+
+.explore-program-card__play-icon {
+    color: var(--color-white);
+    font-size: var(--font-size-2xl);
+}
+
+.explore-program-card__content {
+    padding: var(--spacing-2xl);
+}
+
+.explore-program-card__title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.explore-program-card__description {
+    color: var(--color-gray-600);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--font-size-sm);
+}
+
+.explore-program-card__button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--color-accent);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: var(--transition-normal);
+}
+
+.explore-program-card:hover .explore-program-card__button {
+    color: var(--color-accent-dark);
+}
+
+.explore-programs__cta {
+    text-align: center;
+}
+
+.explore-programs__empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--spacing-4xl);
+    color: var(--color-gray-500);
+}
+
+/* 3. Money-Back Guarantee Section */
+.guarantee-section {
+    padding: var(--spacing-6xl) 0;
+    background: #faf6f0;
+}
+
+.guarantee-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.guarantee-icon {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.guarantee-icon i {
+    font-size: var(--font-size-6xl);
+    color: var(--color-accent);
+}
+
+.guarantee-title {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-light);
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xl);
+}
+
+.guarantee-description {
+    font-size: var(--font-size-lg);
+    color: var(--color-gray-600);
+    line-height: 1.7;
+    margin-bottom: var(--spacing-3xl);
+}
+
+.guarantee-features {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-3xl);
+    flex-wrap: wrap;
+}
+
+.guarantee-feature {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-gray-700);
+}
+
+.guarantee-feature i {
+    color: var(--color-accent);
+    font-size: var(--font-size-lg);
+}
+
+.white-space__quote blockquote {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-3xl);
+    font-style: italic;
+    color: var(--color-gray-700);
+    line-height: 1.4;
+    margin-bottom: var(--spacing-xl);
+    font-weight: var(--font-weight-light);
+}
+
+.white-space__quote cite {
+    font-size: var(--font-size-base);
+    color: var(--color-gray-500);
+    font-style: normal;
+    font-weight: var(--font-weight-medium);
+}
+
+
+
+/* 3. White Space */
+.white-space {
+    padding: var(--spacing-6xl) 0;
+    background: var(--color-gray-50);
+}
+
+.white-space__content {
+    text-align: center;
+}
+
+.white-space__quote blockquote {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-3xl);
+    font-style: italic;
+    color: var(--color-gray-700);
+    line-height: 1.4;
+    margin-bottom: var(--spacing-xl);
+    font-weight: var(--font-weight-light);
+}
+
+.white-space__quote cite {
+    font-size: var(--font-size-base);
+    color: var(--color-gray-500);
+    font-style: normal;
+    font-weight: var(--font-weight-medium);
+}
+
+/* 6. Newsletter Section - Refined & Elegant */
+.newsletter-section {
+    padding: var(--spacing-2xl) 0;
+    background: var(--color-gray-900);
+    color: var(--color-white);
+    position: relative;
+    overflow: hidden;
+}
+
+.newsletter-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(201, 169, 110, 0.05) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.newsletter-section__content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.newsletter-section__title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-thin);
+    margin-bottom: var(--spacing-md);
+    color: var(--color-white);
+    letter-spacing: -0.02em;
+}
+
+.newsletter-section__subtitle {
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: var(--font-weight-light);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-3xl);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.newsletter-section__form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.newsletter-form__single-row {
+    display: flex;
+    gap: 0;
+    max-width: 450px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-full);
+    padding: var(--spacing-sm);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition-normal);
+}
+
+.newsletter-form__single-row:focus-within {
+    border-color: var(--color-accent);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 1px rgba(201, 169, 110, 0.3);
+}
+
+.newsletter-form__input {
+    flex: 1;
+    padding: var(--spacing-sm);
+    background: transparent;
+    border: none;
+    color: var(--color-white);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-light);
+}
+
+.newsletter-form__input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.newsletter-form__input:focus {
+    outline: none;
+}
+
+.newsletter-form__submit {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-accent);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.newsletter-form__submit:hover {
+    background: #e8c44a;
+    transform: translateX(-2px);
+}
+
+.newsletter-form__submit i {
+    font-size: var(--font-size-xs);
+    transition: var(--transition-fast);
+}
+
+.newsletter-form__submit:hover i {
+    transform: translateX(2px);
+}
+
+/* Alert Messages */
+.alert {
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-weight: var(--font-weight-medium);
+}
+
+.alert--success {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.alert--error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.alert--info {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .about-cards__grid,
+    .explore-programs__grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-2xl);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-banner__title {
+        font-size: var(--font-size-5xl);
+    }
+    
+    .hero-banner__actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .hero-banner__stats {
+        flex-direction: column;
+        gap: var(--spacing-xl);
+    }
+    
+    .newsletter-form__single-row {
+        max-width: 100%;
+    }
+    
+    .newsletter-form__submit {
+        padding: var(--spacing-md);
+    }
+    
+    .newsletter-form__submit span {
+        display: none;
+    }
+    
+    .about-cards__grid,
+    .explore-programs__grid {
+        gap: var(--spacing-xl);
+    }
+    
+    .explore-programs__title {
+        font-size: var(--font-size-3xl);
+    }
+    
+    .explore-programs__subtitle {
+        font-size: var(--font-size-base);
+        padding: 0 var(--spacing-lg);
+    }
+    
+    .guarantee-title {
+        font-size: var(--font-size-3xl);
+    }
+    
+    .guarantee-description {
+        font-size: var(--font-size-base);
+        padding: 0 var(--spacing-lg);
+    }
+    
+    .guarantee-features {
+        flex-direction: column;
+        gap: var(--spacing-lg);
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-banner__title {
+        font-size: var(--font-size-4xl);
+    }
+    
+    .about-card,
+    .course-box,
+    .review-card {
+        padding: var(--spacing-2xl);
+    }
+    
+    .explore-programs__title {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .explore-programs__subtitle {
+        font-size: var(--font-size-sm);
+        padding: 0 var(--spacing-md);
+    }
+    
+    .explore-program-card__content {
+        padding: var(--spacing-lg);
+    }
+    
+    .explore-program-card__title {
+        font-size: var(--font-size-lg);
+    }
+    
+    .guarantee-title {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .guarantee-description {
+        font-size: var(--font-size-sm);
+        padding: 0 var(--spacing-md);
+    }
+    
+    .guarantee-icon i {
+        font-size: var(--font-size-4xl);
+    }
+}
+</style>
+{% endblock %}

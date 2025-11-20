@@ -1,0 +1,32 @@
+Welcome to Latina Dance Academy!
+
+🎉 Welcome{% if subscription.first_name %}, {{ subscription.first_name }}{% endif %}!
+
+{% if is_resubscribe %}
+We're so excited to have you back in our dance family! Your passion for Latin dance never left, and neither did we.
+{% else %}
+Thank you for joining our vibrant dance community! You're now part of a family that celebrates the joy, passion, and rhythm of Latin dance.
+{% endif %}
+
+🌟 What You'll Get:
+
+🎥 Exclusive Dance Tutorials
+   Access to our premium video lessons and step-by-step guides
+
+💡 Dance Tips & Tricks
+   Weekly insights to improve your technique and style
+
+🎭 Event Updates
+   Be the first to know about dance competitions, shows, and socials
+
+🔥 Special Offers
+   Exclusive discounts on courses and private lessons
+
+Start Your Dance Journey: http://localhost:8000/courses/
+
+Stay connected with us on social media for daily dance inspiration!
+
+© 2025 Latina Dance Academy. All rights reserved.
+
+You received this email because you subscribed to our newsletter. 
+To unsubscribe, visit: http://localhost:8000/newsletter/unsubscribe/

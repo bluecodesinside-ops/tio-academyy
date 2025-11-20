@@ -1,0 +1,559 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load program_extras %}
+
+{% block extra_css %}
+<style>
+    /* Programs-specific styles using existing design system */
+    .programs-hero {
+        background: #faf6f0;
+        padding: var(--spacing-6xl) 0;
+        text-align: center;
+    }
+    
+    .programs-hero__title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-5xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-lg);
+        line-height: 1.2;
+    }
+    
+    .programs-hero__subtitle {
+        font-size: var(--font-size-xl);
+        color: var(--color-gray-600);
+        max-width: 600px;
+        margin: 0 auto var(--spacing-4xl);
+        line-height: 1.6;
+    }
+    
+    .programs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: var(--spacing-2xl);
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-xl);
+    }
+    
+    .program-card {
+        background: #faf6f0;
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        transition: var(--transition-normal);
+        position: relative;
+    }
+    
+    .program-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-xl);
+        border-color: var(--color-accent);
+    }
+    
+    .program-card__image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        background: var(--color-gray-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .program-card__placeholder {
+        width: 100%;
+        height: 200px;
+        background: var(--color-gray-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .program-card__placeholder i {
+        font-size: var(--font-size-4xl);
+        color: var(--color-gray-600);
+    }
+    
+    .program-card__overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0);
+        transition: var(--transition-normal);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .program-card:hover .program-card__overlay {
+        background: rgba(0, 0, 0, 0.2);
+    }
+    
+    .program-card__play-icon {
+        color: var(--color-white);
+        font-size: var(--font-size-3xl);
+        opacity: 0;
+        transition: var(--transition-normal);
+    }
+    
+    .program-card:hover .program-card__play-icon {
+        opacity: 1;
+    }
+    
+    .program-card__content {
+        padding: var(--spacing-2xl);
+    }
+    
+    .program-card__title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .program-card__description {
+        color: var(--color-gray-600);
+        line-height: 1.6;
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .program-card__button {
+        display: inline-flex;
+        align-items: center;
+        background: var(--color-primary);
+        color: var(--color-white);
+        padding: var(--spacing-md) var(--spacing-xl);
+        border-radius: var(--radius-lg);
+        text-decoration: none;
+        font-weight: var(--font-weight-semibold);
+        transition: var(--transition-fast);
+    }
+    
+    .program-card__button:hover {
+        background: var(--color-primary-light);
+        transform: translateY(-2px);
+    }
+    
+    .program-card__button i {
+        margin-right: var(--spacing-sm);
+    }
+    
+    .video-card {
+        background: #faf6f0;
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        transition: var(--transition-normal);
+        position: relative;
+    }
+    
+    .video-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--color-accent);
+    }
+    
+    .video-card__image {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        background: var(--color-gray-200);
+    }
+    
+    .video-card__placeholder {
+        width: 100%;
+        height: 160px;
+        background: var(--color-gray-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .video-card__placeholder i {
+        font-size: var(--font-size-3xl);
+        color: var(--color-gray-600);
+    }
+    
+    .video-card__badge {
+        position: absolute;
+        top: var(--spacing-sm);
+        left: var(--spacing-sm);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: var(--radius-full);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    .badge-free {
+        background: var(--color-accent);
+        color: var(--color-white);
+    }
+    
+    .badge-purchased {
+        background: var(--color-primary);
+        color: var(--color-white);
+    }
+    
+    .badge-paid {
+        background: var(--color-gray-600);
+        color: var(--color-white);
+    }
+    
+    .video-card__duration {
+        position: absolute;
+        bottom: var(--spacing-sm);
+        right: var(--spacing-sm);
+        background: rgba(0, 0, 0, 0.75);
+        color: var(--color-white);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: var(--radius-sm);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-medium);
+    }
+    
+    .video-card__content {
+        padding: var(--spacing-lg);
+    }
+    
+    .video-card__title {
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-sm);
+        line-height: 1.4;
+    }
+    
+    .video-card__meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--color-gray-600);
+        font-size: var(--font-size-sm);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .video-card__instructor {
+        display: flex;
+        align-items: center;
+    }
+    
+    .video-card__instructor i {
+        margin-right: var(--spacing-xs);
+    }
+    
+    .video-card__views {
+        display: flex;
+        align-items: center;
+    }
+    
+    .video-card__views i {
+        margin-right: var(--spacing-xs);
+    }
+    
+    .breadcrumbs {
+        background: #faf6f0;
+        padding: var(--spacing-lg) 0;
+        border-bottom: 1px solid var(--color-gray-200);
+    }
+    
+    .breadcrumbs__container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-xl);
+    }
+    
+    .breadcrumbs__list {
+        display: flex;
+        align-items: center;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .breadcrumbs__item {
+        display: flex;
+        align-items: center;
+    }
+    
+    .breadcrumbs__item:not(:last-child)::after {
+        content: "›";
+        margin: 0 var(--spacing-md);
+        color: var(--color-gray-400);
+    }
+    
+    .breadcrumbs__link {
+        color: var(--color-gray-700);
+        text-decoration: none;
+        font-weight: var(--font-weight-medium);
+        transition: var(--transition-fast);
+    }
+    
+    .breadcrumbs__link:hover {
+        color: var(--color-accent);
+    }
+    
+    .breadcrumbs__current {
+        color: var(--color-primary);
+        font-weight: var(--font-weight-semibold);
+    }
+    
+    .section-header {
+        text-align: center;
+        margin-bottom: var(--spacing-4xl);
+    }
+    
+    .section-title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-4xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .section-subtitle {
+        font-size: var(--font-size-xl);
+        color: var(--color-gray-600);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+    
+    .skill-levels {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--spacing-xl);
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .skill-level-card {
+        background: #faf6f0;
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-4xl);
+        text-align: center;
+        transition: var(--transition-normal);
+        position: relative;
+    }
+    
+    .skill-level-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-xl);
+        border-color: var(--color-accent);
+    }
+    
+    .skill-level-card__icon {
+        width: 60px;
+        height: 60px;
+        background: var(--color-accent-light);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto var(--spacing-lg);
+    }
+    
+    .skill-level-card__icon i {
+        font-size: var(--font-size-2xl);
+        color: var(--color-accent);
+    }
+    
+    .skill-level-card__title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-2xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .skill-level-card__description {
+        color: var(--color-gray-600);
+        line-height: 1.6;
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .skill-level-card__button {
+        display: inline-flex;
+        align-items: center;
+        background: var(--color-primary);
+        color: var(--color-white);
+        padding: var(--spacing-lg) var(--spacing-2xl);
+        border-radius: var(--radius-lg);
+        text-decoration: none;
+        font-weight: var(--font-weight-semibold);
+        transition: var(--transition-fast);
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .skill-level-card__button:hover {
+        background: var(--color-primary-light);
+        transform: translateY(-2px);
+    }
+    
+    .skill-level-card__button i {
+        margin-right: var(--spacing-sm);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .programs-grid {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-xl);
+        }
+        
+        .skill-levels {
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .programs-hero {
+            padding: var(--spacing-4xl) 0;
+        }
+        
+        .programs-hero__title {
+            font-size: var(--font-size-4xl);
+        }
+        
+        .programs-hero__subtitle {
+            font-size: var(--font-size-lg);
+            padding: 0 var(--spacing-lg);
+        }
+        
+        .programs-grid {
+            grid-template-columns: 1fr;
+            gap: var(--spacing-lg);
+            padding: 0 var(--spacing-lg);
+        }
+        
+        .skill-levels {
+            grid-template-columns: 1fr;
+            gap: var(--spacing-lg);
+            padding: 0 var(--spacing-lg);
+        }
+        
+        .program-card__content {
+            padding: var(--spacing-lg);
+        }
+        
+        .program-card__title {
+            font-size: var(--font-size-lg);
+        }
+        
+        .skill-level-card {
+            padding: var(--spacing-2xl);
+        }
+        
+        .skill-level-card__title {
+            font-size: var(--font-size-xl);
+        }
+        
+        .breadcrumbs__container {
+            padding: 0 var(--spacing-lg);
+        }
+        
+        .section-header {
+            padding: 0 var(--spacing-lg);
+        }
+        
+        .section-title {
+            font-size: var(--font-size-3xl);
+        }
+        
+        .section-subtitle {
+            font-size: var(--font-size-lg);
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .programs-hero__title {
+            font-size: var(--font-size-3xl);
+        }
+        
+        .programs-hero__subtitle {
+            font-size: var(--font-size-base);
+        }
+        
+        .program-card__content {
+            padding: var(--spacing-md);
+        }
+        
+        .program-card__title {
+            font-size: var(--font-size-base);
+        }
+        
+        .program-card__description {
+            font-size: var(--font-size-sm);
+        }
+        
+        .skill-level-card {
+            padding: var(--spacing-lg);
+        }
+        
+        .skill-level-card__title {
+            font-size: var(--font-size-lg);
+        }
+        
+        .skill-level-card__description {
+            font-size: var(--font-size-sm);
+        }
+        
+        .section-title {
+            font-size: var(--font-size-2xl);
+        }
+        
+        .section-subtitle {
+            font-size: var(--font-size-base);
+        }
+        
+        .video-card__content {
+            padding: var(--spacing-md);
+        }
+        
+        .video-card__title {
+            font-size: var(--font-size-base);
+        }
+        
+        .video-card__meta {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--spacing-xs);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="breadcrumbs__container">
+            <ol class="breadcrumbs__list">
+                <li class="breadcrumbs__item">
+                    <a href="{% url 'home' %}" class="breadcrumbs__link">Home</a>
+                </li>
+                {% for crumb in breadcrumbs %}
+                <li class="breadcrumbs__item">
+                    {% if forloop.last %}
+                        <span class="breadcrumbs__current">{{ crumb.name }}</span>
+                    {% else %}
+                        <a href="{{ crumb.url }}" class="breadcrumbs__link">{{ crumb.name }}</a>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+    </nav>
+
+    {% block programs_content %}
+    {% endblock %}
+</div>
+{% endblock %}

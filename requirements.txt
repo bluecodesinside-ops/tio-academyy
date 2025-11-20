@@ -1,0 +1,13 @@
+Django==4.2.7
+django-modeltranslation
+django-multiupload
+django-cleanup
+django-storages
+boto3
+python-dotenv
+psycopg2-binary
+gunicorn
+whitenoise
+Pillow
+stripe
+

@@ -1,0 +1,531 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block extra_css %}
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+    .checkout-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: var(--spacing-4xl) var(--spacing-xl);
+    }
+    
+    .package-summary {
+        background: var(--color-gray-50);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-4xl);
+        margin-bottom: var(--spacing-4xl);
+    }
+    
+    .package-summary__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-2xl);
+    }
+    
+    .package-summary__title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-3xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .package-summary__description {
+        color: var(--color-gray-600);
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--spacing-2xl);
+    }
+    
+    .package-summary__price {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-4xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+    }
+    
+    .package-summary__period {
+        color: var(--color-gray-600);
+        font-size: var(--font-size-lg);
+    }
+    
+    .billing-toggle {
+        display: inline-flex;
+        background: var(--color-white);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-xs);
+    }
+    
+    .billing-toggle button {
+        padding: var(--spacing-md) var(--spacing-xl);
+        border: none;
+        background: transparent;
+        color: var(--color-gray-600);
+        font-weight: var(--font-weight-medium);
+        cursor: pointer;
+        border-radius: var(--radius-md);
+        transition: var(--transition-fast);
+    }
+    
+    .billing-toggle button.active {
+        background: var(--color-accent);
+        color: var(--color-white);
+    }
+    
+    .yearly-discount {
+        background: var(--color-accent);
+        color: var(--color-white);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: var(--radius-sm);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        margin-left: var(--spacing-sm);
+    }
+    
+    .package-features {
+        list-style: none;
+        padding: 0;
+        margin: var(--spacing-2xl) 0;
+    }
+    
+    .package-features li {
+        padding: var(--spacing-sm) 0;
+        display: flex;
+        align-items: center;
+        color: var(--color-gray-700);
+    }
+    
+    .package-features li:before {
+        content: "✓";
+        color: var(--color-accent);
+        font-weight: var(--font-weight-bold);
+        margin-right: var(--spacing-md);
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--color-accent-light);
+        border-radius: 50%;
+        font-size: var(--font-size-xs);
+    }
+    
+    .checkout-form {
+        background: var(--color-white);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-4xl);
+    }
+    
+    .checkout-form__title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-2xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-2xl);
+    }
+    
+    .form-group {
+        margin-bottom: var(--spacing-2xl);
+    }
+    
+    .form-label {
+        display: block;
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-sm);
+        font-size: var(--font-size-sm);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    .form-input {
+        width: 100%;
+        padding: var(--spacing-lg);
+        border: 1px solid var(--color-gray-300);
+        border-radius: var(--radius-lg);
+        font-size: var(--font-size-base);
+        transition: var(--transition-fast);
+        background: var(--color-white);
+    }
+    
+    .form-input:focus {
+        outline: none;
+        border-color: var(--color-accent);
+        box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
+    }
+    
+    .form-input::placeholder {
+        color: var(--color-gray-400);
+    }
+    
+    .form-checkbox {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: var(--spacing-2xl);
+    }
+    
+    .form-checkbox input {
+        margin-right: var(--spacing-md);
+        margin-top: var(--spacing-xs);
+    }
+    
+    .form-checkbox label {
+        color: var(--color-gray-600);
+        font-size: var(--font-size-sm);
+        line-height: 1.5;
+    }
+    
+    .form-checkbox a {
+        color: var(--color-accent);
+        text-decoration: none;
+    }
+    
+    .form-checkbox a:hover {
+        text-decoration: underline;
+    }
+    
+    .checkout-button {
+        width: 100%;
+        background: var(--color-primary);
+        color: var(--color-white);
+        padding: var(--spacing-lg) var(--spacing-2xl);
+        border: none;
+        border-radius: var(--radius-lg);
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        cursor: pointer;
+        transition: var(--transition-fast);
+        margin-top: var(--spacing-2xl);
+    }
+    
+    .checkout-button:hover {
+        background: var(--color-primary-light);
+        transform: translateY(-2px);
+    }
+    
+    .checkout-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid var(--color-white);
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spin 1s ease-in-out infinite;
+        margin-right: var(--spacing-sm);
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    
+    .error-message {
+        color: #DC2626;
+        font-size: var(--font-size-sm);
+        margin-top: var(--spacing-sm);
+    }
+    
+    .hidden {
+        display: none;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .checkout-container {
+            padding: var(--spacing-2xl) var(--spacing-lg);
+        }
+        
+        .package-summary {
+            padding: var(--spacing-2xl);
+        }
+        
+        .package-summary__header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--spacing-lg);
+        }
+        
+        .package-summary__title {
+            font-size: var(--font-size-2xl);
+        }
+        
+        .package-summary__price {
+            font-size: var(--font-size-3xl);
+        }
+        
+        .checkout-form {
+            padding: var(--spacing-2xl);
+        }
+        
+        .checkout-form__title {
+            font-size: var(--font-size-xl);
+        }
+        
+        .billing-toggle {
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+        
+        .billing-toggle button {
+            width: 100%;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .checkout-container {
+            padding: var(--spacing-lg) var(--spacing-md);
+        }
+        
+        .package-summary {
+            padding: var(--spacing-lg);
+        }
+        
+        .package-summary__title {
+            font-size: var(--font-size-xl);
+        }
+        
+        .package-summary__price {
+            font-size: var(--font-size-2xl);
+        }
+        
+        .checkout-form {
+            padding: var(--spacing-lg);
+        }
+        
+        .checkout-form__title {
+            font-size: var(--font-size-lg);
+        }
+        
+        .form-input {
+            padding: var(--spacing-md);
+        }
+        
+        .checkout-button {
+            padding: var(--spacing-md) var(--spacing-lg);
+            font-size: var(--font-size-base);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="checkout-container">
+    <!-- Package Summary -->
+    <div class="package-summary">
+        <div class="package-summary__header">
+            <div>
+                <h1 class="package-summary__title">{{ package.name }} Package</h1>
+                <p class="package-summary__description">{{ package.description }}</p>
+            </div>
+            
+            <!-- Billing Toggle -->
+            <div class="billing-toggle">
+                <button id="monthly-toggle" class="active" onclick="toggleBilling('monthly')">
+                    Monthly
+                </button>
+                <button id="yearly-toggle" onclick="toggleBilling('yearly')">
+                    Yearly
+                    {% if package.yearly_price %}
+                    <span class="yearly-discount">Save {{ package.get_yearly_discount_percentage }}%</span>
+                    {% endif %}
+                </button>
+            </div>
+        </div>
+        
+        <div class="package-summary__price">
+            $<span id="package-price">{{ package.monthly_price|floatformat:0 }}</span>
+        </div>
+        <div class="package-summary__period">
+            <span id="billing-period">per month</span>
+        </div>
+        
+        <!-- Features -->
+        <ul class="package-features">
+            {% for feature in package.get_features_list %}
+            <li>{{ feature }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <!-- Checkout Form -->
+    <div class="checkout-form">
+        <h2 class="checkout-form__title">Complete Your Purchase</h2>
+        
+        <form id="checkout-form">
+            {% csrf_token %}
+            <input type="hidden" id="billing-cycle" name="billing_cycle" value="monthly">
+            
+            <!-- Email Field -->
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="form-input" 
+                    value="{% if user.is_authenticated %}{{ user.email }}{% endif %}"
+                    placeholder="Enter your email address"
+                    required
+                >
+            </div>
+            
+            <!-- Payment Section -->
+            <div class="form-group">
+                <label class="form-label">Payment Information</label>
+                <div id="card-element" class="form-input" style="padding: var(--spacing-lg);">
+                    <!-- Stripe Elements will be inserted here -->
+                </div>
+                <div id="card-errors" class="error-message"></div>
+            </div>
+            
+            <!-- Billing Address -->
+            <div class="form-group">
+                <label for="billing_name" class="form-label">Name on Card</label>
+                <input 
+                    type="text" 
+                    id="billing_name" 
+                    name="billing_name" 
+                    class="form-input"
+                    placeholder="Full name as it appears on card"
+                >
+            </div>
+            
+            <!-- Terms and Conditions -->
+            <div class="form-checkbox">
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">
+                    I agree to the <a href="/terms/">Terms of Service</a> 
+                    and <a href="/privacy/">Privacy Policy</a>
+                </label>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" id="checkout-button" class="checkout-button">
+                <span id="button-text">Complete Purchase - $<span id="total-price">{{ package.monthly_price|floatformat:0 }}</span></span>
+                <span id="button-loading" class="hidden">
+                    <span class="loading-spinner"></span> Processing...
+                </span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+// Initialize Stripe
+const stripe = Stripe('{{ stripe_publishable_key }}');
+const elements = stripe.elements();
+
+// Create card element
+const cardElement = elements.create('card', {
+    style: {
+        base: {
+            fontSize: '16px',
+            color: '#1A1A1A',
+            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+            '::placeholder': {
+                color: '#B4B4B4',
+            },
+        },
+    },
+});
+
+// Mount card element
+cardElement.mount('#card-element');
+
+// Handle real-time validation errors
+cardElement.on('change', function(event) {
+    const displayError = document.getElementById('card-errors');
+    if (event.error) {
+        displayError.textContent = event.error.message;
+    } else {
+        displayError.textContent = '';
+    }
+});
+
+// Handle form submission
+const form = document.getElementById('checkout-form');
+form.addEventListener('submit', async function(event) {
+    event.preventDefault();
+    
+    const button = document.getElementById('checkout-button');
+    const buttonText = document.getElementById('button-text');
+    const buttonLoading = document.getElementById('button-loading');
+    
+    // Show loading state
+    button.disabled = true;
+    buttonText.classList.add('hidden');
+    buttonLoading.classList.remove('hidden');
+    
+    try {
+        // Create checkout session
+        const response = await fetch('{% url "pricing:create_checkout_session" package.slug %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+            body: new URLSearchParams({
+                'email': document.getElementById('email').value,
+                'billing_cycle': document.getElementById('billing-cycle').value,
+            }),
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        
+        // Redirect to Stripe Checkout
+        window.location.href = data.checkout_url;
+        
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Payment processing failed: ' + error.message);
+        
+        // Reset button state
+        button.disabled = false;
+        buttonText.classList.remove('hidden');
+        buttonLoading.classList.add('hidden');
+    }
+});
+
+// Billing cycle toggle
+function toggleBilling(cycle) {
+    const monthlyToggle = document.getElementById('monthly-toggle');
+    const yearlyToggle = document.getElementById('yearly-toggle');
+    const packagePrice = document.getElementById('package-price');
+    const totalPrice = document.getElementById('total-price');
+    const billingPeriod = document.getElementById('billing-period');
+    const billingCycle = document.getElementById('billing-cycle');
+    
+    if (cycle === 'monthly') {
+        monthlyToggle.classList.add('active');
+        yearlyToggle.classList.remove('active');
+        packagePrice.textContent = '{{ package.monthly_price|floatformat:0 }}';
+        totalPrice.textContent = '{{ package.monthly_price|floatformat:0 }}';
+        billingPeriod.textContent = 'per month';
+        billingCycle.value = 'monthly';
+    } else {
+        yearlyToggle.classList.add('active');
+        monthlyToggle.classList.remove('active');
+        packagePrice.textContent = '{{ package.yearly_price|floatformat:0 }}';
+        totalPrice.textContent = '{{ package.yearly_price|floatformat:0 }}';
+        billingPeriod.textContent = 'per year';
+        billingCycle.value = 'yearly';
+    }
+}
+</script>
+{% endblock %}

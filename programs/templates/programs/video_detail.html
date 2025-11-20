@@ -1,0 +1,424 @@
+{% extends 'programs/base_programs.html' %}
+{% load static %}
+{% load program_extras %}
+
+{% block title %}{{ page_title }} - Tio Academy{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .video-player-section {
+        background: var(--color-white);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-2xl);
+        margin-bottom: var(--spacing-4xl);
+    }
+    
+    .video-player-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        height: 0;
+        overflow: hidden;
+        background: var(--color-black);
+        border-radius: var(--radius-lg);
+        margin-bottom: var(--spacing-2xl);
+    }
+    
+    .video-player-container iframe,
+    .video-player-container video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+    
+    .video-info {
+        background: var(--color-white);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-4xl);
+        margin-bottom: var(--spacing-4xl);
+    }
+    
+    .video-title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-3xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .video-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-xl);
+        margin-bottom: var(--spacing-2xl);
+        padding-bottom: var(--spacing-2xl);
+        border-bottom: 1px solid var(--color-gray-200);
+    }
+    
+    .meta-item {
+        display: flex;
+        align-items: center;
+        color: var(--color-gray-600);
+    }
+    
+    .meta-item i {
+        margin-right: var(--spacing-sm);
+        color: var(--color-accent);
+    }
+    
+    .video-description {
+        color: var(--color-gray-700);
+        line-height: 1.6;
+        font-size: var(--font-size-lg);
+    }
+    
+    .related-videos {
+        background: var(--color-gray-50);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-4xl);
+    }
+    
+    .related-title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-2xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-2xl);
+    }
+    
+    .related-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: var(--spacing-xl);
+    }
+    
+    .related-video-card {
+        background: var(--color-white);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        transition: var(--transition-normal);
+    }
+    
+    .related-video-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--color-accent);
+    }
+    
+    .related-video-image {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        background: var(--color-gray-200);
+    }
+    
+    .related-video-placeholder {
+        width: 100%;
+        height: 120px;
+        background: var(--color-gray-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .related-video-placeholder i {
+        font-size: var(--font-size-2xl);
+        color: var(--color-gray-600);
+    }
+    
+    .related-video-content {
+        padding: var(--spacing-lg);
+    }
+    
+    .related-video-title {
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-sm);
+        line-height: 1.4;
+    }
+    
+    .related-video-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--color-gray-600);
+        font-size: var(--font-size-sm);
+    }
+    
+    .access-denied {
+        background: var(--color-white);
+        border: 1px solid var(--color-gray-200);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-6xl);
+        text-align: center;
+    }
+    
+    .access-denied__icon {
+        width: 80px;
+        height: 80px;
+        background: var(--color-gray-200);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto var(--spacing-2xl);
+    }
+    
+    .access-denied__icon i {
+        font-size: var(--font-size-3xl);
+        color: var(--color-gray-600);
+    }
+    
+    .access-denied__title {
+        font-family: var(--font-family-display);
+        font-size: var(--font-size-3xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .access-denied__message {
+        font-size: var(--font-size-xl);
+        color: var(--color-gray-600);
+        margin-bottom: var(--spacing-4xl);
+        line-height: 1.6;
+    }
+    
+    .access-denied__button {
+        display: inline-flex;
+        align-items: center;
+        background: var(--color-primary);
+        color: var(--color-white);
+        padding: var(--spacing-lg) var(--spacing-2xl);
+        border-radius: var(--radius-lg);
+        text-decoration: none;
+        font-weight: var(--font-weight-semibold);
+        transition: var(--transition-fast);
+    }
+    
+    .access-denied__button:hover {
+        background: var(--color-primary-light);
+        transform: translateY(-2px);
+    }
+    
+    .access-denied__button i {
+        margin-right: var(--spacing-sm);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .video-player-section {
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-2xl);
+        }
+        
+        .video-info {
+            padding: var(--spacing-2xl);
+            margin-bottom: var(--spacing-2xl);
+        }
+        
+        .video-title {
+            font-size: var(--font-size-2xl);
+        }
+        
+        .video-meta {
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+        
+        .related-videos {
+            padding: var(--spacing-2xl);
+        }
+        
+        .related-grid {
+            grid-template-columns: 1fr;
+            gap: var(--spacing-lg);
+        }
+        
+        .access-denied {
+            padding: var(--spacing-4xl) var(--spacing-lg);
+        }
+        
+        .access-denied__title {
+            font-size: var(--font-size-2xl);
+        }
+        
+        .access-denied__message {
+            font-size: var(--font-size-lg);
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .video-player-section {
+            padding: var(--spacing-md);
+        }
+        
+        .video-info {
+            padding: var(--spacing-lg);
+        }
+        
+        .video-title {
+            font-size: var(--font-size-xl);
+        }
+        
+        .video-description {
+            font-size: var(--font-size-base);
+        }
+        
+        .related-videos {
+            padding: var(--spacing-lg);
+        }
+        
+        .related-title {
+            font-size: var(--font-size-xl);
+        }
+        
+        .access-denied {
+            padding: var(--spacing-2xl) var(--spacing-md);
+        }
+        
+        .access-denied__title {
+            font-size: var(--font-size-xl);
+        }
+        
+        .access-denied__message {
+            font-size: var(--font-size-base);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block programs_content %}
+{% if has_access %}
+    <!-- Video Player Section -->
+    <section class="video-player-section">
+        <div class="video-player-container">
+            {% if video.video_file %}
+                <video id="video-player" class="w-full h-full" controls preload="metadata" controlsList="nodownload">
+                    <source src="{{ video.video_file.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            {% elif video.video_url and video.video_url|is_youtube_url %}
+                <iframe 
+                    id="video-player" 
+                    class="w-full h-full" 
+                    src="{{ video.video_url|youtube_embed_url }}" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            {% elif video.video_url %}
+                <video id="video-player" class="w-full h-full" controls preload="metadata" controlsList="nodownload">
+                    <source src="{{ video.video_url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            {% else %}
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: var(--color-gray-200); color: var(--color-gray-600);">
+                    <div style="text-align: center;">
+                        <i class="fas fa-video" style="font-size: var(--font-size-4xl); margin-bottom: var(--spacing-lg);"></i>
+                        <p style="font-size: var(--font-size-lg);">Video not available</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Video Information -->
+    <div class="video-info">
+        <h1 class="video-title">{{ video.title }}</h1>
+        
+        <div class="video-meta">
+            <div class="meta-item">
+                <i class="fas fa-user"></i>
+                <span>{{ video.instructor_name|default:"Tio Academy" }}</span>
+            </div>
+            <div class="meta-item">
+                <i class="fas fa-clock"></i>
+                <span>{{ video.duration|format_duration }}</span>
+            </div>
+            <div class="meta-item">
+                <i class="fas fa-eye"></i>
+                <span>{{ video.view_count }} views</span>
+            </div>
+            <div class="meta-item">
+                <i class="fas fa-layer-group"></i>
+                <span>{{ skill_level.get_level_display }} Level</span>
+            </div>
+        </div>
+        
+        {% if video.description %}
+        <div class="video-description">
+            {{ video.description|linebreaks }}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Related Videos -->
+    {% if related_videos %}
+    <div class="related-videos">
+        <h3 class="related-title">More {{ skill_level.get_level_display }} {{ category.name }} Videos</h3>
+        <div class="related-grid">
+            {% for related_video in related_videos %}
+            <div class="related-video-card">
+                <a href="{{ related_video.get_absolute_url }}" class="block">
+                    {% if related_video.thumbnail %}
+                        <img 
+                            src="{{ related_video.thumbnail.url }}" 
+                            alt="{{ related_video.title }}"
+                            class="related-video-image"
+                            loading="lazy"
+                        >
+                    {% else %}
+                        <div class="related-video-placeholder">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="related-video-content">
+                        <h4 class="related-video-title">{{ related_video.title }}</h4>
+                        <div class="related-video-meta">
+                            <span>{{ related_video.duration|format_duration }}</span>
+                            <span>{{ related_video.view_count }} views</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+{% else %}
+    <!-- Access Denied -->
+    <div class="access-denied">
+        <div class="access-denied__icon">
+            <i class="fas fa-lock"></i>
+        </div>
+        
+        <h1 class="access-denied__title">Access Required</h1>
+        <p class="access-denied__message">
+            {% if video.access_type == 'login_required' %}
+                Please log in to access this video.
+            {% elif video.access_type == 'subscription_required' %}
+                You need a subscription to access this video. Choose a plan to get started!
+            {% elif video.access_type == 'upgrade_required' %}
+                You need to upgrade your subscription to access this video.
+            {% else %}
+                Access denied. Please contact support if you believe this is an error.
+            {% endif %}
+        </p>
+        
+        <a href="{% url 'pricing:pricing_page' %}" class="access-denied__button">
+            <i class="fas fa-credit-card"></i>
+            View Pricing Plans
+        </a>
+    </div>
+{% endif %}
+{% endblock %}
