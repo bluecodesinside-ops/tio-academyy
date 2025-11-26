@@ -73,3 +73,7 @@ yarn-error.log*
 Thumbs.db
 .DS_Store
 
+# Ignore large video files
+static/videos/
+*.mp4
+
