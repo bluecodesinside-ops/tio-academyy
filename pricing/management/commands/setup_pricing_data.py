@@ -150,3 +150,7 @@ class Command(BaseCommand):
             self.style.SUCCESS('\nSuccessfully created sample pricing data!')
         )
 
+
+
+
+

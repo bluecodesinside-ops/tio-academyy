@@ -224,3 +224,7 @@ class Command(BaseCommand):
         self.stdout.write(f'Created {SkillLevel.objects.count()} skill levels')
         self.stdout.write(f'Created {Video.objects.count()} videos')
 
+
+
+
+

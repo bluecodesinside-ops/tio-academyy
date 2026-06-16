@@ -73,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
             ],
         },
     },
@@ -126,6 +127,7 @@ LOCALE_PATHS = [
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
+    BASE_DIR / 'static',
     BASE_DIR / 'styles',
     BASE_DIR / 'js',
 ]
@@ -149,10 +151,12 @@ EMAIL_HOST_PASSWORD = 'your-app-password'  # ← REPLACE WITH GMAIL APP PASSWORD
 DEFAULT_FROM_EMAIL = 'your-gmail@gmail.com'  # ← REPLACE WITH YOUR GMAIL ADDRESS
 
 # Stripe configuration
-STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY', 'pk_test_...')
-STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_...')
-STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', 'whsec_...')
-STRIPE_PRICE_ID = os.environ.get('STRIPE_PRICE_ID', 'price_...')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
+STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
+STRIPE_PRICE_SUB = os.environ.get('STRIPE_PRICE_SUB', '')
+STRIPE_PRICE_ONE_TIME = os.environ.get('STRIPE_PRICE_ONE_TIME', '')
+# For frontend - try both VITE and NEXT_PUBLIC prefixes
+STRIPE_PUBLISHABLE_KEY = os.environ.get('VITE_STRIPE_PUBLISHABLE_KEY') or os.environ.get('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY') or os.environ.get('STRIPE_PUBLISHABLE_KEY', '')
 
 # SETUP INSTRUCTIONS:
 # 1. Go to Gmail → Settings → Security → 2-Step Verification
@@ -214,3 +218,33 @@ else:
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Authentication settings
+LOGIN_URL = '/login/'  # URL where users are redirected if not logged in
+LOGIN_REDIRECT_URL = '/dashboard/'  # URL where users are redirected after login
+LOGOUT_REDIRECT_URL = '/'  # URL where users are redirected after logout
+
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'payments.views': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}

@@ -4,6 +4,9 @@ from . import views
 app_name = 'users'
 
 urlpatterns = [
-    path('profile/', views.user_profile, name='user_profile'),
-    path('register/', views.register, name='register'),
+    path('register/', views.register_view, name='register'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('profile/', views.user_profile, name='user_profile'),  # API endpoint
 ]

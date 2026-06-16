@@ -52,3 +52,7 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS(f'Successfully created {len(slideshow_items)} slideshow items!'))
 
+
+
+
+

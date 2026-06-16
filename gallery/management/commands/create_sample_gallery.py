@@ -110,3 +110,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('\nYou can now test the gallery with real content!'))
 
 
+
+
+
+

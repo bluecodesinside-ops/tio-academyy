@@ -426,6 +426,125 @@ function throttle(func, limit) {
     };
 }
 
+// Stripe Checkout Functions - LOGIN REQUIRED
+function handleSubscriptionCheckout() {
+    const csrfToken = getCookie('csrftoken') || document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+    
+    if (!csrfToken) {
+        showAlert('CSRF token not found. Please refresh the page.', 'error');
+        return;
+    }
+    
+    // Show loading state
+    const button = event.target.closest('button');
+    const originalText = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    
+    fetch('/api/checkout/subscription/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if (response.status === 403 || response.status === 401) {
+            window.location.href = '/login/';
+            return;
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.error) {
+            showAlert(data.error, 'error');
+            button.disabled = false;
+            button.innerHTML = originalText;
+        } else if (data && data.checkout_url) {
+            // Redirect to Stripe Checkout
+            window.location.href = data.checkout_url;
+        } else {
+            showAlert('No checkout URL received. Please try again.', 'error');
+            button.disabled = false;
+            button.innerHTML = originalText;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showAlert('Something went wrong. Please try again later.', 'error');
+        button.disabled = false;
+        button.innerHTML = originalText;
+    });
+}
+
+function handleLifetimeCheckout() {
+    const csrfToken = getCookie('csrftoken') || document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+    
+    if (!csrfToken) {
+        showAlert('CSRF token not found. Please refresh the page.', 'error');
+        return;
+    }
+    
+    // Show loading state
+    const button = event.target.closest('button');
+    const originalText = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    
+    fetch('/api/checkout/onetime/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if (response.status === 403 || response.status === 401) {
+            window.location.href = '/login/';
+            return;
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.error) {
+            showAlert(data.error, 'error');
+            button.disabled = false;
+            button.innerHTML = originalText;
+        } else if (data && data.checkout_url) {
+            // Redirect to Stripe Checkout
+            window.location.href = data.checkout_url;
+        } else {
+            showAlert('No checkout URL received. Please try again.', 'error');
+            button.disabled = false;
+            button.innerHTML = originalText;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showAlert('Something went wrong. Please try again later.', 'error');
+        button.disabled = false;
+        button.innerHTML = originalText;
+    });
+}
+
+// Helper function to get CSRF token from cookies
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 // Export functions for use in other scripts
 window.LatinaDanceAcademy = {
     showAlert,
@@ -434,5 +553,7 @@ window.LatinaDanceAcademy = {
     openLightbox,
     closeLightbox,
     debounce,
-    throttle
+    throttle,
+    handleSubscriptionCheckout,
+    handleLifetimeCheckout
 };

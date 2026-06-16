@@ -7,3 +7,7 @@ urlpatterns = [
     path('api/data/', views.slideshow_data, name='slideshow_data'),
 ]
 
+
+
+
+

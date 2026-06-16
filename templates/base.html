@@ -1,11 +1,12 @@
 {% load static %}
 {% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Tio Academy{% endblock %}</title>
+    <title>{% block title %}{% trans "Tio Academy" %}{% endblock %}</title>
     <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml">
     <link rel="alternate icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'core.css' %}">
@@ -15,11 +16,174 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;900&family=Playfair+Display:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     {% block extra_css %}
+    <!-- Mobile Menu Styles - Loaded after external CSS to ensure override -->
     <style>
+        /* Prevent horizontal overflow */
+        body {
+            overflow-x: hidden;
+        }
+        
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: var(--spacing-2xl);
+        }
+        
+        /* Responsive Navbar Styles - High Specificity */
+        .navbar {
+            position: relative;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .navbar__container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 100%;
+            position: relative;
+            flex-wrap: nowrap;
+        }
+        
+        .navbar__logo {
+            text-decoration: none !important;
+            color: inherit !important;
+            cursor: pointer !important;
+            transition: opacity 0.3s;
+            display: block !important;
+            position: relative !important;
+            z-index: 10 !important;
+            pointer-events: auto !important;
+        }
+        
+        .navbar__logo:hover {
+            opacity: 0.8;
+        }
+        
+        .navbar__logo h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            pointer-events: none; /* Allow clicks to pass through to parent link */
+        }
+        
+        /* Ensure logo link is always clickable */
+        a.navbar__logo {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+        }
+        
+        .navbar__menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .navbar__menu li {
+            margin: 0;
+        }
+        
+        .navbar__link {
+            text-decoration: none;
+            color: inherit;
+            padding: 0.5rem 0;
+            transition: color 0.3s;
+            display: block;
+        }
+        
+        .navbar__link:hover,
+        .navbar__link--active {
+            color: var(--color-accent, #c9a96e);
+        }
+        
+        /* Hamburger Button - Always visible on mobile */
+        button.hamburger,
+        .hamburger,
+        #hamburger,
+        button#hamburger {
+            display: none !important;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+            z-index: 1001;
+            padding: 8px;
+            background: transparent;
+            border: none;
+            color: #333;
+            position: relative;
+            width: 30px;
+            height: 30px;
+            justify-content: center;
+            align-items: center;
+            margin-left: auto;
+            min-width: 30px;
+            min-height: 30px;
+        }
+        
+        button.hamburger span,
+        .hamburger span,
+        #hamburger span,
+        button#hamburger span {
+            width: 25px !important;
+            height: 3px !important;
+            background: var(--color-gray-700, #4A4A4A) !important;
+            background-color: var(--color-gray-700, #4A4A4A) !important;
+            color: var(--color-gray-700, #4A4A4A) !important;
+            transition: all 0.3s;
+            display: block !important;
+            border-radius: 2px;
+            pointer-events: none;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        
+        /* Ensure proper spacing between hamburger lines */
+        button.hamburger,
+        .hamburger,
+        #hamburger,
+        button#hamburger {
+            gap: 5px !important;
+            row-gap: 5px !important;
+        }
+        
+        /* Ensure hamburger is clickable and visible */
+        .hamburger:focus,
+        #hamburger:focus {
+            outline: 2px solid #c9a96e;
+            outline-offset: 2px;
+        }
+        
+        /* Force hamburger visibility on small screens as fallback - SIMPLE AND DIRECT */
+        @media (max-width: 768px) {
+            .hamburger,
+            #hamburger,
+            button.hamburger,
+            div.hamburger {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+            
+            /* Force hide menu on mobile unless active */
+            .navbar__menu:not(.active),
+            #navMenu:not(.active) {
+                display: none !important;
+            }
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
         }
         
         /* Language Switcher Dropdown */
@@ -76,27 +240,248 @@
             background: #f0ebe3;
             color: var(--color-gray-900);
         }
+        
+        /* Mobile Overlay */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .mobile-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        /* Mobile Styles - Maximum Specificity to Override External CSS */
+        @media screen and (max-width: 768px) {
+            body.menu-open {
+                overflow: hidden !important;
+            }
+            
+            /* Show hamburger on mobile - Force visibility with maximum specificity */
+            nav.navbar .navbar__container .hamburger,
+            nav.navbar .hamburger,
+            .navbar .navbar__container .hamburger,
+            .navbar__container .hamburger,
+            .navbar .hamburger,
+            #hamburger.hamburger,
+            #hamburger {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+            }
+            
+            /* Hide menu by default on mobile - Override external CSS */
+            nav.navbar .navbar__container .navbar__menu,
+            nav.navbar .navbar__menu,
+            .navbar .navbar__container .navbar__menu,
+            .navbar__container .navbar__menu,
+            .navbar .navbar__menu,
+            ul.navbar__menu#navMenu,
+            #navMenu.navbar__menu,
+            #navMenu {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+            }
+            
+            /* Show menu when active - Maximum specificity */
+            nav.navbar .navbar__container .navbar__menu.active,
+            nav.navbar .navbar__menu.active,
+            .navbar .navbar__container .navbar__menu.active,
+            .navbar__container .navbar__menu.active,
+            .navbar .navbar__menu.active,
+            ul.navbar__menu#navMenu.active,
+            #navMenu.navbar__menu.active,
+            #navMenu.active {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                position: fixed !important;
+                top: 0 !important;
+                right: 0 !important;
+                width: 80% !important;
+                max-width: 300px !important;
+                height: 100vh !important;
+                background: #faf6f0 !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                padding: 5rem 2rem 2rem !important;
+                gap: 1.5rem !important;
+                transition: right 0.3s ease !important;
+                box-shadow: -2px 0 10px rgba(0,0,0,0.1) !important;
+                overflow-y: auto !important;
+                z-index: 1000 !important;
+                margin: 0 !important;
+                list-style: none !important;
+            }
+            
+            .navbar__menu li {
+                width: 100% !important;
+                display: block !important;
+            }
+            
+            .navbar__link {
+                width: 100% !important;
+                padding: 1rem 0 !important;
+                border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+                display: block !important;
+            }
+            
+            .language-switcher {
+                width: 100% !important;
+            }
+            
+            .dropdown-content {
+                position: static !important;
+                margin-top: 0.5rem !important;
+                width: 100% !important;
+            }
+            
+            .navbar__container {
+                padding: 1rem !important;
+            }
+        }
+        
+        /* iPhone specific fixes - Maximum specificity */
+        @media screen and (max-width: 480px) {
+            nav.navbar .navbar__container .hamburger,
+            nav.navbar .hamburger,
+            .navbar .navbar__container .hamburger,
+            .navbar__container .hamburger,
+            .navbar .hamburger,
+            #hamburger.hamburger,
+            #hamburger {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+            
+            nav.navbar .navbar__container .navbar__menu.active,
+            nav.navbar .navbar__menu.active,
+            .navbar .navbar__container .navbar__menu.active,
+            .navbar__container .navbar__menu.active,
+            .navbar .navbar__menu.active,
+            #navMenu.active {
+                width: 85% !important;
+            }
+        }
     </style>
     {% endblock %}
+    
+    <!-- SIMPLE MOBILE MENU FIX -->
+    <style>
+        /* Simple, clean mobile menu */
+        @media (max-width: 768px) {
+            /* Show hamburger - MAKE IT VISIBLE AND CLICKABLE */
+            #hamburger {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 5px !important;
+                width: 30px !important;
+                height: 30px !important;
+                padding: 5px !important;
+                background: transparent !important;
+                border: none !important;
+                cursor: pointer !important;
+                z-index: 1001 !important;
+                justify-content: center !important;
+                align-items: center !important;
+                pointer-events: auto !important;
+                position: relative !important;
+            }
+            
+            #hamburger span {
+                display: block !important;
+                width: 25px !important;
+                height: 3px !important;
+                background: var(--color-gray-700, #4A4A4A) !important;
+                background-color: var(--color-gray-700, #4A4A4A) !important;
+                color: var(--color-gray-700, #4A4A4A) !important;
+                border: none !important;
+                border-radius: 2px !important;
+            }
+            
+            /* Hide menu by default */
+            #navMenu {
+                display: none !important;
+                visibility: hidden !important;
+            }
+            
+            /* Show menu when active */
+            #navMenu.active {
+                display: flex !important;
+                visibility: visible !important;
+                position: fixed !important;
+                top: 0 !important;
+                right: 0 !important;
+                width: 80% !important;
+                max-width: 300px !important;
+                height: 100vh !important;
+                background: #faf6f0 !important;
+                flex-direction: column !important;
+                padding: 5rem 2rem 2rem !important;
+                gap: 1.5rem !important;
+                z-index: 1000 !important;
+                box-shadow: -2px 0 10px rgba(0,0,0,0.1) !important;
+                margin: 0 !important;
+                list-style: none !important;
+                overflow-y: auto !important;
+            }
+            
+            #navMenu.active li {
+                width: 100% !important;
+            }
+            
+            #navMenu.active .navbar__link {
+                width: 100% !important;
+                padding: 1rem 0 !important;
+                border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+            }
+            
+            #navMenu.active li {
+                width: 100% !important;
+            }
+            
+            #navMenu.active .navbar__link {
+                width: 100% !important;
+                padding: 1rem 0 !important;
+                border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar">
         <div class="navbar__container">
-            <div class="navbar__logo">
-                <h2>Tio Academy</h2>
-            </div>
-            <ul class="navbar__menu">
-                <li><a href="{% url 'home' %}" class="navbar__link {% if request.resolver_match.url_name == 'home' %}navbar__link--active{% endif %}">{% trans "Home" %}</a></li>
-                <li><a href="{% url 'about' %}" class="navbar__link {% if request.resolver_match.url_name == 'about' %}navbar__link--active{% endif %}">{% trans "About" %}</a></li>
-                <li><a href="{% url 'programs:explore_programs' %}" class="navbar__link {% if 'programs' in request.resolver_match.namespace %}navbar__link--active{% endif %}">{% trans "Explore Programs" %}</a></li>
-                <li><a href="{% url 'pricing:pricing_page' %}" class="navbar__link {% if 'pricing' in request.resolver_match.namespace %}navbar__link--active{% endif %}">{% trans "Pricing" %}</a></li>
-                <li><a href="{% url 'admin:login' %}" class="navbar__link">{% trans "Admin" %}</a></li>
+            <a href="{% url 'home' %}" class="navbar__logo" onclick="console.log('Logo clicked!'); return true;" style="text-decoration: none; color: inherit; display: block; cursor: pointer; z-index: 10; position: relative;">
+                <h2>{% trans "Tio Academy" %}</h2>
+            </a>
+            <ul class="navbar__menu" id="navMenu">
+                <li><a href="{% url 'home' %}" class="navbar__link {% if request.resolver_match.url_name == 'home' %}navbar__link--active{% endif %}" data-nav-link>{% trans "Home" %}</a></li>
+                <li><a href="{% url 'about' %}" class="navbar__link {% if request.resolver_match.url_name == 'about' %}navbar__link--active{% endif %}" data-nav-link>{% trans "About" %}</a></li>
+                <li><a href="{% url 'courses' %}" class="navbar__link {% if request.resolver_match.url_name == 'courses' %}navbar__link--active{% endif %}" data-nav-link>{% trans "Courses" %}</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'users:dashboard' %}" class="navbar__link {% if request.resolver_match.url_name == 'dashboard' %}navbar__link--active{% endif %}" data-nav-link>{% trans "Dashboard" %}</a></li>
+                    <li><a href="{% url 'users:logout' %}" class="navbar__link" data-nav-link>{% trans "Logout" %}</a></li>
+                {% else %}
+                    <li><a href="{% url 'users:login' %}" class="navbar__link {% if request.resolver_match.url_name == 'login' %}navbar__link--active{% endif %}" data-nav-link>{% trans "Login" %}</a></li>
+                {% endif %}
 
                 <!-- Language Switcher -->
                 <li class="language-switcher">
                     <div class="dropdown" id="languageDropdown">
-                        <button class="dropdown-btn" onclick="toggleLanguageDropdown()">
+                        <button class="dropdown-btn" onclick="toggleLanguageDropdown()" type="button">
                             {% get_current_language as LANGUAGE_CODE %}
                             {% if LANGUAGE_CODE == 'sq' %}
                                 🇦🇱 Shqip
@@ -123,13 +508,16 @@
                     </div>
                 </li>
             </ul>
-            <div class="hamburger">
+            <button type="button" class="hamburger" id="hamburger" aria-label="Toggle menu" onclick="toggleMobileMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
-            </div>
+            </button>
         </div>
     </nav>
+    
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
 
     <!-- Hidden CSRF Token for JavaScript -->
     {% csrf_token %}
@@ -144,14 +532,13 @@
         <div class="container">
             <div class="footer__content">
                 <div class="footer__brand">
-                    <h3 class="footer__logo">Tio Academy</h3>
+                    <a href="{% url 'home' %}" style="text-decoration: none; color: inherit;"><h3 class="footer__logo">{% trans "Tio Academy" %}</h3></a>
                     <p class="footer__tagline">{% trans "Premium dance education since 2010" %}</p>
                 </div>
                 
                 <div class="footer__nav">
                     <ul class="footer__links">
                         <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
-                        <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
                     </ul>
                     
                     <div class="footer__social-links">
@@ -169,9 +556,12 @@
             </div>
             
             <div class="footer__bottom">
-                <p>&copy; 2025 Tio Academy. {% trans "All rights reserved." %} | 
+                <p>&copy; 2025 {% trans "Tio Academy" %}. {% trans "All rights reserved." %} | 
                    <a href="{% url 'privacy' %}">{% trans "Privacy" %}</a> | 
                    <a href="{% url 'terms' %}">{% trans "Terms" %}</a>
+                </p>
+                <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">
+                    {% trans "Designed and developed by" %} <a href="https://synaeagency.com/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">synaé agency</a>
                 </p>
             </div>
         </div>
@@ -239,9 +629,94 @@
     }
     </script>
     
-    <!-- Hamburger Menu JavaScript -->
+    <!-- MOBILE MENU JAVASCRIPT - CLEAN VERSION -->
     <script>
+        // Global function called from onclick
+        function toggleMobileMenu() {
+            console.log('=== toggleMobileMenu() CALLED ===');
+            const navMenu = document.getElementById('navMenu');
+            const hamburger = document.getElementById('hamburger');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            
+            console.log('Elements:', {navMenu, hamburger, mobileOverlay});
+            
+            if (!navMenu) {
+                console.error('ERROR: navMenu not found!');
+                return;
+            }
+            
+            if (!hamburger) {
+                console.error('ERROR: hamburger not found!');
+                return;
+            }
+            
+            console.log('Before toggle - Menu classes:', navMenu.className);
+            console.log('Before toggle - Hamburger classes:', hamburger.className);
+            
+            // Toggle classes
+            navMenu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+            
+            if (mobileOverlay) {
+                mobileOverlay.classList.toggle('active');
+            }
+            
+            // Prevent body scroll
+            if (navMenu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+                console.log('Menu OPENED - body scroll locked');
+            } else {
+                document.body.style.overflow = '';
+                console.log('Menu CLOSED - body scroll unlocked');
+            }
+            
+            console.log('After toggle - Menu classes:', navMenu.className);
+            console.log('After toggle - Menu has active?', navMenu.classList.contains('active'));
+        }
+        
+        function closeMobileMenu() {
+            const navMenu = document.getElementById('navMenu');
+            const hamburger = document.getElementById('hamburger');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            
+            if (navMenu) navMenu.classList.remove('active');
+            if (hamburger) hamburger.classList.remove('active');
+            if (mobileOverlay) mobileOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            const hamburger = document.querySelector('.hamburger');
-            const navMenu = document.querySelector('.nav-menu');
-            const navLinks = document
+            console.log('=== DOM LOADED - Initializing mobile menu ===');
+            
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('navMenu');
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            
+            console.log('Found elements:', {
+                hamburger: !!hamburger,
+                navMenu: !!navMenu,
+                mobileOverlay: !!mobileOverlay,
+                navLinksCount: navLinks.length
+            });
+            
+            // Close menu when clicking nav links
+            navLinks.forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+            
+            // Close menu when clicking overlay
+            if (mobileOverlay) {
+                mobileOverlay.addEventListener('click', closeMobileMenu);
+            }
+            
+            // Close menu on ESC key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && navMenu && navMenu.classList.contains('active')) {
+                    closeMobileMenu();
+                }
+            });
+        });
+    </script>
+    

@@ -28,6 +28,7 @@ def pricing_page(request):
     context = {
         'packages': packages,
         'guarantee_content': guarantee_content,
+        'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY,
         'page_title': 'Choose Your Plan - Tio Academy',
         'breadcrumbs': [
             {'name': 'Home', 'url': '/'},

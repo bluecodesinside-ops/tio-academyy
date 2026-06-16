@@ -1,566 +1,219 @@
-{% load static %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
 
-<!-- Slideshow Container -->
-<div class="slideshow-container" id="slideshow-container">
-    <!-- Slides -->
-    <div class="slideshow-wrapper" id="slideshow-wrapper">
-        {% for item in slideshow_items %}
-        <div class="slide {% if forloop.first %}active{% endif %}" data-slide-index="{{ forloop.counter0 }}">
-            {% if item.media_type == 'image' and item.image %}
-                <img src="{{ item.image.url }}" alt="{{ item.title }}" class="slide-image" loading="lazy">
-            {% elif item.media_type == 'video' %}
-                {% if item.is_youtube_url and item.get_youtube_embed_url %}
-                    <iframe 
-                        src="{{ item.get_youtube_embed_url }}" 
-                        class="slide-video" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen>
-                    </iframe>
-                {% elif item.video_file %}
-                    <video 
-                        class="slide-video" 
-                        controls 
-                        preload="metadata"
-                        data-slide-index="{{ forloop.counter0 }}">
-                        <source src="{{ item.video_file.url }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                {% elif item.video_url %}
-                    <video 
-                        class="slide-video" 
-                        controls 
-                        preload="metadata"
-                        data-slide-index="{{ forloop.counter0 }}">
-                        <source src="{{ item.video_url }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                {% endif %}
-            {% endif %}
-            
-            <div class="slide-content">
-                <h2 class="slide-title">{{ item.title }}</h2>
-                {% if item.description %}
-                    <p class="slide-description">{{ item.description }}</p>
-                {% endif %}
-            </div>
+<div class="luxury-video-slideshow-wrap">
+    {% if slideshow_youtube_slides %}
+    <div class="splide luxury-video-splide" id="luxury-video-splide" aria-label="Featured videos">
+        <div class="splide__track">
+            <ul class="splide__list">
+                {% for item in slideshow_youtube_slides %}
+                <li class="splide__slide">
+                    <div class="luxury-video-slide">
+                        <div class="luxury-video-frame">
+                            <iframe
+                                class="luxury-video-iframe"
+                                src="{{ item.youtube_embed_src }}"
+                                title="{{ item.title|striptags|truncatechars:120 }}"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+                            </iframe>
+                        </div>
+                        {% if item.title or item.description %}
+                        <div class="luxury-video-caption">
+                            {% if item.title %}<h2 class="luxury-video-caption__title">{{ item.title }}</h2>{% endif %}
+                            {% if item.description %}<p class="luxury-video-caption__text">{{ item.description }}</p>{% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
-        {% empty %}
-        <div class="slide active">
-            <div class="slide-content">
-                <h2 class="slide-title">Welcome to Tio Academy</h2>
-                <p class="slide-description">Experience the art of dance through our curated programs and distinguished instruction.</p>
-            </div>
-        </div>
-        {% endfor %}
     </div>
-    
-    <!-- Navigation Buttons -->
-    <button class="slideshow-nav slideshow-prev" id="slideshow-prev" aria-label="Previous slide">
-        <i class="fas fa-chevron-left"></i>
-    </button>
-    <button class="slideshow-nav slideshow-next" id="slideshow-next" aria-label="Next slide">
-        <i class="fas fa-chevron-right"></i>
-    </button>
-    
-    <!-- Play/Pause Button -->
-    <button class="slideshow-play-pause" id="slideshow-play-pause" aria-label="Play/Pause slideshow">
-        <i class="fas fa-pause" id="play-pause-icon"></i>
-    </button>
-    
-    <!-- Slide Counter -->
-    <div class="slideshow-counter" id="slideshow-counter">
-        <span id="current-slide">1</span> / <span id="total-slides">0</span>
+    {% else %}
+    <div class="luxury-video-slideshow-empty" role="status">
+        <p class="luxury-video-slideshow-empty__title">Video showcase</p>
+        <p class="luxury-video-slideshow-empty__hint">Add active slideshow items with <strong>Video</strong> type and a <strong>YouTube</strong> URL in the admin.</p>
     </div>
-    
-    <!-- Indicators/Dots -->
-    <div class="slideshow-indicators" id="slideshow-indicators">
-        <!-- Dots will be dynamically generated here -->
-    </div>
+    {% endif %}
 </div>
 
-<!-- Slideshow Styles -->
 <style>
-.slideshow-container {
+.luxury-video-slideshow-wrap {
+    max-width: 1100px;
+    margin: var(--spacing-4xl) auto;
+}
+
+.luxury-video-splide {
+    padding: 0 3rem 3rem;
+}
+
+.luxury-video-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xl);
+}
+
+.luxury-video-frame {
     position: relative;
     width: 100%;
-    height: 60vh;
-    min-height: 400px;
-    max-height: 800px;
-    background: #faf6f0;
-    border-radius: var(--radius-xl);
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
-    box-shadow: var(--shadow-2xl);
-    margin: var(--spacing-4xl) 0;
+    border-radius: 12px;
+    background: #0a0a0a;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
 }
 
-.slideshow-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-}
-
-.slide {
-    position: relative;
-    min-width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-gray-900);
-}
-
-.slide-image,
-.slide-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.slide-video {
-    background: var(--color-black);
-}
-
-.slide-content {
+.luxury-video-iframe {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-    color: var(--color-white);
-    padding: var(--spacing-4xl) var(--spacing-2xl) var(--spacing-2xl);
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.luxury-video-caption {
     text-align: center;
+    max-width: 640px;
+    padding: 0 var(--spacing-lg);
 }
 
-.slide-title {
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--spacing-lg);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-}
-
-.slide-description {
-    font-size: var(--font-size-lg);
-    opacity: 0.9;
-    max-width: 600px;
-    margin: 0 auto;
-    line-height: 1.6;
-}
-
-.slideshow-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: var(--color-white);
-    border: none;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--transition-normal);
-    z-index: 10;
-    font-size: var(--font-size-xl);
-}
-
-.slideshow-nav:hover {
-    background: rgba(0, 0, 0, 0.8);
-    transform: translateY(-50%) scale(1.1);
-}
-
-.slideshow-prev {
-    left: var(--spacing-2xl);
-}
-
-.slideshow-next {
-    right: var(--spacing-2xl);
-}
-
-.slideshow-play-pause {
-    position: absolute;
-    top: var(--spacing-2xl);
-    right: var(--spacing-2xl);
-    background: rgba(0, 0, 0, 0.5);
-    color: var(--color-white);
-    border: none;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--transition-normal);
-    z-index: 10;
-    font-size: var(--font-size-lg);
-}
-
-.slideshow-play-pause:hover {
-    background: rgba(0, 0, 0, 0.8);
-    transform: scale(1.1);
-}
-
-.slideshow-counter {
-    position: absolute;
-    top: var(--spacing-2xl);
-    left: var(--spacing-2xl);
-    background: rgba(0, 0, 0, 0.5);
-    color: var(--color-white);
-    padding: var(--spacing-sm) var(--spacing-lg);
-    border-radius: var(--radius-full);
+.luxury-video-caption__title {
+    font-family: var(--font-family-display, 'Playfair Display', Georgia, serif);
+    font-size: var(--font-size-2xl);
     font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-sm);
-    z-index: 10;
+    color: #0a0a0a;
+    margin: 0 0 var(--spacing-sm);
+    letter-spacing: -0.02em;
 }
 
-.slideshow-indicators {
-    position: absolute;
-    bottom: var(--spacing-2xl);
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: var(--spacing-sm);
-    z-index: 10;
+.luxury-video-caption__text {
+    font-family: var(--font-family-primary, system-ui, sans-serif);
+    font-size: var(--font-size-base);
+    color: #525252;
+    line-height: 1.6;
+    margin: 0;
 }
 
-.slideshow-dot {
-    width: 12px;
-    height: 12px;
+/* Splide arrows — minimal monochrome circles */
+.luxury-video-splide .splide__arrow {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    cursor: pointer;
-    transition: var(--transition-fast);
+    opacity: 1;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-.slideshow-dot.active {
-    background: var(--color-accent);
-    transform: scale(1.2);
+.luxury-video-splide .splide__arrow:hover {
+    background: #0a0a0a;
+    border-color: #0a0a0a;
 }
 
-.slideshow-dot:hover {
-    background: rgba(255, 255, 255, 0.8);
+.luxury-video-splide .splide__arrow svg {
+    fill: #0a0a0a;
 }
 
-/* Video Controls */
-.video-controls {
-    position: absolute;
-    bottom: var(--spacing-2xl);
-    right: var(--spacing-2xl);
+.luxury-video-splide .splide__arrow:hover svg {
+    fill: #fff;
+}
+
+.luxury-video-splide .splide__arrow--prev {
+    left: 0;
+}
+
+.luxury-video-splide .splide__arrow--next {
+    right: 0;
+}
+
+/* Pagination dots */
+.luxury-video-splide .splide__pagination {
+    bottom: 0.5rem;
+    gap: 0.5rem;
+}
+
+.luxury-video-splide .splide__pagination__page {
+    background: #d4d4d4;
+    opacity: 1;
+    width: 8px;
+    height: 8px;
+    margin: 0;
+}
+
+.luxury-video-splide .splide__pagination__page.is-active {
+    background: #0a0a0a;
+    transform: scale(1.25);
+}
+
+.luxury-video-slideshow-empty {
+    aspect-ratio: 16 / 9;
+    max-height: 420px;
+    border-radius: 12px;
+    background: #f5f5f5;
+    border: 1px solid #e5e5e5;
     display: flex;
-    gap: var(--spacing-sm);
-    z-index: 10;
-}
-
-.video-control-btn {
-    background: rgba(0, 0, 0, 0.5);
-    color: var(--color-white);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: var(--transition-fast);
+    text-align: center;
+    padding: var(--spacing-4xl);
+}
+
+.luxury-video-slideshow-empty__title {
+    font-family: var(--font-family-display, Georgia, serif);
+    font-size: var(--font-size-xl);
+    color: #0a0a0a;
+    margin: 0 0 var(--spacing-md);
+}
+
+.luxury-video-slideshow-empty__hint {
     font-size: var(--font-size-sm);
+    color: #525252;
+    max-width: 400px;
+    margin: 0;
+    line-height: 1.5;
 }
 
-.video-control-btn:hover {
-    background: rgba(0, 0, 0, 0.8);
-    transform: scale(1.1);
-}
-
-/* Responsive Design */
 @media (max-width: 768px) {
-    .slideshow-container {
-        height: 50vh;
-        min-height: 300px;
-        margin: var(--spacing-2xl) 0;
+    .luxury-video-splide {
+        padding: 0 0 2.5rem;
     }
-    
-    .slide-title {
-        font-size: var(--font-size-2xl);
-    }
-    
-    .slide-description {
-        font-size: var(--font-size-base);
-    }
-    
-    .slide-content {
-        padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-lg);
-    }
-    
-    .slideshow-nav {
-        width: 50px;
-        height: 50px;
-        font-size: var(--font-size-lg);
-    }
-    
-    .slideshow-prev {
-        left: var(--spacing-lg);
-    }
-    
-    .slideshow-next {
-        right: var(--spacing-lg);
-    }
-    
-    .slideshow-play-pause {
-        width: 40px;
-        height: 40px;
-        font-size: var(--font-size-base);
-    }
-    
-    .slideshow-counter {
-        font-size: var(--font-size-xs);
-        padding: var(--spacing-xs) var(--spacing-md);
-    }
-    
-    .slideshow-indicators {
-        bottom: var(--spacing-lg);
-    }
-    
-    .slideshow-dot {
-        width: 10px;
-        height: 10px;
-    }
-}
 
-@media (max-width: 480px) {
-    .slideshow-container {
-        height: 40vh;
-        min-height: 250px;
+    .luxury-video-splide .splide__arrow {
+        width: 38px;
+        height: 38px;
     }
-    
-    .slide-title {
-        font-size: var(--font-size-xl);
+
+    .luxury-video-splide .splide__arrow--prev {
+        left: 0.25rem;
     }
-    
-    .slide-description {
-        font-size: var(--font-size-sm);
-    }
-    
-    .slide-content {
-        padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
-    }
-    
-    .slideshow-nav {
-        width: 40px;
-        height: 40px;
-        font-size: var(--font-size-base);
-    }
-    
-    .slideshow-prev {
-        left: var(--spacing-md);
-    }
-    
-    .slideshow-next {
-        right: var(--spacing-md);
-    }
-    
-    .slideshow-play-pause {
-        width: 35px;
-        height: 35px;
-        font-size: var(--font-size-sm);
-    }
-    
-    .slideshow-counter {
-        font-size: var(--font-size-xs);
-        padding: var(--spacing-xs) var(--spacing-sm);
+
+    .luxury-video-splide .splide__arrow--next {
+        right: 0.25rem;
     }
 }
 </style>
 
-<!-- Slideshow JavaScript -->
+{% if slideshow_youtube_slides %}
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
 <script>
-class Slideshow {
-    constructor(containerId) {
-        this.container = document.getElementById(containerId);
-        this.wrapper = document.getElementById('slideshow-wrapper');
-        this.prevBtn = document.getElementById('slideshow-prev');
-        this.nextBtn = document.getElementById('slideshow-next');
-        this.playPauseBtn = document.getElementById('slideshow-play-pause');
-        this.playPauseIcon = document.getElementById('play-pause-icon');
-        this.counter = document.getElementById('slideshow-counter');
-        this.currentSlideEl = document.getElementById('current-slide');
-        this.totalSlidesEl = document.getElementById('total-slides');
-        this.indicators = document.getElementById('slideshow-indicators');
-        
-        this.slides = [];
-        this.currentSlide = 0;
-        this.isPlaying = true;
-        this.interval = null;
-        this.autoPlayDelay = 5000; // 5 seconds
-        
-        this.init();
-    }
-    
-    init() {
-        this.loadSlides();
-        this.setupEventListeners();
-        this.startAutoPlay();
-    }
-    
-    loadSlides() {
-        // Get slides from the DOM (already rendered server-side)
-        this.slides = Array.from(this.wrapper.querySelectorAll('.slide'));
-        
-        if (this.slides.length === 0) {
-            return;
-        }
-        
-        // Update counter
-        this.totalSlidesEl.textContent = this.slides.length;
-        this.updateCounter();
-        
-        // Render indicators
-        this.renderIndicators();
-    }
-    
-    
-    renderIndicators() {
-        this.indicators.innerHTML = this.slides.map((_, index) => 
-            `<div class="slideshow-dot ${index === 0 ? 'active' : ''}" data-slide="${index}"></div>`
-        ).join('');
-    }
-    
-    setupEventListeners() {
-        this.prevBtn.addEventListener('click', () => this.previousSlide());
-        this.nextBtn.addEventListener('click', () => this.nextSlide());
-        this.playPauseBtn.addEventListener('click', () => this.togglePlayPause());
-        
-        // Indicator clicks
-        this.indicators.addEventListener('click', (e) => {
-            if (e.target.classList.contains('slideshow-dot')) {
-                const slideIndex = parseInt(e.target.dataset.slide);
-                this.goToSlide(slideIndex);
-            }
-        });
-        
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') this.previousSlide();
-            if (e.key === 'ArrowRight') this.nextSlide();
-            if (e.key === ' ') {
-                e.preventDefault();
-                this.togglePlayPause();
-            }
-        });
-        
-        // Touch/swipe support
-        this.setupTouchEvents();
-    }
-    
-    setupTouchEvents() {
-        let startX = 0;
-        let startY = 0;
-        let endX = 0;
-        let endY = 0;
-        
-        this.container.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
-        });
-        
-        this.container.addEventListener('touchend', (e) => {
-            endX = e.changedTouches[0].clientX;
-            endY = e.changedTouches[0].clientY;
-            this.handleSwipe(startX, startY, endX, endY);
-        });
-    }
-    
-    handleSwipe(startX, startY, endX, endY) {
-        const deltaX = endX - startX;
-        const deltaY = endY - startY;
-        const minSwipeDistance = 50;
-        
-        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
-            if (deltaX > 0) {
-                this.previousSlide();
-            } else {
-                this.nextSlide();
-            }
-        }
-    }
-    
-    nextSlide() {
-        this.currentSlide = (this.currentSlide + 1) % this.slides.length;
-        this.updateSlide();
-    }
-    
-    previousSlide() {
-        this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
-        this.updateSlide();
-    }
-    
-    goToSlide(index) {
-        this.currentSlide = index;
-        this.updateSlide();
-    }
-    
-    updateSlide() {
-        const translateX = -this.currentSlide * 100;
-        this.wrapper.style.transform = `translateX(${translateX}%)`;
-        
-        // Update indicators
-        document.querySelectorAll('.slideshow-dot').forEach((dot, index) => {
-            dot.classList.toggle('active', index === this.currentSlide);
-        });
-        
-        this.updateCounter();
-        
-        // Pause any playing videos in other slides
-        this.pauseAllVideos();
-    }
-    
-    updateCounter() {
-        this.currentSlideEl.textContent = this.currentSlide + 1;
-    }
-    
-    togglePlayPause() {
-        this.isPlaying = !this.isPlaying;
-        
-        if (this.isPlaying) {
-            this.playPauseIcon.className = 'fas fa-pause';
-            this.startAutoPlay();
-        } else {
-            this.playPauseIcon.className = 'fas fa-play';
-            this.stopAutoPlay();
-        }
-    }
-    
-    startAutoPlay() {
-        this.stopAutoPlay();
-        if (this.isPlaying && this.slides.length > 1) {
-            this.interval = setInterval(() => {
-                this.nextSlide();
-            }, this.autoPlayDelay);
-        }
-    }
-    
-    stopAutoPlay() {
-        if (this.interval) {
-            clearInterval(this.interval);
-            this.interval = null;
-        }
-    }
-    
-    pauseAllVideos() {
-        const videos = this.container.querySelectorAll('video');
-        videos.forEach(video => {
-            video.pause();
-        });
-    }
-}
-
-// Initialize slideshow when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    new Slideshow('slideshow-container');
+document.addEventListener('DOMContentLoaded', function () {
+    var root = document.getElementById('luxury-video-splide');
+    if (!root || typeof Splide === 'undefined') return;
+    new Splide(root, {
+        type: 'fade',
+        rewind: true,
+        speed: 600,
+        easing: 'cubic-bezier(0.25, 1, 0.3, 1)',
+        pagination: true,
+        arrows: true,
+        drag: true,
+        keyboard: true,
+    }).mount();
 });
 </script>
+{% endif %}

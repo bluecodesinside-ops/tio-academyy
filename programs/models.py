@@ -5,6 +5,43 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
 
 
+class Genre(models.Model):
+    """Genre/tag for programs — e.g. Valle Tradicionale Shqiptare, Fizioterapi, Military Workout, Yoga"""
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = "Genre"
+        verbose_name_plural = "Genres"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class SiteSection(models.Model):
+    """Admin-editable copy blocks — hero, explore section, etc. No redeploy needed."""
+    slug = models.SlugField(max_length=100, unique=True, help_text="Identifier e.g. 'hero', 'explore-programs'")
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='site_sections/', blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Site Section"
+        verbose_name_plural = "Site Sections"
+
+    def __str__(self):
+        return f"[{self.slug}] {self.title}"
+
+
 class DanceStyle(models.Model):
     """Level 1: Dance Styles (e.g., Latina, Hip Hop, Contemporary, Ballroom)"""
     name = models.CharField(max_length=100, unique=True)
@@ -13,13 +50,14 @@ class DanceStyle(models.Model):
     description = models.TextField(blank=True, help_text="Brief description of the dance style")
     order = models.PositiveIntegerField(default=0, help_text="Display order (0 = first)")
     is_active = models.BooleanField(default=True)
+    genres = models.ManyToManyField(Genre, blank=True, related_name='programs', help_text="Genre tags shown on the homepage tag row")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['order', 'name']
-        verbose_name = "Dance Style"
-        verbose_name_plural = "Dance Styles"
+        verbose_name = "Program"
+        verbose_name_plural = "Programs"
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -44,6 +82,7 @@ class Category(models.Model):
     image = models.ImageField(upload_to='programs/categories/', help_text="Recommended size: 300x200px")
     description = models.TextField(blank=True, help_text="Brief description of the category")
     order = models.PositiveIntegerField(default=0, help_text="Display order within dance style")
+    has_levels = models.BooleanField(default=False, help_text="True if this problem/category has multiple progressive levels (e.g. spine rehab series)")
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -80,10 +119,21 @@ class SkillLevel(models.Model):
         ('advanced', 'Advanced'),
     ]
 
+    PACKAGE_TIER_CHOICES = [
+        ('basic', 'Basic'),
+        ('premium', 'Premium'),
+    ]
+
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='skill_levels')
     level = models.CharField(max_length=20, choices=LEVEL_CHOICES)
     description = models.TextField(blank=True, help_text="Description of what students will learn at this level")
     order = models.PositiveIntegerField(default=0, help_text="Display order within category")
+    required_package_tier = models.CharField(
+        max_length=10,
+        choices=PACKAGE_TIER_CHOICES,
+        default='basic',
+        help_text="Minimum package tier required to access this folder/level"
+    )
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -114,9 +164,62 @@ class SkillLevel(models.Model):
         return self.videos.filter(is_active=True, is_free=False).count()
 
 
+class VideoFolder(models.Model):
+    """
+    Video Folder — sits directly under Category.
+    For single-level categories: one folder per category.
+    For multi-level categories (has_levels=True): one folder per level number.
+    Access control: basic tier sees basic folders; premium tier sees all.
+    """
+    PACKAGE_TIER_CHOICES = [
+        ('basic', 'Basic'),
+        ('premium', 'Premium'),
+    ]
+
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='folders')
+    name = models.CharField(max_length=100)
+    level = models.PositiveSmallIntegerField(
+        null=True, blank=True,
+        help_text="Level number for multi-level categories (e.g. 1, 2, 3). Leave blank for single-level."
+    )
+    description = models.TextField(blank=True)
+    required_package_tier = models.CharField(
+        max_length=10,
+        choices=PACKAGE_TIER_CHOICES,
+        default='basic',
+        help_text="'basic' = visible to all subscribers; 'premium' = premium only"
+    )
+    order = models.PositiveSmallIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', 'level', 'name']
+        verbose_name = "Video Folder"
+        verbose_name_plural = "Video Folders"
+
+    def __str__(self):
+        if self.level:
+            return f"{self.category.name} — Level {self.level}: {self.name}"
+        return f"{self.category.name} — {self.name}"
+
+    def is_accessible_to(self, user_tier):
+        """Return True if user_tier meets the folder's requirement."""
+        tier_rank = {'basic': 1, 'premium': 2}
+        return tier_rank.get(user_tier, 0) >= tier_rank.get(self.required_package_tier, 1)
+
+
 class Video(models.Model):
-    """Level 4: Individual videos within a skill level"""
+    """Level 4: Individual videos within a skill level or video folder"""
     skill_level = models.ForeignKey(SkillLevel, on_delete=models.CASCADE, related_name='videos')
+    # New: videos can also live directly in a VideoFolder (preferred for new content)
+    video_folder = models.ForeignKey(
+        VideoFolder,
+        on_delete=models.SET_NULL,
+        null=True, blank=True,
+        related_name='videos',
+        help_text="Assign to a VideoFolder for tier-based access control (preferred for new videos)"
+    )
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, blank=True)
     description = models.TextField(blank=True)

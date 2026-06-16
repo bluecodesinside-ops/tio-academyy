@@ -8,7 +8,7 @@
 <style>
     /* Pricing page styles matching existing design system */
     .pricing-hero {
-        background: var(--color-gray-50);
+        background: #141414;
         padding: var(--spacing-6xl) 0;
         text-align: center;
     }
@@ -17,14 +17,14 @@
         font-family: var(--font-family-display);
         font-size: var(--font-size-5xl);
         font-weight: var(--font-weight-bold);
-        color: var(--color-primary);
+        color: #fafafa;
         margin-bottom: var(--spacing-lg);
         line-height: 1.2;
     }
     
     .pricing-hero__subtitle {
         font-size: var(--font-size-xl);
-        color: var(--color-gray-600);
+        color: #a3a3a3;
         max-width: 600px;
         margin: 0 auto var(--spacing-4xl);
         line-height: 1.6;
@@ -32,8 +32,8 @@
     
     .billing-toggle {
         display: inline-flex;
-        background: var(--color-white);
-        border: 1px solid var(--color-gray-200);
+        background: #1f1f1f;
+        border: 1px solid #2a2a2a;
         border-radius: var(--radius-lg);
         padding: var(--spacing-xs);
         margin-bottom: var(--spacing-4xl);
@@ -43,7 +43,7 @@
         padding: var(--spacing-md) var(--spacing-xl);
         border: none;
         background: transparent;
-        color: var(--color-gray-600);
+        color: #a3a3a3;
         font-weight: var(--font-weight-medium);
         cursor: pointer;
         border-radius: var(--radius-md);
@@ -51,13 +51,13 @@
     }
     
     .billing-toggle button.active {
-        background: var(--color-accent);
-        color: var(--color-white);
+        background: #fafafa;
+        color: #0a0a0a;
     }
     
     .yearly-discount {
-        background: var(--color-accent);
-        color: var(--color-white);
+        background: #fafafa;
+        color: #0a0a0a;
         padding: var(--spacing-xs) var(--spacing-sm);
         border-radius: var(--radius-sm);
         font-size: var(--font-size-xs);
@@ -65,6 +65,11 @@
         margin-left: var(--spacing-sm);
     }
     
+    .pricing-section {
+        background: #f7f7f5;
+        padding: var(--spacing-6xl) 0;
+    }
+
     .pricing-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -75,29 +80,29 @@
     }
     
     .pricing-card {
-        background: var(--color-white);
-        border: 1px solid var(--color-gray-200);
+        background: #fafafa;
+        border: 1px solid #e0e0e0;
         border-radius: var(--radius-xl);
-        padding: var(--spacing-4xl);
+        padding: var(--spacing-5xl) var(--spacing-4xl);
         text-align: center;
-        transition: var(--transition-normal);
+        transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
         position: relative;
     }
     
     .pricing-card:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-xl);
-        border-color: var(--color-accent);
+        transform: scale(1.02);
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.1);
+        border-color: #0a0a0a;
     }
     
     .pricing-card.popular {
-        border-color: var(--color-accent);
-        box-shadow: var(--shadow-lg);
-        transform: scale(1.02);
+        border-color: #0a0a0a;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+        background: #fff;
     }
     
     .pricing-card.popular:hover {
-        transform: scale(1.02) translateY(-4px);
+        transform: scale(1.03);
     }
     
     .popular-badge {
@@ -105,44 +110,46 @@
         top: -12px;
         left: 50%;
         transform: translateX(-50%);
-        background: var(--color-accent);
-        color: var(--color-white);
+        background: #0a0a0a;
+        color: #fafafa;
         padding: var(--spacing-sm) var(--spacing-xl);
         border-radius: var(--radius-full);
         font-size: var(--font-size-sm);
         font-weight: var(--font-weight-semibold);
+        letter-spacing: 0.04em;
     }
     
     .pricing-card__name {
         font-family: var(--font-family-display);
         font-size: var(--font-size-2xl);
         font-weight: var(--font-weight-bold);
-        color: var(--color-primary);
+        color: #0a0a0a;
         margin-bottom: var(--spacing-sm);
     }
     
     .pricing-card__description {
-        color: var(--color-gray-600);
+        font-family: var(--font-family-primary);
+        color: #525252;
         margin-bottom: var(--spacing-2xl);
-        line-height: 1.6;
+        line-height: 1.65;
     }
     
     .pricing-card__price {
         font-family: var(--font-family-display);
         font-size: var(--font-size-5xl);
         font-weight: var(--font-weight-bold);
-        color: var(--color-primary);
+        color: #0a0a0a;
         margin-bottom: var(--spacing-sm);
     }
     
     .pricing-card__period {
-        color: var(--color-gray-600);
+        color: #737373;
         font-size: var(--font-size-lg);
         margin-bottom: var(--spacing-2xl);
     }
     
     .pricing-card__discount {
-        color: var(--color-accent);
+        color: #0a0a0a;
         font-size: var(--font-size-sm);
         font-weight: var(--font-weight-semibold);
         margin-bottom: var(--spacing-2xl);
@@ -156,56 +163,61 @@
     }
     
     .pricing-features li {
-        padding: var(--spacing-sm) 0;
+        padding: var(--spacing-md) 0;
         display: flex;
-        align-items: center;
-        color: var(--color-gray-700);
+        align-items: flex-start;
+        gap: var(--spacing-md);
+        color: #404040;
+        line-height: 1.5;
     }
     
     .pricing-features li:before {
         content: "✓";
-        color: var(--color-accent);
+        color: #fafafa;
         font-weight: var(--font-weight-bold);
-        margin-right: var(--spacing-md);
-        width: 20px;
-        height: 20px;
+        flex-shrink: 0;
+        width: 22px;
+        height: 22px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: var(--color-accent-light);
+        background: #0a0a0a;
         border-radius: 50%;
         font-size: var(--font-size-xs);
+        margin-top: 2px;
     }
     
     .pricing-card__button {
         display: inline-block;
-        background: var(--color-primary);
-        color: var(--color-white);
+        background: #0a0a0a;
+        color: #fafafa;
         padding: var(--spacing-lg) var(--spacing-2xl);
         text-decoration: none;
         border-radius: var(--radius-lg);
         font-weight: var(--font-weight-semibold);
         font-size: var(--font-size-lg);
-        transition: var(--transition-fast);
+        transition: transform 0.25s ease, background 0.25s ease;
         width: 100%;
         text-align: center;
+        border: 1px solid #0a0a0a;
     }
     
     .pricing-card__button:hover {
-        background: var(--color-primary-light);
+        background: #262626;
         transform: translateY(-2px);
     }
     
     .pricing-card.popular .pricing-card__button {
-        background: var(--color-accent);
+        background: #0a0a0a;
+        color: #fafafa;
     }
     
     .pricing-card.popular .pricing-card__button:hover {
-        background: var(--color-accent-dark);
+        background: #262626;
     }
     
     .guarantee-section {
-        background: var(--color-gray-50);
+        background: #f7f7f5;
         padding: var(--spacing-6xl) 0;
         margin: var(--spacing-6xl) 0;
         text-align: center;
@@ -220,7 +232,7 @@
     .guarantee-icon {
         width: 80px;
         height: 80px;
-        background: var(--color-accent);
+        background: #0a0a0a;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -230,20 +242,20 @@
     
     .guarantee-icon i {
         font-size: var(--font-size-3xl);
-        color: var(--color-white);
+        color: #fafafa;
     }
     
     .guarantee-title {
         font-family: var(--font-family-display);
         font-size: var(--font-size-4xl);
         font-weight: var(--font-weight-bold);
-        color: var(--color-primary);
+        color: #0a0a0a;
         margin-bottom: var(--spacing-lg);
     }
     
     .guarantee-description {
         font-size: var(--font-size-xl);
-        color: var(--color-gray-600);
+        color: #525252;
         margin-bottom: var(--spacing-4xl);
         line-height: 1.6;
     }
@@ -263,18 +275,18 @@
         font-family: var(--font-family-display);
         font-size: var(--font-size-3xl);
         font-weight: var(--font-weight-bold);
-        color: var(--color-primary);
+        color: #0a0a0a;
         display: block;
     }
     
     .guarantee-stat__label {
-        color: var(--color-gray-600);
+        color: #737373;
         font-size: var(--font-size-lg);
     }
     
     .faq-section {
         padding: var(--spacing-6xl) 0;
-        background: var(--color-white);
+        background: #fafafa;
     }
     
     .faq-container {
@@ -287,14 +299,14 @@
         font-family: var(--font-family-display);
         font-size: var(--font-size-4xl);
         font-weight: var(--font-weight-bold);
-        color: var(--color-primary);
+        color: #0a0a0a;
         text-align: center;
         margin-bottom: var(--spacing-4xl);
     }
     
     .faq-item {
-        background: var(--color-white);
-        border: 1px solid var(--color-gray-200);
+        background: #fff;
+        border: 1px solid #e5e5e5;
         border-radius: var(--radius-lg);
         padding: var(--spacing-2xl);
         margin-bottom: var(--spacing-xl);
@@ -303,13 +315,27 @@
     .faq-question {
         font-size: var(--font-size-xl);
         font-weight: var(--font-weight-semibold);
-        color: var(--color-primary);
+        color: #0a0a0a;
         margin-bottom: var(--spacing-md);
     }
     
     .faq-answer {
-        color: var(--color-gray-600);
+        color: #525252;
         line-height: 1.6;
+    }
+
+    .pricing-option-card {
+        background: #fafafa;
+        border: 1px solid #e0e0e0;
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-5xl) var(--spacing-4xl);
+        text-align: center;
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .pricing-option-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
     }
     
     /* Responsive Design */
@@ -483,6 +509,7 @@
 <section class="pricing-section">
     <div class="pricing-grid">
         {% for package in packages %}
+        {% if package.is_price_set and package.is_active %}
         <div class="pricing-card {% if package.is_popular %}popular{% endif %}">
             {% if package.is_popular %}
             <div class="popular-badge">Most Popular</div>
@@ -515,7 +542,41 @@
                 {{ package.button_text }}
             </a>
         </div>
+        {% endif %}
         {% endfor %}
+    </div>
+</section>
+
+<!-- Subscription Options Section -->
+<section class="pricing-section" style="background: #ebebe8;">
+    <div class="container" style="max-width: 800px; margin: 0 auto; padding: 0 var(--spacing-xl);">
+        <h2 style="text-align: center; font-family: var(--font-family-display); font-size: var(--font-size-4xl); font-weight: var(--font-weight-bold); color: #0a0a0a; margin-bottom: var(--spacing-2xl);">
+            Premium Access Options
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-2xl); margin-top: var(--spacing-4xl);">
+            <div class="pricing-option-card">
+                <h3 style="font-family: var(--font-family-display); font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: #0a0a0a; margin-bottom: var(--spacing-lg);">
+                    Subscribe
+                </h3>
+                <p style="color: #525252; margin-bottom: var(--spacing-2xl); line-height: 1.6;">
+                    Get unlimited access to all premium content with a monthly subscription.
+                </p>
+                <button type="button" onclick="handleSubscriptionCheckout()" class="pricing-card__button" style="width: 100%;">
+                    Subscribe Now
+                </button>
+            </div>
+            <div class="pricing-option-card">
+                <h3 style="font-family: var(--font-family-display); font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: #0a0a0a; margin-bottom: var(--spacing-lg);">
+                    Buy Lifetime
+                </h3>
+                <p style="color: #525252; margin-bottom: var(--spacing-2xl); line-height: 1.6;">
+                    One-time payment for lifetime access to all premium content.
+                </p>
+                <button type="button" onclick="handleLifetimeCheckout()" class="pricing-card__button" style="width: 100%;">
+                    Buy Lifetime Access
+                </button>
+            </div>
+        </div>
     </div>
 </section>
 

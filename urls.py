@@ -35,6 +35,8 @@ urlpatterns += i18n_patterns(
     # Main pages (using Django views)
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
+    path('courses/', views.courses, name='courses'),
+    path('gallery/', include('gallery.urls')),
     path('course/<int:course_id>/', views.course_detail, name='course_detail'),
     path('session/<int:session_id>/', views.session_detail, name='session_detail'),
     path('session/<int:session_id>/progress/', views.update_progress, name='update_progress'),
@@ -54,7 +56,11 @@ urlpatterns += i18n_patterns(
     # Django app URLs
     path('api/courses/', include('courses.urls')),
     path('api/newsletter/', include('newsletter.urls', namespace='newsletter_api')),
-    path('api/users/', include('users.urls')),
+    path('api/users/', include('users.urls', namespace='users_api')),
+    path('api/', include('payments.urls')),  # Payments API endpoints
+    
+    # User authentication and dashboard
+    path('', include('users.urls')),
     
     # Newsletter URLs (direct access)
     path('newsletter/', include('newsletter.urls')),

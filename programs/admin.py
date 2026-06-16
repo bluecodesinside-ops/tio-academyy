@@ -2,7 +2,36 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from .models import DanceStyle, Category, SkillLevel, Video, UserVideoAccess
+from .models import DanceStyle, Category, SkillLevel, Video, UserVideoAccess, Genre, SiteSection, VideoFolder
+
+
+class VideoFolderInline(admin.TabularInline):
+    model = VideoFolder
+    extra = 0
+    fields = ['name', 'level', 'required_package_tier', 'order', 'is_active']
+    ordering = ['order', 'level']
+
+
+@admin.register(VideoFolder)
+class VideoFolderAdmin(admin.ModelAdmin):
+    list_display = ['name', 'category', 'level', 'required_package_tier', 'order', 'is_active']
+    list_filter = ['category__dance_style', 'required_package_tier', 'is_active']
+    list_editable = ['required_package_tier', 'order', 'is_active']
+    search_fields = ['name', 'category__name']
+
+
+@admin.register(Genre)
+class GenreAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug', 'order']
+    list_editable = ['order']
+    prepopulated_fields = {'slug': ('name',)}
+
+
+@admin.register(SiteSection)
+class SiteSectionAdmin(admin.ModelAdmin):
+    list_display = ['slug', 'title', 'is_active', 'updated_at']
+    list_editable = ['is_active']
+    search_fields = ['slug', 'title']
 
 
 class VideoInline(admin.TabularInline):
@@ -41,6 +70,10 @@ class DanceStyleAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Basic Information', {
             'fields': ('name', 'slug', 'description', 'order', 'is_active')
+        }),
+        ('Genres / Tags', {
+            'fields': ('genres',),
+            'description': 'Genre tags shown in the homepage tag row (e.g. Valle Tradicionale Shqiptare, Fizioterapi, Military Workout)'
         }),
         ('Image', {
             'fields': ('image',)
@@ -81,17 +114,17 @@ class DanceStyleAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'dance_style', 'image_preview', 'skill_levels_count', 'order', 'is_active']
-    list_filter = ['dance_style', 'is_active', 'created_at']
+    list_display = ['name', 'dance_style', 'image_preview', 'has_levels', 'skill_levels_count', 'order', 'is_active']
+    list_filter = ['dance_style', 'has_levels', 'is_active', 'created_at']
     search_fields = ['name', 'description', 'dance_style__name']
-    list_editable = ['order', 'is_active']
+    list_editable = ['order', 'has_levels', 'is_active']
     prepopulated_fields = {'slug': ('name',)}
-    inlines = [SkillLevelInline]
+    inlines = [SkillLevelInline, VideoFolderInline]
     readonly_fields = ['created_at', 'updated_at']
     
     fieldsets = (
         ('Basic Information', {
-            'fields': ('dance_style', 'name', 'slug', 'description', 'order', 'is_active')
+            'fields': ('dance_style', 'name', 'slug', 'description', 'order', 'has_levels', 'is_active')
         }),
         ('Image', {
             'fields': ('image',)
@@ -142,6 +175,10 @@ class SkillLevelAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Basic Information', {
             'fields': ('category', 'level', 'description', 'order', 'is_active')
+        }),
+        ('Access Control', {
+            'fields': ('required_package_tier',),
+            'description': 'Basic = included in all plans. Premium = premium subscribers only.'
         }),
         ('Timestamps', {
             'fields': ('created_at', 'updated_at'),

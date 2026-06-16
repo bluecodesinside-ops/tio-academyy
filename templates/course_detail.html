@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load course_extras %}
 
-{% block title %}{{ course.title|default:"Course" }} - {% trans "Tio Academy" %}{% endblock %}
+{% block title %}{{ course.title|default:_("Course") }} - {% trans "Tio Academy" %}{% endblock %}
 
 {% block content %}
 <div class="course-platform">
@@ -18,15 +18,15 @@
             <div class="course-badge-container">
                 <span class="premium-badge">
                     <i class="fas fa-crown"></i>
-                    Premium Course
+                    {% trans "Premium Course" %}
                 </span>
                 <span class="quality-badge">
                     <i class="fas fa-hd-video"></i>
-                    4K Streaming
+                    {% trans "4K Streaming" %}
                 </span>
                 <span class="streaming-badge">
                     <i class="fas fa-shield-alt"></i>
-                    Stream Only
+                    {% trans "Stream Only" %}
                 </span>
         </div>
         
@@ -40,34 +40,34 @@
                         <img src="{% if course.instructor.avatar %}{{ course.instructor.avatar.url }}{% else %}/static/images/instructor-default.jpg{% endif %}" alt="Instructor">
                     </div>
                     <div class="instructor-details">
-                        <span class="instructor-name">{{ course.instructor.name|default:"Tio Academy Expert" }}</span>
-                        <span class="instructor-title">{{ course.instructor.title|default:"Professional Dance Instructor" }}</span>
+                        <span class="instructor-name">{{ course.instructor.name|default:_("Tio Academy Expert") }}</span>
+                        <span class="instructor-title">{{ course.instructor.title|default:_("Professional Dance Instructor") }}</span>
                     </div>
                 </div>
                 
                 <div class="course-stats">
                     <div class="stat-item">
                         <i class="fas fa-users"></i>
-                        <span>{{ course.enrolled_students.count|default:"0" }} students</span>
+                        <span>{{ course.enrolled_students.count|default:"0" }} {% trans "students" %}</span>
                     </div>
                     <div class="stat-item">
                         <i class="fas fa-clock"></i>
-                        <span>{{ course.get_total_duration }} total</span>
+                        <span>{{ course.get_total_duration }} {% trans "total" %}</span>
                     </div>
                     <div class="stat-item">
                         <i class="fas fa-star"></i>
-                        <span>{{ course.rating }} ({{ course.reviews.count|default:"0" }} reviews)</span>
+                        <span>{{ course.rating }} ({{ course.reviews.count|default:"0" }} {% trans "reviews" %})</span>
                     </div>
                     <div class="stat-item">
                         <i class="fas fa-play-circle"></i>
-                        <span>{{ course.get_total_sessions }} sessions</span>
+                        <span>{{ course.get_total_sessions }} {% trans "sessions" %}</span>
                     </div>
                 </div>
             </div>
             
             <!-- Course Purchase Section -->
             <div class="course-purchase">
-                {% if course.price == 0 or user.is_authenticated and has_access %}
+                {% if course.price == 0 or has_premium_access %}
                     <div class="purchase-status purchased">
                         <i class="fas fa-check-circle"></i>
                         <span>{% if course.price == 0 %}{% trans "Free Course - Full Access" %}{% else %}{% trans "Course Purchased" %}{% endif %}</span>
@@ -97,10 +97,10 @@
                         </div>
                                     <div class="free-features">
                                         <ul>
-                                            <li><i class="fas fa-play"></i> {{ course.get_total_sessions }} Video Lessons</li>
-                                            <li><i class="fas fa-clock"></i> {{ course.get_total_duration }} of Content</li>
-                                            <li><i class="fas fa-mobile-alt"></i> Mobile & Desktop Access</li>
-                                            <li><i class="fas fa-certificate"></i> Certificate of Completion</li>
+                                            <li><i class="fas fa-play"></i> {{ course.get_total_sessions }} {% trans "Video Lessons" %}</li>
+                                            <li><i class="fas fa-clock"></i> {{ course.get_total_duration }} {% trans "of Content" %}</li>
+                                            <li><i class="fas fa-mobile-alt"></i> {% trans "Mobile & Desktop Access" %}</li>
+                                            <li><i class="fas fa-certificate"></i> {% trans "Certificate of Completion" %}</li>
                                         </ul>
                     </div>
                                     <div class="free-actions">
@@ -130,15 +130,19 @@
                 </div>
 
                                 <div class="purchase-actions">
-                                    <button class="purchase-btn primary" onclick="purchaseCourseWithStripe({{ course.id }})">
-                                        <i class="fas fa-credit-card"></i>
-                                        {% trans "Purchase with Card" %}
-                    </button>
+                                    <button class="purchase-btn primary" onclick="handleSubscriptionCheckout()">
+                                        <i class="fas fa-sync-alt"></i>
+                                        {% trans "Subscribe" %}
+                                    </button>
+                                    <button class="purchase-btn primary" onclick="handleLifetimeCheckout()" style="margin-left: 10px;">
+                                        <i class="fas fa-infinity"></i>
+                                        {% trans "Buy Lifetime" %}
+                                    </button>
                                     <button class="purchase-btn secondary" onclick="addToWishlist({{ course.id }})">
                                         <i class="fas fa-heart"></i>
                                         {% trans "Add to Wishlist" %}
-                    </button>
-                </div>
+                                    </button>
+                                </div>
                                 
                                 <div class="guarantee-badge">
                                     <i class="fas fa-shield-check"></i>
@@ -156,7 +160,8 @@
         <div class="course-layout">
             <!-- Video Player Area (75%) -->
             <section class="video-section">
-                {% if course.price == 0 or user.is_authenticated and has_access %}
+                {% if current_session %}
+                    {% if current_session.is_free_preview or course.price == 0 or has_premium_access %}
                     <div class="video-container">
                         <!-- Debug Info -->
                         <div style="background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px;">
@@ -333,17 +338,22 @@
                         </div>
                     </div>
                 </div>
+                    {% endif %}
+                {% else %}
+                    <div class="no-video-message">
+                        <p>{% trans "Select a session from the sidebar to start watching." %}</p>
+                    </div>
                 {% endif %}
             </section>
 
             <!-- Lesson Sidebar (25%) -->
             <aside class="lesson-sidebar">
                 <div class="sidebar-header">
-                    <h2 class="sidebar-title">Course Content</h2>
-                    {% if course.price == 0 or user.is_authenticated and has_access %}
+                    <h2 class="sidebar-title">{% trans "Course Content" %}</h2>
+                    {% if course.price == 0 or has_premium_access %}
                         <div class="completion-stats">
                             <span class="completed-count">{{ user_completed_sessions|default:0 }}</span>
-                            <span class="total-count">/ {{ course.get_total_sessions }} completed</span>
+                            <span class="total-count">/ {{ course.get_total_sessions }} {% trans "completed" %}</span>
                     </div>
                     {% else %}
                         <div class="locked-indicator">
@@ -355,7 +365,7 @@
 
                 <div class="course-levels">
                     {% for level in course.levels.all %}
-                        <div class="level-section {% if course.price > 0 and not user.is_authenticated or course.price > 0 and not has_access %}locked-level{% endif %}" data-level="{{ level.name|lower }}">
+                        <div class="level-section {% if course.price > 0 and not has_premium_access %}locked-level{% endif %}" data-level="{{ level.name|lower }}">
                             <div class="level-header {{ level.name|lower }}-level">
                                 <div class="level-info">
                                     <h3 class="level-title">
@@ -370,7 +380,7 @@
                                     </h3>
                                     <span class="level-duration">{{ level.sessions.count }} lessons • {{ level.get_total_duration|default:"1h 20m" }}</span>
                         </div>
-                                {% if course.price == 0 or user.is_authenticated and has_access %}
+                                {% if course.price == 0 or has_premium_access %}
                                     <div class="level-progress">
                                         <div class="level-progress-bar">
                                             <div class="level-progress-fill" style="width: {{ level.progress_percentage|default:0 }}%;"></div>
@@ -386,27 +396,33 @@
 
                             <div class="level-sessions">
                                 {% for session in level.sessions.all %}
-                                    <div class="session-item {% if course.price == 0 or user.is_authenticated and has_access %}{% if session.user_progress.is_completed %}completed{% elif forloop.first %}current{% else %}available{% endif %}{% else %}locked{% endif %}" 
+                                    <div class="session-item {% if session.has_access %}{% if session.user_progress.is_completed %}completed{% elif session.is_free_preview %}current{% else %}available{% endif %}{% else %}locked{% endif %}" 
                                          data-session="{{ session.id }}"
                                          data-video-url="{% if session.video_file %}{{ session.video_file.url }}{% else %}{{ session.video_url }}{% endif %}"
                                          data-title="{{ session.title }}"
                                          data-description="{{ session.description }}"
-                                         data-duration="{{ session.duration }}">
+                                         data-duration="{{ session.duration }}"
+                                         {% if not session.has_access %}onclick="{% if user.is_authenticated %}window.location.href='{% url 'users:dashboard' %}';{% else %}window.location.href='{% url 'users:login' %}';{% endif %}" style="cursor: pointer;"{% endif %}>
                                         <div class="session-status">
-                                            {% if course.price == 0 or user.is_authenticated and has_access %}
-                                                {% if session.user_progress.is_completed %}
-                                                    <i class="fas fa-check-circle"></i>
-                                                {% elif forloop.first %}
-                                                    <i class="fas fa-play-circle"></i>
-                                                {% else %}
-                                                    <i class="fas fa-circle"></i>
-                                                {% endif %}
-                                            {% else %}
+                                            {% if not session.has_access %}
                                                 <i class="fas fa-lock"></i>
+                                            {% elif session.user_progress.is_completed %}
+                                                <i class="fas fa-check-circle"></i>
+                                            {% elif session.is_free_preview %}
+                                                <i class="fas fa-play-circle"></i>
+                                            {% else %}
+                                                <i class="fas fa-circle"></i>
                                             {% endif %}
                         </div>
                                         <div class="session-info">
-                                            <h4 class="session-title">{{ session.title }}</h4>
+                                            <h4 class="session-title">
+                                                {{ session.title }}
+                                                {% if session.is_free_preview %}
+                                                    <span class="preview-badge">FREE PREVIEW</span>
+                                                {% elif not session.has_access %}
+                                                    <span class="locked-badge">LOCKED</span>
+                                                {% endif %}
+                                            </h4>
                                             <span class="session-duration">{{ session.duration }} min</span>
                     </div>
                 </div>
@@ -424,7 +440,7 @@
 
                 <!-- Sidebar Footer -->
                 <div class="sidebar-footer">
-                    {% if course.price == 0 or user.is_authenticated and has_access %}
+                    {% if course.price == 0 or has_premium_access %}
                         <button class="continue-btn">
                             <i class="fas fa-play"></i>
                             {% if course.price == 0 %}{% trans "Start Learning" %}{% else %}{% trans "Continue Learning" %}{% endif %}

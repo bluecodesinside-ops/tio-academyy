@@ -27,3 +27,7 @@ The Tio Academy Team
 This email was sent to {{ user.email }}
 Tio Academy - Learn to Dance with Passion
 
+
+
+
+

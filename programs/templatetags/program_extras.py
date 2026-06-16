@@ -101,3 +101,7 @@ def breadcrumb_navigation(breadcrumbs):
     html += '</ol></nav>'
     return mark_safe(html)
 
+
+
+
+

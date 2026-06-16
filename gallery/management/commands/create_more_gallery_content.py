@@ -164,3 +164,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('\nNow you have enough content for pagination testing!'))
 
 
+
+
+
+

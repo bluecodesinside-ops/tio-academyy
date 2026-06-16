@@ -21,7 +21,7 @@
         {% for style in dance_styles %}
         <div class="program-card">
             <a href="{{ style.get_absolute_url }}" class="block">
-                <div class="relative">
+                <div class="program-card__media">
                     {% if style.image %}
                         <img 
                             src="{{ style.image.url }}" 

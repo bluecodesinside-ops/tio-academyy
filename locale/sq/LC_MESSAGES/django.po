@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-24 17:09+0000\n"
+"POT-Creation-Date: 2025-12-12 19:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,181 +18,815 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: newsletter/templates/admin/newsletter/send_newsletter.html:62
-#: templates/base.html:23
 msgid "Home"
 msgstr "Kreu"
 
-#: templates/base.html:24
+msgid "About Us - Tio Academy"
+msgstr "Rreth Nesh - Tio Academy"
+
+msgid "Dance Your Way to Excellence"
+msgstr "Kërce Rrugën Tënde Drejt Ekselencës"
+
+msgid ""
+"Transform your passion into mastery with our world-class Latin dance "
+"education platform"
+msgstr ""
+"Transformo pasionin tënd në mjeshtëri me platformën tonë botërore të "
+"edukimit të kërcimit latino"
+
+msgid "Start Learning"
+msgstr "Fillo Mësimin"
+
+msgid "Our Story"
+msgstr "Historia Jonë"
+
+msgid "Dancers"
+msgstr "Kërcyes"
+
+msgid "Students worldwide"
+msgstr "Studentë në mbarë botën"
+
+msgid "Dance Styles"
+msgstr "Stile Kërcimi"
+
+msgid "Comprehensive curriculum"
+msgstr "Kurrikulë gjithëpërfshirëse"
+
+msgid "Rating"
+msgstr "Vlerësim"
+
+msgid "Student satisfaction"
+msgstr "Kënaqësia e studentëve"
+
+msgid "Years"
+msgstr "Vjet"
+
+msgid "Teaching experience"
+msgstr "Përvojë mësimdhënie"
+
+msgid "Why Choose Tio Academy"
+msgstr "Pse Të Zgjedhësh Tio Academy"
+
+msgid "Experience the difference of professional dance education"
+msgstr "Përjeto ndryshimin e edukimit profesional të kërcimit"
+
+msgid "HD Video Lessons"
+msgstr "Mësime Video HD"
+
+msgid ""
+"Crystal-clear 4K video instruction with multiple camera angles and slow-"
+"motion breakdowns for perfect technique mastery."
+msgstr ""
+
+msgid "Professional Quality"
+msgstr "Cilësi Profesionale"
+
+msgid "Learn Anytime"
+msgstr "Mëso Kurdo"
+
+msgid ""
+"Access your courses 24/7 from anywhere in the world. Learn at your own pace "
+"with lifetime access to all content."
+msgstr ""
+
+msgid "Flexible Schedule"
+msgstr "Orar Fleksibël"
+
+msgid "All Dance Styles"
+msgstr "Të Gjitha Stilet e Kërcimit"
+
+msgid ""
+"From salsa and bachata to merengue and cha cha, master the complete spectrum "
+"of Latin dance styles."
+msgstr ""
+
+msgid "Complete Curriculum"
+msgstr "Kurrikulë e Plotë"
+
+msgid "Our Journey"
+msgstr "Udhëtimi Ynë"
+
+msgid "15+ Years of Dance Excellence"
+msgstr "15+ Vjet Ekselence Kërcimi"
+
+msgid ""
+"Founded by professional dancers with over 15 years of experience, Tio "
+"Academy was born from a passion to make authentic Latin dance accessible to "
+"everyone."
+msgstr ""
+
+msgid ""
+"Our unique teaching method breaks complex moves into simple, digestible "
+"steps that anyone can master. Whether you're a complete beginner or an "
+"advanced dancer, our progressive curriculum adapts to your skill level."
+msgstr ""
+
+msgid ""
+"With HD video lessons, personalized feedback, and 24/7 accessibility, we've "
+"revolutionized how people learn to dance. Join our global community and "
+"discover the joy of Latin dance."
+msgstr ""
+
+msgid "Expert Instructors"
+msgstr "Instruktorë Ekspertë"
+
+msgid "Professional dancers with international recognition"
+msgstr "Kërcyes profesionalë me njohje ndërkombëtare"
+
+msgid "Proven Method"
+msgstr "Metodë e Provuar"
+
+msgid "Simplified learning approach for faster progress"
+msgstr "Qasje e thjeshtuar e të mësuarit për progres më të shpejtë"
+
+msgid "Global Community"
+msgstr "Komunitet Global"
+
+msgid "Connect with dancers from around the world"
+msgstr "Lidhu me kërcyes nga mbarë bota"
+
+#, fuzzy
+#| msgid "Explore Courses"
+msgid "Explore Our Courses"
+msgstr "Eksploro Kurset"
+
+msgid "Our Mission"
+msgstr "Misioni Ynë"
+
+msgid "Preserving culture while embracing innovation"
+msgstr "Ruajtja e kulturës ndërsa përqafojmë inovacionin"
+
+msgid "Cultural Preservation"
+msgstr "Ruajtja e Kulturës"
+
+msgid ""
+"Honor the authentic roots and traditions of Latin dance while making it "
+"accessible to modern learners."
+msgstr ""
+
+msgid "Innovation"
+msgstr "Inovacion"
+
+msgid ""
+"Leverage cutting-edge technology to create the most effective and engaging "
+"dance learning experience."
+msgstr ""
+
+msgid "Accessibility"
+msgstr "Aksesueshmëri"
+
+msgid ""
+"Break down barriers and make professional dance education available to "
+"anyone, anywhere in the world."
+msgstr ""
+
+msgid "Tio Academy"
+msgstr "Tio Academy"
+
 msgid "About"
 msgstr "Rreth Nesh"
 
-#: templates/base.html:25 templates/base.html:89
 msgid "Courses"
 msgstr "Kurset"
 
-#: templates/base.html:26 templates/base.html:90
-msgid "Tournaments"
-msgstr "Turnetë"
+msgid "Dashboard"
+msgstr "Paneli"
 
-#: templates/base.html:27 templates/base.html:91
-msgid "Gallery"
-msgstr "Galeria"
+msgid "Logout"
+msgstr "Dil"
 
-#: templates/base.html:28
-msgid "Blog"
-msgstr "Blog"
+msgid "Login"
+msgstr "Hyr"
 
-#: templates/base.html:29
-msgid "Admin"
-msgstr "Admin"
+msgid "Premium dance education since 2010"
+msgstr "Edukim premium i kërcimit që nga viti 2010"
 
-#: templates/base.html:77
-msgid "Teaching authentic Latin dance styles to students worldwide."
-msgstr ""
-
-#: templates/base.html:86
-msgid "Quick Links"
-msgstr ""
-
-#: templates/base.html:88
-#, fuzzy
-#| msgid "About"
-msgid "About Us"
-msgstr "Rreth Nesh"
-
-#: templates/base.html:95
-msgid "Support"
-msgstr ""
-
-#: templates/base.html:97
-msgid "Contact"
-msgstr ""
-
-#: templates/base.html:98
-msgid "FAQ"
-msgstr ""
-
-#: templates/base.html:99
-msgid "Privacy Policy"
-msgstr ""
-
-#: templates/base.html:100
-msgid "Terms of Service"
-msgstr "Kushtet e Shërbimit"
-
-#: templates/base.html:104
-msgid "Contact Info"
-msgstr "Informacion Kontakti"
-
-#: templates/base.html:110
 msgid "All rights reserved."
 msgstr "Të gjitha të drejtat të rezervuara."
 
-#: templates/courses.html:5
-msgid "Courses - Latina Dance Academy"
-msgstr "Kurset - Akademia e Kërcimit Latino"
+msgid "Privacy"
+msgstr "Privatësia"
 
-#: templates/courses.html:11
-#, fuzzy
-#| msgid "Explore Courses"
-msgid "Our Dance Courses"
-msgstr "Kurset Tona të Kërcimit"
+msgid "Terms"
+msgstr "Kushtet"
 
-#: templates/courses.html:12
-msgid "Master authentic Latin dance styles with our comprehensive curriculum"
-msgstr "Zotëroni stile autentike kërcimi latino me kurrikulën tonë gjithëpërfshirëse"
+msgid "Designed and developed by"
+msgstr "Dizajnuar dhe zhvilluar nga"
 
-#: templates/courses.html:20
 #, fuzzy
 #| msgid "Courses"
-msgid "All Courses"
+msgid "Course"
+msgstr "Kurs"
+
+#, fuzzy
+#| msgid "Explore Courses"
+msgid "Premium Course"
+msgstr "Kurs Premium"
+
+msgid "4K Streaming"
+msgstr "Transmetim 4K"
+
+msgid "Stream Only"
+msgstr "Vetëm Transmetim"
+
+#, fuzzy
+#| msgid "Tio Academy"
+msgid "Tio Academy Expert"
+msgstr "Ekspert Tio Academy"
+
+#, fuzzy
+#| msgid "Professional graduates"
+msgid "Professional Dance Instructor"
+msgstr "Instruktor Profesional i Kërcimit"
+
+#, fuzzy
+#| msgid "Students"
+msgid "students"
+msgstr "Studentë"
+
+msgid "total"
+msgstr "gjithsej"
+
+#, fuzzy
+#| msgid "Previous"
+msgid "reviews"
+msgstr "vlerësime"
+
+msgid "sessions"
+msgstr "sesione"
+
+msgid "Free Course - Full Access"
+msgstr "Kurs Falas - Akses i Plotë"
+
+#, fuzzy
+#| msgid "Courses"
+msgid "Course Purchased"
 msgstr "Kurset"
 
-#: templates/courses.html:21
-msgid "Beginner"
-msgstr ""
+msgid "FREE COURSE"
+msgstr "KURS FALAS"
 
-#: templates/courses.html:22
-msgid "Intermediate"
-msgstr ""
+#, fuzzy
+#| msgid "HD Video Lessons"
+msgid "Video Lessons"
+msgstr "Mësime Video HD"
 
-#: templates/courses.html:23
-msgid "Advanced"
-msgstr ""
+msgid "of Content"
+msgstr "Përmbajtje"
 
-#: templates/courses.html:24
-msgid "Popular"
-msgstr ""
+msgid "Mobile & Desktop Access"
+msgstr "Akses Mobil dhe Desktop"
 
-#: templates/gallery.html:5
-msgid "Gallery - Latina Dance Academy"
-msgstr ""
+#, fuzzy
+#| msgid "Certified professionals"
+msgid "Certificate of Completion"
+msgstr "Certifikatë Përfundimi"
 
-#: templates/gallery.html:11
-msgid "Photo & Video Gallery"
-msgstr ""
+msgid "Start Free Course"
+msgstr "Fillo Kursin Falas"
 
-#: templates/gallery.html:12
-msgid "Explore our collection of dance moments and performances"
-msgstr ""
+#, fuzzy
+#| msgid "Subscribe Now"
+msgid "Subscribe"
+msgstr "Abonohuni Tani"
 
-#: templates/gallery.html:20
-msgid "Photos"
-msgstr ""
+msgid "Buy Lifetime"
+msgstr "Bli Përgjithmonë"
 
-#: templates/gallery.html:21
-msgid "Videos"
-msgstr ""
+msgid "Add to Wishlist"
+msgstr "Shto në Listë Dëshirash"
 
-#: templates/index.html:5
-msgid "Latina Dance Academy - Learn Authentic Latin Dance"
-msgstr "Akademia e Kërcimit Latino - Mëso Kërcime Autentike Latino"
+msgid "Course Preview"
+msgstr "Parapamje Kursi"
 
-#: templates/index.html:119
-msgid "Master the Art of Latin Dance"
-msgstr "Zotëro Artin e Kërcimit Latino"
+msgid "Get a taste of what you'll learn in"
+msgstr "Shijoni një pjesë të asaj që do të mësoni në"
 
-#: templates/index.html:120
-msgid ""
-"Learn authentic Latin dance styles from professional instructors. From "
-"beginner to advanced, discover the rhythm and passion of Latin culture."
-msgstr ""
-"Mëso stile autentike kërcimi latino nga instruktorë profesionalë. Nga "
-"fillestar deri tek i përparuar, zbulo ritmin dhe pasionin e kulturës latino."
+msgid "Premium Content Locked"
+msgstr "Përmbajtja Premium e Mbyllur"
 
-#: templates/index.html:122
+msgid "Purchase"
+msgstr "Bli"
+
+msgid "to access all"
+msgstr "për të aksesuar të gjitha"
+
+msgid "lessons and features"
+msgstr "mësimet dhe veçoritë"
+
+msgid "Unlock Course for"
+msgstr "Hap Kursin për"
+
+msgid "Select a session from the sidebar to start watching."
+msgstr "Zgjidh një sesion nga menuja anësore për të filluar shikimin."
+
+msgid "Course Content"
+msgstr "Përmbajtja e Kursit"
+
+msgid "completed"
+msgstr "përfunduar"
+
+msgid "Purchase to unlock"
+msgstr "Bli për të hapur"
+
+msgid "Course content is being prepared. Please check back soon!"
+msgstr "Përmbajtja e kursit po përgatitet. Ju lutemi kontrolloni së shpejti!"
+
+msgid "Continue Learning"
+msgstr "Vazhdo Mësimin"
+
+msgid "Enjoy this free course!"
+msgstr "Gëzo këtë kurs falas!"
+
+msgid "You're on fire! Keep up the momentum."
+msgstr "Je në flakë! Vazhdo me momentumin."
+
+msgid "Purchase for"
+msgstr "Bli për"
+
+msgid "Unlock all lessons and start your dance journey today!"
+msgstr "Hap të gjitha mësimet dhe fillo udhëtimin tënd të kërcimit sot!"
+
+#, fuzzy
+#| msgid "Explore Courses"
+msgid "Explore Courses - Tio Academy"
+msgstr "Eksploro Kurset"
+
 msgid "Explore Courses"
 msgstr "Eksploro Kurset"
 
-#: templates/index.html:123
-msgid "Watch Preview"
-msgstr "Shiko Parapreken"
-
-#: templates/index.html:233
-msgid "Join Our Dance Family!"
-msgstr "Bashkohu me Familjen Tonë të Kërcimit!"
-
-#: templates/index.html:234
 msgid ""
-"Get exclusive dance tips, course updates, and special offers delivered to "
-"your inbox. Be the first to know about new tutorials and events!"
+"Discover our comprehensive collection of Latin dance courses designed by "
+"world-class instructors"
 msgstr ""
-"Merr këshilla ekskluzive kërcimi, përditësime kursesh dhe oferta të veçanta "
-"direkt në email. Bëhu i pari që di për tutoriale të reja dhe evenimente!"
 
-#: templates/index.html:239
-msgid "First Name"
-msgstr "Emri"
+msgid "Search courses..."
+msgstr "Kërko kurse..."
 
-#: templates/index.html:240
-msgid "Last Name"
-msgstr "Mbiemri"
+msgid "All Levels"
+msgstr "Të Gjitha Nivelet"
 
-#: templates/index.html:243
-msgid "Enter your email address"
+msgid "Beginner"
+msgstr "Fillestar"
+
+msgid "Intermediate"
+msgstr "Mesatar"
+
+msgid "Advanced"
+msgstr "I Përparuar"
+
+msgid "Any Duration"
+msgstr "Çdo Kohëzgjatje"
+
+msgid "Under 3 hours"
+msgstr "Nën 3 orë"
+
+msgid "3-6 hours"
+msgstr "3-6 orë"
+
+msgid "6+ hours"
+msgstr "6+ orë"
+
+msgid "Filter"
+msgstr "Filtro"
+
+msgid "FREE"
+msgstr "FALAS"
+
+msgid "by"
+msgstr "nga"
+
+msgid "Start Free"
+msgstr "Fillo Falas"
+
+msgid "Enroll Now"
+msgstr "Regjistrohu Tani"
+
+msgid "No courses found"
+msgstr "Nuk u gjetën kurse"
+
+msgid "Try adjusting your search or filter criteria"
+msgstr "Provoni të rregulloni kriteret e kërkimit ose filtrit"
+
+msgid "Reset Filters"
+msgstr "Rivendos Filtra"
+
+#, fuzzy
+#| msgid "Explore Courses"
+msgid "Load More Courses"
+msgstr "Eksploro Kurset"
+
+#, fuzzy
+#| msgid "Courses - Latina Dance Academy"
+msgid "Courses - Tio Academy"
+msgstr "Kurset - Akademia e Kërcimit Latino"
+
+#, fuzzy
+#| msgid "Explore Courses"
+msgid "Latin Dance Courses"
+msgstr "Kurset Tona të Kërcimit"
+
+#, fuzzy
+#| msgid ""
+#| "Master authentic Latin dance styles with our comprehensive curriculum"
+msgid "Master the art of Latin dance with our premium course collection"
+msgstr ""
+"Zotëro artin e kërcimit latino me koleksionin tonë premium të "
+"kurseveZotëroni stile autentike kërcimi latino me kurrikulën tonë "
+"gjithëpërfshirëse"
+
+msgid "Included"
+msgstr "Përfshirë"
+
+msgid "No courses available"
+msgstr "Nuk ka kurse të disponueshme"
+
+msgid "Check back soon for new courses!"
+msgstr "Kontrolloni së shpejti për kurse të reja!"
+
+msgid "Ready to Start Your Dance Journey?"
+msgstr "Gati për të Filluar Udhëtimin Tënd të Kërcimit?"
+
+msgid ""
+"Join thousands of students learning Latin dance with our expert instructors"
+msgstr ""
+"Bashkohu me mijëra studentë që mësojnë kërcimin latino me instruktorët tanë "
+"ekspertë"
+
+msgid "Students"
+msgstr "Studentë"
+
+msgid "Gallery - Tio Academy"
+msgstr "Galeria - Tio Academy"
+
+msgid "Gallery"
+msgstr "Galeria"
+
+msgid "Download and enjoy our premium collection of dance photos and videos"
+msgstr ""
+"Shkarko dhe gëzo koleksionin tonë premium të fotove dhe videove të kërcimit"
+
+msgid "Photos"
+msgstr "Foto"
+
+msgid "Videos"
+msgstr "Video"
+
+msgid "Free"
+msgstr "Falas"
+
+msgid "Downloads"
+msgstr "Shkarkime"
+
+msgid "NEW"
+msgstr "E RE"
+
+msgid "All"
+msgstr "Të Gjitha"
+
+msgid "Showing"
+msgstr "Duke treguar"
+
+msgid "of"
+msgstr "nga"
+
+msgid "photos"
+msgstr "foto"
+
+msgid "Previous"
+msgstr "Paraardhës"
+
+msgid "Next"
+msgstr "Tjetër"
+
+msgid "No Photos Available"
+msgstr "Nuk ka Foto të Disponueshme"
+
+msgid "Photos will appear here once they're uploaded to the gallery."
+msgstr "Fotot do të shfaqen këtu pasi të ngarkohen në galeri."
+
+msgid "videos"
+msgstr "video"
+
+msgid "No Videos Available"
+msgstr "Nuk ka Video të Disponueshme"
+
+msgid "Videos will appear here once they're uploaded to the gallery."
+msgstr "Videot do të shfaqen këtu pasi të ngarkohen në galeri."
+
+msgid "Close"
+msgstr "Mbyll"
+
+#, fuzzy
+#| msgid "Gallery"
+msgid "Gallery Item"
+msgstr "Galeria"
+
+msgid "View gallery content"
+msgstr "Shiko përmbajtjen e galerisë"
+
+msgid "Download"
+msgstr "Shkarko"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Tio Academy - Premium Dance Education"
+msgstr "Tio Academy - Edukim Premium i Kërcimit"
+
+#, fuzzy
+#| msgid "Dancers"
+msgid "Dance"
+msgstr "Kërcim"
+
+msgid "Education"
+msgstr "Edukim"
+
+msgid "Training"
+msgstr "Trajnim"
+
+msgid "Learn from"
+msgstr "Mëso nga"
+
+msgid "masters"
+msgstr "mjeshtër"
+
+msgid "in techniques, dance, fitness and more."
+msgstr "në teknika, kërcim, fitness dhe më shumë."
+
+#, fuzzy
+#| msgid "Explore Courses"
+msgid "Explore Programs"
+msgstr "Eksploro Kurset"
+
+msgid "Members"
+msgstr "Anëtarë"
+
+msgid "Success"
+msgstr "Sukses"
+
+msgid "Explore Dance Programs"
+msgstr "Eksploro Programet e Kërcimit"
+
+msgid ""
+"Discover our comprehensive dance programs. Choose your style and start your "
+"dance journey today!"
+msgstr ""
+
+#, fuzzy
+#| msgid "Explore Courses"
+msgid "Explore"
+msgstr "Eksploro Kurset"
+
+msgid "No dance programs available at the moment."
+msgstr "Nuk ka programe kërcimi të disponueshme për momentin."
+
+msgid "View All Programs"
+msgstr "Shiko Të Gjitha Programet"
+
+msgid "Discover what makes our dance education exceptional"
+msgstr "Zbuloni çfarë e bën edukimin tonë të kërcimit të jashtëzakonshëm"
+
+msgid "Expert Instruction"
+msgstr "Udhëzim Ekspert"
+
+msgid ""
+"Learn from internationally certified instructors with decades of "
+"professional experience in Latin dance traditions."
+msgstr ""
+
+msgid "Certified professionals"
+msgstr "Profesionistë të certifikuar"
+
+msgid "Personalized attention"
+msgstr "Vëmendje e personalizuar"
+
+msgid "Cultural authenticity"
+msgstr "Autenticitet kulturor"
+
+msgid "Small Class Sizes"
+msgstr "Klase të Vogla"
+
+msgid ""
+"Maximum 12 students per class ensures individual attention and rapid skill "
+"development in our intimate learning environment."
+msgstr ""
+
+msgid "Max 12 students"
+msgstr "Maksimumi 12 studentë"
+
+msgid "Individual feedback"
+msgstr "Feedback individual"
+
+msgid "Accelerated learning"
+msgstr "Të mësuar i përshpejtuar"
+
+msgid "Proven Results"
+msgstr "Rezultate të Provuara"
+
+#, python-format
+msgid ""
+"98%% student satisfaction rate with graduates performing professionally "
+"worldwide and competing at international levels."
+msgstr ""
+
+#, python-format
+msgid "98%% satisfaction"
+msgstr ""
+
+msgid "Professional graduates"
+msgstr "Diplomuar profesionalë"
+
+msgid "Competition winners"
+msgstr "Fitues garash"
+
+#, python-format
+msgid "100%% Money-Back Guarantee"
+msgstr ""
+
+#, python-format
+msgid ""
+"We're so confident in our dance programs that we offer a 100%% money-back "
+"guarantee. If you're not completely satisfied with your learning experience "
+"within 30 days, we'll refund your entire subscription - no questions asked."
+msgstr ""
+
+msgid "30-day risk-free trial"
+msgstr "Provojë 30-ditëshe pa rrezik"
+
+msgid "Full refund guarantee"
+msgstr "Garancion kthim i plotë parash"
+
+msgid "No questions asked"
+msgstr "Pa pyetje"
+
+msgid "Stay Connected"
+msgstr "Qëndro i Lidhur"
+
+msgid "Exclusive insights and masterclass invitations await."
+msgstr "Njohuri ekskluzive dhe ftesa për masterclass po presin."
+
+#, fuzzy
+#| msgid "Enter your email address"
+msgid "Enter your email"
 msgstr "Shkruani adresën tuaj të email-it"
 
-#: templates/index.html:245
-msgid "Subscribe Now"
-msgstr "Abonohuni Tani"
+#, fuzzy
+#| msgid "Courses - Latina Dance Academy"
+msgid "Upload Media - Latina Dance Academy"
+msgstr "Kurset - Akademia e Kërcimit Latino"
+
+msgid "Upload Media"
+msgstr "Ngarko Media"
+
+msgid "Simple upload: Category → Content Type → Files → Done"
+msgstr "Ngarkim i thjeshtë: Kategori → Lloj Përmbajtjeje → Skedarë → Bërë"
+
+msgid "My Profile"
+msgstr "Profili Im"
+
+msgid "Subscription Status:"
+msgstr "Statusi i Abonimit:"
+
+msgid "Lifetime Access:"
+msgstr "Akses Përgjithmonë:"
+
+#, fuzzy
+#| msgid "Years"
+msgid "Yes"
+msgstr "Po"
+
+msgid "No"
+msgstr "Jo"
+
+#, fuzzy
+#| msgid "Explore Courses"
+msgid "Premium Access:"
+msgstr "Akses Premium:"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "Not Active"
+msgstr "Jo Aktiv"
+
+msgid "Get Premium Access"
+msgstr "Merr Akses Premium"
+
+msgid "You need premium access to view all courses. Choose an option:"
+msgstr ""
+"Ju duhet akses premium për të parë të gjitha kurset. Zgjidhni një opsion:"
+
+msgid "month"
+msgstr "muaj"
+
+#, fuzzy
+#| msgid "Courses"
+msgid "My Courses"
+msgstr "Kurset e Mia"
+
+msgid "Unlocked"
+msgstr "E Hapur"
+
+msgid "Locked"
+msgstr "E Mbyllur"
+
+msgid "Progress"
+msgstr "Progresi"
+
+#, fuzzy
+#| msgid "completed"
+msgid "sessions completed"
+msgstr "sesione të përfunduara"
+
+msgid "Videos & Materials"
+msgstr "Video dhe Materiale"
+
+#, fuzzy
+#| msgid "Admin"
+msgid "min"
+msgstr "Admin"
+
+#, fuzzy
+#| msgid "Watch Preview"
+msgid "Watch Video"
+msgstr "Shiko Parapreken"
+
+#, fuzzy
+#| msgid "Purchase to unlock"
+msgid "Purchase course to unlock"
+msgstr "Bli kursin për të hapur"
+
+#, fuzzy
+#| msgid "Courses"
+msgid "View Course"
+msgstr "Kurs"
+
+#, fuzzy
+#| msgid "No courses available"
+msgid "No courses available."
+msgstr "Nuk ka kurse të disponueshme"
+
+#~ msgid "Portfolio"
+#~ msgstr "Portofolio"
+
+#, fuzzy
+#~| msgid "Success"
+#~ msgid "Access:"
+#~ msgstr "Akses:"
+
+#~ msgid "Something went wrong. Please try again."
+#~ msgstr "Diçka shkoi keq. Ju lutemi provoni përsëri."
+
+#~ msgid "Tournaments"
+#~ msgstr "Turnetë"
+
+#~ msgid "Blog"
+#~ msgstr "Blog"
+
+#, fuzzy
+#~| msgid "About"
+#~ msgid "About Us"
+#~ msgstr "Rreth Nesh"
+
+#~ msgid "Terms of Service"
+#~ msgstr "Kushtet e Shërbimit"
+
+#~ msgid "Contact Info"
+#~ msgstr "Informacion Kontakti"
+
+#, fuzzy
+#~| msgid "Courses"
+#~ msgid "All Courses"
+#~ msgstr "Kurset"
+
+#~ msgid "Latina Dance Academy - Learn Authentic Latin Dance"
+#~ msgstr "Akademia e Kërcimit Latino - Mëso Kërcime Autentike Latino"
+
+#~ msgid "Master the Art of Latin Dance"
+#~ msgstr "Zotëro Artin e Kërcimit Latino"
+
+#~ msgid ""
+#~ "Learn authentic Latin dance styles from professional instructors. From "
+#~ "beginner to advanced, discover the rhythm and passion of Latin culture."
+#~ msgstr ""
+#~ "Mëso stile autentike kërcimi latino nga instruktorë profesionalë. Nga "
+#~ "fillestar deri tek i përparuar, zbulo ritmin dhe pasionin e kulturës "
+#~ "latino."
+
+#~ msgid "Join Our Dance Family!"
+#~ msgstr "Bashkohu me Familjen Tonë të Kërcimit!"
+
+#~ msgid ""
+#~ "Get exclusive dance tips, course updates, and special offers delivered to "
+#~ "your inbox. Be the first to know about new tutorials and events!"
+#~ msgstr ""
+#~ "Merr këshilla ekskluzive kërcimi, përditësime kursesh dhe oferta të "
+#~ "veçanta direkt në email. Bëhu i pari që di për tutoriale të reja dhe "
+#~ "evenimente!"
+
+#~ msgid "First Name"
+#~ msgstr "Emri"
+
+#~ msgid "Last Name"
+#~ msgstr "Mbiemri"

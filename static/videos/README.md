@@ -28,3 +28,7 @@ This directory is for storing course video files.
 - `sample-course.mp4` - Placeholder video (you can replace this)
 
 
+
+
+
+

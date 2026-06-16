@@ -35,7 +35,7 @@
         {% for category in categories %}
         <div class="program-card">
             <a href="{{ category.get_absolute_url }}" class="block">
-                <div class="relative">
+                <div class="program-card__media">
                     {% if category.image %}
                         <img 
                             src="{{ category.image.url }}" 

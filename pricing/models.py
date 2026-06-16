@@ -9,9 +9,9 @@ import json
 class PricingPackage(models.Model):
     """Model for subscription packages (Standard, Pro, Gold)"""
     PACKAGE_TIERS = [
-        ('standard', 'Standard'),
-        ('pro', 'Pro'),
-        ('gold', 'Gold'),
+        ('basic', 'Basic'),
+        ('premium', 'Premium'),
+        # 'standard' middle tier reserved for v2 A/B experiment
     ]
     
     name = models.CharField(max_length=100, unique=True)
@@ -98,6 +98,16 @@ class PricingPackage(models.Model):
                 return round(discount, 1)
         return 0
     
+    @property
+    def is_price_set(self):
+        """True only when both monthly and yearly prices are entered — guards template rendering."""
+        return (
+            self.monthly_price is not None and
+            self.yearly_price is not None and
+            self.monthly_price > 0 and
+            self.yearly_price > 0
+        )
+
     def get_features_list(self):
         """Return features as a list"""
         if isinstance(self.features, str):

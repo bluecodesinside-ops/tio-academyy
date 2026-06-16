@@ -22,3 +22,7 @@ urlpatterns = [
     path('purchase/<int:video_id>/', views.purchase_video, name='purchase_video'),
 ]
 
+
+
+
+
