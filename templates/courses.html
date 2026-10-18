@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
+{% load course_extras %}
 
 {% block title %}{% trans "Explore Courses - Tio Academy" %}{% endblock %}
 
@@ -30,33 +31,6 @@
                                autocomplete="off">
                     </div>
                 </div>
-                
-                <div class="filter-controls">
-                    <div class="filter-dropdown">
-                        <select id="level-filter" class="filter-select">
-                            <option value="">{% trans "All Levels" %}</option>
-                            <option value="beginner">{% trans "Beginner" %}</option>
-                            <option value="intermediate">{% trans "Intermediate" %}</option>
-                            <option value="advanced">{% trans "Advanced" %}</option>
-                        </select>
-                        <i class="fas fa-chevron-down dropdown-icon"></i>
-                    </div>
-                    
-                    <div class="filter-dropdown">
-                        <select id="duration-filter" class="filter-select">
-                            <option value="">{% trans "Any Duration" %}</option>
-                            <option value="short">{% trans "Under 3 hours" %}</option>
-                            <option value="medium">{% trans "3-6 hours" %}</option>
-                            <option value="long">{% trans "6+ hours" %}</option>
-                        </select>
-                        <i class="fas fa-chevron-down dropdown-icon"></i>
-                    </div>
-                    
-                    <button class="filter-button" id="apply-filters">
-                        <i class="fas fa-filter"></i>
-                        {% trans "Filter" %}
-                    </button>
-                </div>
             </div>
         </div>
     </section>
@@ -67,8 +41,6 @@
             <div class="course-grid" id="course-grid">
                 {% for course in courses %}
                     <article class="course-card" 
-                             data-level="{{ course.level }}"
-                             data-duration="{{ course.get_total_duration }}"
                              data-title="{{ course.title|lower }}"
                              data-instructor="{{ course.instructor.name|default:'Tio Academy'|lower }}"
                              onclick="location.href='{% url 'course_detail' course.id %}'">
@@ -81,23 +53,6 @@
                                     <i class="fas fa-music"></i>
                                 </div>
                             {% endif %}
-                            
-                            <!-- Overlay Badges -->
-                            <div class="course-card__badges">
-                                <span class="level-badge {{ course.level }}">
-                                    {{ course.get_level_display }}
-                                </span>
-                                {% if course.price == 0 %}
-                                    <span class="price-badge free">
-                                        <i class="fas fa-gift"></i>
-                                        {% trans "FREE" %}
-                                    </span>
-                                {% else %}
-                                    <span class="price-badge paid">
-                                        ${{ course.price }}
-                                    </span>
-                                {% endif %}
-                            </div>
                         </div>
                         
                         <div class="course-card__content">
@@ -131,9 +86,21 @@
                                 </div>
                             </div>
                             
+                            <div class="course-card__price">
+                                {% if course.sold_as_packages %}
+                                {% elif course.price == 0 %}
+                                    <strong class="sale-price__now">{% trans "FREE" %}</strong>
+                                {% else %}
+                                    {% sale_price course.price %}
+                                {% endif %}
+                            </div>
+                            
                             <div class="course-card__footer">
-                                <button class="enroll-btn {% if course.price == 0 %}free{% else %}paid{% endif %}">
-                                    {% if course.price == 0 %}
+                                <button class="enroll-btn {% if course.price == 0 and not course.sold_as_packages %}free{% else %}paid{% endif %}">
+                                    {% if course.sold_as_packages %}
+                                        <i class="fas fa-th-large"></i>
+                                        {% trans "Choose packages" %}
+                                    {% elif course.price == 0 %}
                                         <i class="fas fa-play"></i>
                                         {% trans "Start Free" %}
                                     {% else %}
@@ -150,9 +117,9 @@
                             <i class="fas fa-search"></i>
                         </div>
                         <h3>{% trans "No courses found" %}</h3>
-                        <p>{% trans "Try adjusting your search or filter criteria" %}</p>
+                        <p>{% trans "Try a different search" %}</p>
                         <button class="reset-filters-btn" onclick="resetFilters()">
-                            {% trans "Reset Filters" %}
+                            {% trans "Clear search" %}
                         </button>
                     </div>
                 {% endfor %}
@@ -220,11 +187,9 @@
 
 .search-filter-bar {
     display: flex;
-    gap: var(--spacing-2xl);
     align-items: center;
-    max-width: 1200px;
+    max-width: 720px;
     margin: 0 auto;
-    flex-wrap: wrap;
 }
 
 .search-input-wrapper {
@@ -348,7 +313,7 @@
     justify-content: center;
 }
 
-/* Course Card Component */
+/* Course Card Component — landscape promotional covers (full banner visible) */
 .course-card {
     background: #fafafa;
     border-radius: var(--radius-2xl);
@@ -358,10 +323,10 @@
     transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
     cursor: pointer;
     position: relative;
-    flex: 1 1 250px;
-    min-width: 250px;
-    max-width: 250px;
-    height: 400px;
+    flex: 1 1 320px;
+    min-width: 280px;
+    max-width: 360px;
+    height: auto;
     display: flex;
     flex-direction: column;
 }
@@ -374,16 +339,21 @@
 
 .course-card__image {
     position: relative;
-    height: 180px;
+    aspect-ratio: 16 / 9;
+    width: 100%;
     overflow: hidden;
-    background: #f5f5f5;
+    background: #f0eee9;
     flex-shrink: 0;
 }
 
 .course-card__image img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
+    display: block;
     transition: var(--transition-slow);
 }
 
@@ -392,6 +362,8 @@
 }
 
 .course-card__placeholder {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     display: flex;
@@ -412,7 +384,7 @@
     left: var(--spacing-lg);
     right: var(--spacing-lg);
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: flex-start;
 }
 
@@ -460,6 +432,8 @@
 .price-badge.paid {
     background: rgba(255, 255, 255, 0.95);
     color: #0a0a0a;
+    flex-wrap: wrap;
+    max-width: 11rem;
 }
 
 .course-card__content {
@@ -518,8 +492,25 @@
     opacity: 0.85;
 }
 
-.course-card__footer {
+.course-card__price {
     margin-top: auto;
+    padding-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+}
+.course-card__price .sale-price__now {
+    font-size: 1.2rem;
+    color: #00a651;
+}
+.course-card__price .sale-price__was {
+    font-size: 0.95rem;
+}
+.course-card__price .sale-price__off {
+    font-size: 0.95rem;
+    color: #00a651;
+}
+
+.course-card__footer {
+    margin-top: 0;
 }
 
 .enroll-btn {
@@ -781,43 +772,24 @@
 
 {% block extra_js %}
 <script>
+const TIO = window.TIO_I18N || {};
 // Course List Page JavaScript
 class CourseListManager {
     constructor() {
         this.searchInput = document.getElementById('course-search');
-        this.levelFilter = document.getElementById('level-filter');
-        this.durationFilter = document.getElementById('duration-filter');
-        this.applyFiltersBtn = document.getElementById('apply-filters');
         this.loadMoreBtn = document.getElementById('load-more-btn');
         this.courseGrid = document.getElementById('course-grid');
         this.allCourses = Array.from(document.querySelectorAll('.course-card'));
-        this.visibleCourses = 6; // Show 6 courses initially
-        this.currentPage = 1;
+        this.visibleCourses = 6;
         
-        this.initializeFilters();
+        this.initializeSearch();
         this.initializeLoadMore();
         this.showInitialCourses();
     }
     
-    initializeFilters() {
-        // Real-time search
+    initializeSearch() {
         this.searchInput.addEventListener('input', () => {
             this.filterCourses();
-        });
-        
-        // Filter dropdowns
-        this.levelFilter.addEventListener('change', () => {
-            this.filterCourses();
-        });
-        
-        this.durationFilter.addEventListener('change', () => {
-            this.filterCourses();
-        });
-        
-        // Apply filters button (for mobile/additional filtering)
-        this.applyFiltersBtn.addEventListener('click', () => {
-            this.filterCourses();
-            this.showFilterAppliedMessage();
         });
     }
     
@@ -841,37 +813,12 @@ class CourseListManager {
     
     filterCourses() {
         const searchTerm = this.searchInput.value.toLowerCase().trim();
-        const levelFilter = this.levelFilter.value;
-        const durationFilter = this.durationFilter.value;
-        
         let visibleCount = 0;
         
         this.allCourses.forEach(course => {
             const title = course.dataset.title || '';
             const instructor = course.dataset.instructor || '';
-            const level = course.dataset.level || '';
-            const duration = course.dataset.duration || '';
-            
-            let matches = true;
-            
-            // Search filter
-            if (searchTerm) {
-                matches = matches && (
-                    title.includes(searchTerm) || 
-                    instructor.includes(searchTerm)
-                );
-            }
-            
-            // Level filter
-            if (levelFilter) {
-                matches = matches && level === levelFilter;
-            }
-            
-            // Duration filter
-            if (durationFilter) {
-                const durationMatches = this.checkDurationFilter(duration, durationFilter);
-                matches = matches && durationMatches;
-            }
+            const matches = !searchTerm || title.includes(searchTerm) || instructor.includes(searchTerm);
             
             if (matches) {
                 course.style.display = 'block';
@@ -883,29 +830,8 @@ class CourseListManager {
             }
         });
         
-        // Update load more button visibility
         this.updateLoadMoreButton();
-        
-        // Show no results message if needed
         this.showNoResultsMessage(visibleCount === 0);
-    }
-    
-    checkDurationFilter(duration, filter) {
-        // Extract hours from duration string (e.g., "6h 0m" -> 6)
-        const hours = parseInt(duration.match(/(\d+)h/)?.[1] || '0');
-        const minutes = parseInt(duration.match(/(\d+)m/)?.[1] || '0');
-        const totalHours = hours + (minutes / 60);
-        
-        switch (filter) {
-            case 'short':
-                return totalHours < 3;
-            case 'medium':
-                return totalHours >= 3 && totalHours <= 6;
-            case 'long':
-                return totalHours > 6;
-            default:
-                return true;
-        }
     }
     
     loadMoreCourses() {
@@ -954,10 +880,10 @@ class CourseListManager {
                 <div class="no-courses-icon">
                     <i class="fas fa-search"></i>
                 </div>
-                <h3>No courses match your criteria</h3>
-                <p>Try adjusting your search or filter settings</p>
+                <h3>${TIO.noCoursesMatch || 'No courses match your search'}</h3>
+                <p>${TIO.adjustSearch || 'Try a different search'}</p>
                 <button class="reset-filters-btn" onclick="resetFilters()">
-                    Reset Filters
+                    ${TIO.resetFilters || 'Clear search'}
                 </button>
             `;
             this.courseGrid.appendChild(noResultsMsg);
@@ -972,7 +898,7 @@ class CourseListManager {
         message.innerHTML = `
             <div class="toast-content">
                 <i class="fas fa-check"></i>
-                <span>Filters applied successfully</span>
+                <span>${TIO.filtersApplied || 'Filters applied successfully'}</span>
             </div>
         `;
         
@@ -987,10 +913,6 @@ class CourseListManager {
 // Reset filters function
 function resetFilters() {
     document.getElementById('course-search').value = '';
-    document.getElementById('level-filter').value = '';
-    document.getElementById('duration-filter').value = '';
-    
-    // Trigger filter update
     const courseManager = new CourseListManager();
     courseManager.filterCourses();
 }

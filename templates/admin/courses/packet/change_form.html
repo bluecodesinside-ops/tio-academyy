@@ -1,0 +1,21 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+  .packet-hint {
+    margin: 0 0 16px;
+    padding: 12px 14px;
+    background: #f7f4ee;
+    border-radius: 8px;
+    color: #4b3f2f;
+  }
+</style>
+{% endblock %}
+
+{% block after_field_sets %}
+{{ block.super }}
+{% if original %}
+<p class="packet-hint">Add this packet’s videos below. Save returns you to the course so you can see every packet together.</p>
+{% endif %}
+{% endblock %}

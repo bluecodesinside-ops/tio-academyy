@@ -76,6 +76,45 @@
   background: var(--color-accent);
 }
 
+.navbar__link--profile {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  text-transform: none;
+  letter-spacing: 0;
+  padding: 0;
+}
+
+.navbar__link--profile::after {
+  display: none;
+}
+
+.profile-icon {
+  display: block;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3px #c9a96e;
+}
+
+.profile-icon svg {
+  display: block;
+}
+
+.profile-nav__label {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .profile-nav__label {
+    display: inline;
+    font-size: 1rem;
+    text-transform: none;
+  }
+}
+
 /* ===== HERO COMPONENT ===== */
 .hero {
   padding: 160px 0 var(--spacing-6xl);
@@ -258,11 +297,22 @@
 }
 
 .course-card__image {
-  height: 240px;
-  background: var(--color-gray-100);
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  background: #f0eee9;
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid var(--color-gray-100);
+}
+
+.course-card__image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
 }
 
 .course-card__placeholder {
@@ -508,4 +558,145 @@
     width: 100%;
     justify-content: center;
   }
+}
+
+/* Phone players: iPhone, Android, Samsung, in-app browsers */
+.video-wrapper,
+.video-player,
+.video-player-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 200px;
+  background: #efe8dc;
+}
+
+@supports not (aspect-ratio: 16 / 9) {
+  .video-wrapper,
+  .video-player,
+  .video-player-container {
+    height: 0;
+    padding-bottom: 56.25%;
+    min-height: 0;
+  }
+}
+
+.video-wrapper video,
+.video-wrapper iframe,
+.video-player video,
+.video-player iframe,
+.course-video {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  border: 0;
+  display: block;
+  object-fit: contain;
+  background: #efe8dc;
+}
+
+#video-cover-poster,
+.phone-watch-link {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.phone-watch-link {
+  display: none;
+  position: relative;
+  z-index: 3;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 220px;
+  aspect-ratio: 16 / 9;
+  background: #efe8dc;
+  text-decoration: none;
+}
+
+.phone-watch-link img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.phone-watch-btn {
+  display: none;
+  margin-top: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  border-radius: 999px;
+  background: #c9a96e;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+@media (max-width: 1024px) {
+  .phone-watch-link,
+  .phone-watch-btn {
+    display: flex;
+  }
+
+  .desktop-embed {
+    display: none !important;
+  }
+}
+
+.sale-price {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.45rem;
+  line-height: 1.15;
+}
+.sale-price__was {
+  color: #9aa0a6;
+  text-decoration: line-through;
+  font-weight: 400;
+  font-size: 0.95rem;
+}
+.sale-price__now {
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: #00a651;
+  letter-spacing: -0.02em;
+}
+.sale-price__off {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #00a651;
+}
+.purchase-btn .sale-price,
+.purchase-sidebar-btn .sale-price,
+.unlock-btn .sale-price {
+  align-items: baseline;
+}
+.purchase-btn .sale-price__now,
+.purchase-sidebar-btn .sale-price__now,
+.unlock-btn .sale-price__now {
+  font-size: 1.05rem;
+  color: #fff;
+}
+.purchase-btn .sale-price__was,
+.purchase-sidebar-btn .sale-price__was,
+.unlock-btn .sale-price__was {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.85rem;
+}
+.purchase-btn .sale-price__off,
+.purchase-sidebar-btn .sale-price__off,
+.unlock-btn .sale-price__off {
+  color: #d9f99d;
+  font-size: 0.85rem;
+}
+.catalog-picker__price .sale-price {
+  flex-direction: row;
+  align-items: baseline;
+}
+.catalog-picker__price .sale-price__now {
+  font-size: 1.1rem;
 }

@@ -17,8 +17,8 @@
             </h1>
             <p class="hero-banner__subtitle">{% trans "Learn from" %} <strong>{% trans "certified instructors" %}</strong> {% trans "across dance, physiotherapy, and fitness." %}</p>
             <div class="hero-banner__actions">
-                <a href="{% url 'programs:explore_programs' %}" class="btn btn--primary btn--lg">
-                    {% trans "Explore Programs" %}
+                <a href="{% url 'courses' %}" class="btn btn--primary btn--lg">
+                    {% trans "Explore Courses" %}
                     <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
@@ -47,23 +47,23 @@
     </div>
 </section>
 
-<!-- 1.6. EXPLORE PROGRAMS - Dance styles preview -->
+<!-- 1.6. COURSES - unified catalog cards (name + cover) -->
 <section class="explore-programs-section">
     <div class="container">
         <div class="explore-programs__header">
-            <h2 class="explore-programs__title">{% trans "Explore Our Programs" %}</h2>
-            <p class="explore-programs__subtitle">{% trans "Discover our programs — dance, physiotherapy, and fitness. Choose your path and start your journey today!" %}</p>
+            <h2 class="explore-programs__title">{% trans "Explore Our Courses" %}</h2>
+            <p class="explore-programs__subtitle">{% trans "Discover our courses — dance, physiotherapy, and fitness. Choose your path and start your journey today!" %}</p>
         </div>
         
         <div class="explore-programs__grid">
             {% for program in programs %}
             <div class="explore-program-card">
-                <a href="{% url 'programs:explore_programs' %}{{ program.slug }}/" class="explore-program-card__link">
+                <a href="{% url 'course_detail' program.id %}" class="explore-program-card__link">
                     <div class="explore-program-card__image-container">
                         {% if program.image %}
                             <img 
                                 src="{{ program.image.url }}" 
-                                alt="{{ program.name }}"
+                                alt="{{ program.title }}"
                                 class="explore-program-card__image"
                                 loading="lazy"
                             >
@@ -80,10 +80,10 @@
                     </div>
                     
                     <div class="explore-program-card__content">
-                        <h3 class="explore-program-card__title">{{ program.name }}</h3>
+                        <h3 class="explore-program-card__title">{{ program.title }}</h3>
                         <p class="explore-program-card__description">{{ program.description|truncatewords:15 }}</p>
                         <span class="explore-program-card__button">
-                            {% trans "Explore" %} {{ program.name }}
+                            {% trans "View course" %}
                             <i class="fas fa-arrow-right"></i>
                         </span>
                     </div>
@@ -91,14 +91,14 @@
             </div>
             {% empty %}
             <div class="explore-programs__empty">
-                <p>{% trans "No programs available at the moment." %}</p>
+                <p>{% trans "No courses available at the moment." %}</p>
             </div>
             {% endfor %}
         </div>
         
         <div class="explore-programs__cta">
-            <a href="{% url 'programs:explore_programs' %}" class="btn btn--primary btn--lg">
-                {% trans "View All Programs" %}
+            <a href="{% url 'courses' %}" class="btn btn--primary btn--lg">
+                {% trans "View All Courses" %}
                 <i class="fas fa-arrow-right"></i>
             </a>
         </div>
@@ -124,19 +124,6 @@
                     <li><i class="fas fa-check"></i> {% trans "Certified professionals" %}</li>
                     <li><i class="fas fa-check"></i> {% trans "Personalized attention" %}</li>
                     <li><i class="fas fa-check"></i> {% trans "Program excellence" %}</li>
-                </ul>
-            </div>
-            
-            <div class="about-card about-card--featured">
-                <div class="about-card__icon">
-                    <i class="fas fa-star"></i>
-                </div>
-                <h3 class="about-card__title">{% trans "Small Class Sizes" %}</h3>
-                <p class="about-card__description">{% trans "Maximum 12 students per class ensures individual attention and rapid skill development in our intimate learning environment." %}</p>
-                <ul class="about-card__features">
-                    <li><i class="fas fa-check"></i> {% trans "Max 12 students" %}</li>
-                    <li><i class="fas fa-check"></i> {% trans "Individual feedback" %}</li>
-                    <li><i class="fas fa-check"></i> {% trans "Accelerated learning" %}</li>
                 </ul>
             </div>
             
@@ -410,8 +397,10 @@ body {
 
 .about-cards__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, minmax(280px, 400px));
     gap: var(--spacing-3xl);
+    justify-content: center;
+    align-items: stretch;
 }
 
 .about-card {
@@ -553,16 +542,17 @@ body {
 
 .explore-program-card__image-container {
     position: relative;
-    aspect-ratio: 16 / 10;
-    min-height: 200px;
+    aspect-ratio: 16 / 9;
+    min-height: 180px;
     overflow: hidden;
-    background: #f5f5f5;
+    background: #f0eee9;
 }
 
 .explore-program-card__image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
     display: block;
     transition: var(--transition-normal);
 }
@@ -904,7 +894,12 @@ body {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    .about-cards__grid,
+    .about-cards__grid {
+        grid-template-columns: minmax(280px, 400px);
+        justify-content: center;
+        gap: var(--spacing-2xl);
+    }
+
     .explore-programs__grid {
         grid-template-columns: 1fr;
         gap: var(--spacing-2xl);

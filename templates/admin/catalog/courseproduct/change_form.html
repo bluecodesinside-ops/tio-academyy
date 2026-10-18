@@ -1,0 +1,142 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'catalog/admin/catalog_admin.css' %}">
+{% endblock %}
+
+{% block after_field_sets %}
+{{ block.super }}
+{% if original %}
+<div class="catalog-admin" data-csrf="{{ csrf_token }}">
+  {% if catalog_is_dance %}
+  <section class="catalog-panel" id="pricing-tier-form" data-save-url="{{ save_tiers_url }}">
+    <header class="catalog-panel__header">
+      <div>
+        <h2>Pricing tiers</h2>
+        <p>Users buy 1, 3, or 6 videos. Duration is stored in days (1 month = 30 days).</p>
+      </div>
+      <button type="button" class="button catalog-btn" data-add-tier>+ Add tier</button>
+    </header>
+    <div class="catalog-toast" hidden></div>
+    <table class="catalog-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Videos</th>
+          <th>Price (€)</th>
+          <th>Days</th>
+          <th>Months</th>
+          <th>Discount %</th>
+          <th>Active</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody data-tier-rows>
+        {% for tier in catalog_tiers %}
+        <tr data-tier-id="{{ tier.id }}">
+          <td><input name="name" value="{{ tier.name }}" required maxlength="100"></td>
+          <td><input name="video_count" type="number" min="1" max="50" value="{{ tier.video_count }}" required></td>
+          <td><input name="price" type="number" min="0.01" step="0.01" value="{{ tier.price }}" required></td>
+          <td><input name="access_duration_days" type="number" min="1" value="{{ tier.access_duration_days }}" required></td>
+          <td><input name="access_duration_months" type="number" min="0" value="{{ tier.access_duration_months }}"></td>
+          <td><input name="discount_percent" type="number" min="0" max="100" step="0.01" value="{{ tier.discount_percent }}"></td>
+          <td><input name="is_active" type="checkbox" {% if tier.is_active %}checked{% endif %}></td>
+          <td><button type="button" class="catalog-link" data-remove-tier>Remove</button></td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td><input name="name" value="1 Video" required></td>
+          <td><input name="video_count" type="number" min="1" value="1" required></td>
+          <td><input name="price" type="number" min="0.01" step="0.01" value="17.00" required></td>
+          <td><input name="access_duration_days" type="number" min="1" value="30" required></td>
+          <td><input name="access_duration_months" type="number" min="0" value="1"></td>
+          <td><input name="discount_percent" type="number" min="0" max="100" step="0.01" value="0"></td>
+          <td><input name="is_active" type="checkbox" checked></td>
+          <td><button type="button" class="catalog-link" data-remove-tier>Remove</button></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="catalog-hint">Defaults: 1 video €17 / 30 days · 3 videos €39 / 60 days · 6 videos €64 / 120 days.</p>
+    <button type="button" class="default catalog-btn catalog-btn--primary" data-save-tiers>Save tiers</button>
+  </section>
+  {% endif %}
+
+  {% if catalog_is_physio %}
+  <section class="catalog-panel" id="physio-layout" data-save-url="{{ save_physio_layout_url }}">
+    <header class="catalog-panel__header">
+      <div>
+        <h2>15 packages — set each price, then put videos in</h2>
+        <p>Students pay the package price. Open a package to upload its cover and add videos.</p>
+      </div>
+    </header>
+    <div class="catalog-toast" hidden></div>
+    <h3>Package prices</h3>
+    <table class="catalog-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Cover</th>
+          <th>Package name</th>
+          <th>Price (€)</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody data-physio-packages>
+        {% for package in catalog_physio_packages %}
+        <tr data-package-id="{{ package.id }}">
+          <td>{{ package.chapter_number }}</td>
+          <td>
+            {% if package.cover %}
+            <img src="{{ package.cover.url }}" alt="" style="height:42px;width:64px;object-fit:cover;border-radius:4px;">
+            {% else %}
+            <span class="catalog-muted">No cover</span>
+            {% endif %}
+          </td>
+          <td><input name="title" value="{{ package.title }}" maxlength="200" required></td>
+          <td><input name="individual_price" type="number" min="0.01" step="0.01" value="{{ package.individual_price }}" required></td>
+          <td><a href="{% url 'admin:catalog_package_change' package.id %}">Cover &amp; videos</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="catalog-muted">No packages yet. Save this product, then run seed catalog.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <h3>Put videos into packages</h3>
+    <p class="catalog-hint">Leave a video on “Not assigned” until you decide which package it belongs to.</p>
+    <table class="catalog-table">
+      <thead>
+        <tr>
+          <th>Video</th>
+          <th>Package</th>
+        </tr>
+      </thead>
+      <tbody data-physio-videos>
+        {% for video in catalog_physio_videos %}
+        <tr data-session-id="{{ video.session_id }}">
+          <td>{{ video.title }}</td>
+          <td>
+            <select name="package_id">
+              <option value="">Not assigned</option>
+              {% for package in catalog_physio_packages %}
+              <option value="{{ package.id }}" {% if video.package_id == package.id %}selected{% endif %}>
+                Package {{ package.chapter_number }} — {{ package.title }}
+              </option>
+              {% endfor %}
+            </select>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="2" class="catalog-muted">Link the physiotherapy course above, then save, to see videos here.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <button type="button" class="default catalog-btn catalog-btn--primary" data-save-physio-layout>Save packages and video placement</button>
+  </section>
+  {% endif %}
+</div>
+<script src="{% static 'catalog/admin/catalog_admin.js' %}"></script>
+{% endif %}
+{% endblock %}

@@ -1,22 +1,31 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load course_extras %}
+{% load i18n %}
 
-{% block title %}{{ session.title }} - {{ session.level.course.title }}{% endblock %}
+{% block title %}{{ session.title }} - {{ course.title }}{% endblock %}
 
 {% block content %}
 <!-- Session Header -->
 <section class="session-header">
     <div class="container">
         <div class="session-navigation">
-            <a href="{% url 'course_detail' session.level.course.id %}" class="back-link">
-                <i class="fas fa-arrow-left"></i> Back to Course
+            {% if session.packet_id %}
+            <a href="{% url 'packet_detail' course.id session.packet_id %}" class="back-link">
+                <i class="fas fa-arrow-left"></i> {% trans "Back to packet" %}
             </a>
+            {% else %}
+            <a href="{% url 'course_detail' course.id %}?session={{ session.id }}" class="back-link">
+                <i class="fas fa-arrow-left"></i> {% trans "Back to Course" %}
+            </a>
+            {% endif %}
             <div class="session-breadcrumb">
-                <span>{{ session.level.course.title }}</span>
-                <i class="fas fa-chevron-right"></i>
-                <span>{{ session.level.name }}</span>
+                <span>{{ course.title }}</span>
                 <i class="fas fa-chevron-right"></i>
                 <span>{{ session.title }}</span>
+                {% if is_free_preview %}
+                <span class="preview-badge" style="margin-left:0.5rem;">{% trans "FREE PREVIEW" %}</span>
+                {% endif %}
             </div>
         </div>
         
@@ -24,9 +33,7 @@
             <h1>{{ session.title }}</h1>
             <p>{{ session.description }}</p>
             <div class="session-meta">
-                <span><i class="fas fa-clock"></i> {{ session.duration }} minutes</span>
-                <span><i class="fas fa-play-circle"></i> Session {{ session.order }}</span>
-                <span><i class="fas fa-signal"></i> {{ session.level.name }}</span>
+                <span><i class="fas fa-play-circle"></i> Video {{ session.order }}</span>
             </div>
         </div>
     </div>
@@ -37,111 +44,77 @@
     <div class="container">
         <div class="video-container">
             {% if session.video_file %}
-                <!-- Uploaded Video File -->
                 <div class="video-player" id="videoPlayer">
                     <video 
                         id="video" 
-                        controls 
+                        controls
+                        playsinline
+                        webkit-playsinline
                         preload="metadata"
+                        controlsList="nodownload"
                         data-session-id="{{ session.id }}"
-                        data-last-position="{{ progress.last_watched_position }}"
+                        data-last-position="{{ progress.last_watched_position|default:0 }}"
                     >
                         <source src="{{ session.video_file.url }}" type="video/mp4">
-                        Your browser does not support the video tag.
+                        {% trans "Your browser does not support the video tag." %}
                     </video>
-                    
-                    <!-- Custom Video Controls -->
-                    <div class="video-controls" id="videoControls">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="videoProgress"></div>
-                        </div>
-                        <div class="control-buttons">
-                            <button class="control-btn" id="playPauseBtn">
-                                <i class="fas fa-play"></i>
-                            </button>
-                            <div class="time-display">
-                                <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
-                            </div>
-                            <button class="control-btn" id="fullscreenBtn">
-                                <i class="fas fa-expand"></i>
-                            </button>
-                        </div>
-                    </div>
                 </div>
             {% elif session.video_url and session.is_youtube_url %}
-                <!-- YouTube Video -->
                 <div class="video-player youtube-player" id="videoPlayer">
                     <iframe 
                         id="youtubeVideo"
                         width="100%" 
                         height="500" 
-                        src="https://www.youtube.com/embed/HyHNuVaZJ-k?si=6G4rOLSJ99rzPNi-&rel=0&modestbranding=1&showinfo=0&controls=1&autoplay=0" 
-                        title="YouTube video player" 
+                        src="{{ session.get_youtube_embed_url }}" 
+                        title="{{ session.title }}" 
                         frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                        referrerpolicy="strict-origin-when-cross-origin" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" 
                         allowfullscreen
+                        webkitallowfullscreen
+                        playsinline
                         data-session-id="{{ session.id }}"
-                        data-last-position="{{ progress.last_watched_position }}"
                     ></iframe>
-                    
-                    <!-- YouTube Progress Tracking -->
-                    <div class="youtube-progress-info">
-                        <p><i class="fas fa-info-circle"></i> YouTube video progress tracking is limited. Use the "Mark as Complete" button when finished.</p>
-                    </div>
+                </div>
+            {% elif session.video_url and session.is_bunny_embed_url %}
+                <div class="video-player bunny-player" id="videoPlayer">
+                    {% include "components/course_video_player.html" with session=session %}
                 </div>
             {% elif session.video_url %}
-                <!-- External Video URL -->
                 <div class="video-player external-video" id="videoPlayer">
                     <video 
                         id="video" 
-                        controls 
+                        controls
+                        playsinline
+                        webkit-playsinline
                         preload="metadata"
+                        controlsList="nodownload"
                         data-session-id="{{ session.id }}"
-                        data-last-position="{{ progress.last_watched_position }}"
+                        data-last-position="{{ progress.last_watched_position|default:0 }}"
                     >
                         <source src="{{ session.video_url }}" type="video/mp4">
-                        Your browser does not support the video tag.
+                        {% trans "Your browser does not support the video tag." %}
                     </video>
-                    
-                    <!-- Custom Video Controls -->
-                    <div class="video-controls" id="videoControls">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="videoProgress"></div>
-                        </div>
-                        <div class="control-buttons">
-                            <button class="control-btn" id="playPauseBtn">
-                                <i class="fas fa-play"></i>
-                            </button>
-                            <div class="time-display">
-                                <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
-                            </div>
-                            <button class="control-btn" id="fullscreenBtn">
-                                <i class="fas fa-expand"></i>
-                            </button>
-                        </div>
-                    </div>
                 </div>
             {% else %}
                 <div class="video-placeholder">
                     <i class="fas fa-video"></i>
-                    <h3>Video Coming Soon</h3>
-                    <p>This session video will be available soon.</p>
+                    <h3>{% trans "Video Coming Soon" %}</h3>
+                    <p>{% trans "Add a Bunny or YouTube URL for this video in admin." %}</p>
                 </div>
             {% endif %}
         </div>
         
-        <!-- Session Progress -->
+        <!-- {% trans "Session Progress" %} -->
         <div class="session-progress-panel">
             <div class="progress-info">
-                <h3>Your Progress</h3>
+                <h3>{% trans "Your Progress" %}</h3>
                 <div class="progress-stats">
                     <div class="stat">
-                        <span class="stat-label">Session Progress</span>
+                        <span class="stat-label">{% trans "Session Progress" %}</span>
                         <span class="stat-value" id="sessionProgress">0%</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-label">Time Watched</span>
+                        <span class="stat-label">{% trans "Time Watched" %}</span>
                         <span class="stat-value" id="timeWatched">0:00</span>
                     </div>
                 </div>
@@ -153,11 +126,11 @@
             <div class="session-actions">
                 {% if next_session %}
                 <a href="{% url 'session_detail' next_session.id %}" class="btn btn-primary" id="nextSessionBtn" style="display: none;">
-                    Next Session <i class="fas fa-arrow-right"></i>
+                    {% trans "Next Session" %} <i class="fas fa-arrow-right"></i>
                 </a>
                 {% endif %}
                 <button class="btn btn-secondary" id="markCompleteBtn">
-                    Mark as Complete
+                    {% trans "Mark as Complete" %}
                 </button>
             </div>
         </div>
@@ -169,53 +142,46 @@
     <div class="container">
         <div class="content-grid">
             <div class="main-content">
-                <h2>Session Overview</h2>
+                <h2>{% trans "Session Overview" %}</h2>
                 <div class="session-description">
                     {{ session.description|linebreaks }}
                 </div>
                 
                 <div class="session-tips">
-                    <h3>Key Points</h3>
+                    <h3>{% trans "Key Points" %}</h3>
                     <ul>
-                        <li>Focus on proper technique and form</li>
-                        <li>Practice the movements slowly at first</li>
-                        <li>Pay attention to timing and rhythm</li>
-                        <li>Don't rush - quality over quantity</li>
+                        <li>{% trans "Focus on proper technique and form" %}</li>
+                        <li>{% trans "Practice the movements slowly at first" %}</li>
+                        <li>{% trans "Pay attention to timing and rhythm" %}</li>
+                        <li>{% trans "Don't rush - quality over quantity" %}</li>
                     </ul>
                 </div>
             </div>
             
             <div class="sidebar">
                 <div class="course-progress">
-                    <h3>Course Progress</h3>
+                    <h3>{% trans "Course Videos" %}</h3>
                     <div class="level-progress">
-                        {% for level in session.level.course.levels.all %}
+                        {% for s in course.get_ordered_sessions %}
                         <div class="level-item">
                             <div class="level-header">
-                                <span class="level-name">{{ level.name }}</span>
-                                <span class="level-sessions">{{ level.sessions.count }} sessions</span>
-                            </div>
-                            <div class="level-progress-bar">
-                                <div class="progress-fill" style="width: 0%"></div>
+                                <span class="level-name">
+                                    {% if s.id == session.id %}<strong>{{ s.order }}. {{ s.title }}</strong>{% else %}{{ s.order }}. {{ s.title }}{% endif %}
+                                </span>
+                                {% if s.is_free_preview %}<span class="level-sessions">{% trans "FREE" %}</span>{% endif %}
                             </div>
                         </div>
                         {% endfor %}
                     </div>
+                    <p style="margin-top:0.75rem;"><a href="{% url 'course_detail' course.id %}">{% trans "View full course →" %}</a></p>
                 </div>
                 
                 <div class="session-navigation">
-                    <h3>Session Navigation</h3>
+                    <h3>{% trans "Navigation" %}</h3>
                     <div class="nav-links">
-                        {% if session.order > 1 %}
-                        <a href="#" class="nav-link prev" data-session-id="{{ session.id|add:'-1' }}">
-                            <i class="fas fa-chevron-left"></i>
-                            Previous Session
-                        </a>
-                        {% endif %}
-                        
                         {% if next_session %}
                         <a href="{% url 'session_detail' next_session.id %}" class="nav-link next">
-                            Next Session
+                            {% trans "Next Video" %}
                             <i class="fas fa-chevron-right"></i>
                         </a>
                         {% endif %}

@@ -66,6 +66,13 @@
             font-size: 1.5rem;
             pointer-events: none; /* Allow clicks to pass through to parent link */
         }
+
+        .navbar__logo img {
+            height: 44px;
+            width: auto;
+            display: block;
+            pointer-events: none;
+        }
         
         /* Ensure logo link is always clickable */
         a.navbar__logo {
@@ -98,6 +105,28 @@
         .navbar__link--active {
             color: var(--color-accent, #c9a96e);
         }
+
+        .navbar__link--profile {
+            display: inline-flex !important;
+            align-items: center;
+            gap: 0.55rem;
+            padding: 0 !important;
+            text-transform: none;
+        }
+        .navbar__link--profile::after {
+            display: none !important;
+        }
+        .profile-icon {
+            display: block;
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 0 0 2px #fff, 0 0 0 3px #c9a96e;
+        }
+        .profile-icon svg { display: block; }
+        .profile-nav__label { display: none; }
         
         /* Hamburger Button - Always visible on mobile */
         button.hamburger,
@@ -336,6 +365,15 @@
                 border-bottom: 1px solid rgba(0,0,0,0.1) !important;
                 display: block !important;
             }
+            .navbar__link--profile {
+                display: flex !important;
+                align-items: center;
+            }
+            .profile-nav__label {
+                display: inline !important;
+                font-size: 1rem;
+                text-transform: none;
+            }
             
             .language-switcher {
                 width: 100% !important;
@@ -447,15 +485,13 @@
                 padding: 1rem 0 !important;
                 border-bottom: 1px solid rgba(0,0,0,0.1) !important;
             }
-            
-            #navMenu.active li {
-                width: 100% !important;
+            #navMenu.active .navbar__link--profile {
+                display: flex !important;
+                align-items: center;
+                gap: 0.55rem;
             }
-            
-            #navMenu.active .navbar__link {
-                width: 100% !important;
-                padding: 1rem 0 !important;
-                border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+            #navMenu.active .profile-nav__label {
+                display: inline !important;
             }
         }
     </style>
@@ -465,17 +501,27 @@
     <nav class="navbar">
         <div class="navbar__container">
             <a href="{% url 'home' %}" class="navbar__logo" onclick="console.log('Logo clicked!'); return true;" style="text-decoration: none; color: inherit; display: block; cursor: pointer; z-index: 10; position: relative;">
-                <h2>{% trans "Tio Academy" %}</h2>
+                <img src="{% static 'logo.png' %}" alt="{% trans 'Tio Academy' %}" height="44">
             </a>
             <ul class="navbar__menu" id="navMenu">
                 <li><a href="{% url 'home' %}" class="navbar__link {% if request.resolver_match.url_name == 'home' %}navbar__link--active{% endif %}" data-nav-link>{% trans "Home" %}</a></li>
                 <li><a href="{% url 'about' %}" class="navbar__link {% if request.resolver_match.url_name == 'about' %}navbar__link--active{% endif %}" data-nav-link>{% trans "About" %}</a></li>
                 <li><a href="{% url 'courses' %}" class="navbar__link {% if request.resolver_match.url_name == 'courses' %}navbar__link--active{% endif %}" data-nav-link>{% trans "Courses" %}</a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'users:dashboard' %}" class="navbar__link {% if request.resolver_match.url_name == 'dashboard' %}navbar__link--active{% endif %}" data-nav-link>{% trans "Dashboard" %}</a></li>
+                    <li>
+                        <a href="{% url 'users:dashboard' %}" class="navbar__link navbar__link--profile {% if request.resolver_match.url_name == 'dashboard' %}navbar__link--active{% endif %}" data-nav-link aria-label="{% trans 'My Profile' %}">
+                            {% include 'components/profile_icon.html' %}
+                            <span class="profile-nav__label">{% trans "My Profile" %}</span>
+                        </a>
+                    </li>
                     <li><a href="{% url 'users:logout' %}" class="navbar__link" data-nav-link>{% trans "Logout" %}</a></li>
                 {% else %}
-                    <li><a href="{% url 'users:login' %}" class="navbar__link {% if request.resolver_match.url_name == 'login' %}navbar__link--active{% endif %}" data-nav-link>{% trans "Login" %}</a></li>
+                    <li>
+                        <a href="{% url 'users:login' %}" class="navbar__link navbar__link--profile {% if request.resolver_match.url_name == 'login' or request.resolver_match.url_name == 'register' %}navbar__link--active{% endif %}" data-nav-link aria-label="{% trans 'Create profile' %}">
+                            {% include 'components/profile_icon.html' %}
+                            <span class="profile-nav__label">{% trans "Create profile" %}</span>
+                        </a>
+                    </li>
                 {% endif %}
 
                 <!-- Language Switcher -->
@@ -508,7 +554,7 @@
                     </div>
                 </li>
             </ul>
-            <button type="button" class="hamburger" id="hamburger" aria-label="Toggle menu" onclick="toggleMobileMenu()">
+            <button type="button" class="hamburger" id="hamburger" aria-label="{% trans 'Toggle menu' %}" onclick="toggleMobileMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -522,6 +568,34 @@
     <!-- Hidden CSRF Token for JavaScript -->
     {% csrf_token %}
 
+    <script>
+    window.TIO_I18N = {
+        paymentFailed: "{% filter escapejs %}{% trans 'Payment failed.' %}{% endfilter %}",
+        noCheckoutUrl: "{% filter escapejs %}{% trans 'No checkout URL received' %}{% endfilter %}",
+        selectPackage: "{% filter escapejs %}{% trans 'Select at least one package.' %}{% endfilter %}",
+        selectVideo: "{% filter escapejs %}{% trans 'Select at least one video.' %}{% endfilter %}",
+        packetNotReady: "{% filter escapejs %}{% trans 'This packet is not ready for checkout yet.' %}{% endfilter %}",
+        noCoursesMatch: "{% filter escapejs %}{% trans 'No courses match your criteria' %}{% endfilter %}",
+        adjustSearch: "{% filter escapejs %}{% trans 'Try adjusting your search or filter settings' %}{% endfilter %}",
+        resetFilters: "{% filter escapejs %}{% trans 'Reset Filters' %}{% endfilter %}",
+        filtersApplied: "{% filter escapejs %}{% trans 'Filters applied successfully' %}{% endfilter %}",
+        galleryItem: "{% filter escapejs %}{% trans 'Gallery Item' %}{% endfilter %}",
+        clickToPlay: "{% filter escapejs %}{% trans 'Click to play video' %}{% endfilter %}",
+        viewGallery: "{% filter escapejs %}{% trans 'View gallery content' %}{% endfilter %}",
+        download: "{% filter escapejs %}{% trans 'Download' %}{% endfilter %}",
+        downloadStarted: "{% filter escapejs %}{% trans 'Download started! Check your Downloads folder.' %}{% endfilter %}",
+        downloadFailed: "{% filter escapejs %}{% trans 'Download failed. Try right-clicking and \"Save as...\"' %}{% endfilter %}",
+        startingDownload: "{% filter escapejs %}{% trans 'Starting download...' %}{% endfilter %}",
+        noMedia: "{% filter escapejs %}{% trans 'No media source available' %}{% endfilter %}",
+        noMediaDownload: "{% filter escapejs %}{% trans 'No media available to download' %}{% endfilter %}",
+        videoError: "{% filter escapejs %}{% trans 'Error playing video' %}{% endfilter %}",
+        of: "{% filter escapejs %}{% trans 'of' %}{% endfilter %}",
+        close: "{% filter escapejs %}{% trans 'Close' %}{% endfilter %}",
+        previous: "{% filter escapejs %}{% trans 'Previous' %}{% endfilter %}",
+        next: "{% filter escapejs %}{% trans 'Next' %}{% endfilter %}"
+    };
+    </script>
+
     {% block content %}{% endblock %}
 
     {% block extra_js %}{% endblock %}
@@ -532,7 +606,9 @@
         <div class="container">
             <div class="footer__content">
                 <div class="footer__brand">
-                    <a href="{% url 'home' %}" style="text-decoration: none; color: inherit;"><h3 class="footer__logo">{% trans "Tio Academy" %}</h3></a>
+                    <a href="{% url 'home' %}" class="footer__logo" style="text-decoration: none; color: inherit; display: inline-block;">
+                        <img src="{% static 'logo.png' %}" alt="{% trans 'Tio Academy' %}" height="44" style="height: 44px; width: auto; display: block;">
+                    </a>
                     <p class="footer__tagline">{% trans "Premium dance education since 2010" %}</p>
                 </div>
                 
@@ -542,14 +618,8 @@
                     </ul>
                     
                     <div class="footer__social-links">
-                        <a href="#" class="footer__social-link" aria-label="Instagram">
+                        <a href="https://www.instagram.com/tioacademy.online/" class="footer__social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="footer__social-link" aria-label="Facebook">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="footer__social-link" aria-label="YouTube">
-                            <i class="fab fa-youtube"></i>
                         </a>
                     </div>
                 </div>
@@ -568,6 +638,7 @@
     </footer>
 
     <script src="{% static 'js/core.js' %}"></script>
+    <img src="{% url 'stats_hit' %}?p={{ request.path|urlencode }}" alt="" width="1" height="1" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none" aria-hidden="true">
     
     <!-- Language Switcher Script -->
     <script>
@@ -613,14 +684,17 @@
         nextInput.type = 'hidden';
         nextInput.name = 'next';
         let currentPath = window.location.pathname;
-        // Remove existing language prefix if any
-        if (currentPath.startsWith('/sq/')) {
-            currentPath = currentPath.substring(3);
+        // Remove existing language prefixes (sq or en)
+        currentPath = currentPath.replace(/^\/(sq|en)(?=\/|$)/, '') || '/';
+        if (!currentPath.startsWith('/')) {
+            currentPath = '/' + currentPath;
         }
-        if (currentPath === '') {
-            currentPath = '/';
+        // When switching to Albanian, prefer prefixed next so LocaleMiddleware lands correctly
+        if (langCode === 'sq' && !currentPath.startsWith('/sq/')) {
+            nextInput.value = '/sq' + (currentPath === '/' ? '/' : currentPath);
+        } else {
+            nextInput.value = currentPath;
         }
-        nextInput.value = currentPath;
         form.appendChild(nextInput);
         
         // Submit form

@@ -1,0 +1,49 @@
+{% load i18n %}
+{% load course_extras %}
+{% url 'watch_session' session.id as watch_fallback %}
+{% with cover_url=session.get_cover_url play_url=session.get_bunny_play_url %}
+<div class="video-wrapper" id="video-wrapper" data-cover="{% if cover_url %}{{ cover_url }}{% endif %}">
+    {% if session.video_file %}
+        <video id="course-video" class="course-video" controls playsinline webkit-playsinline x5-playsinline preload="metadata" controlsList="nodownload"
+               {% if cover_url %}poster="{{ cover_url }}"{% endif %}>
+            <source src="{{ session.video_file.url }}" type="video/mp4">
+            {% trans "Your browser does not support the video tag." %}
+        </video>
+    {% elif session.video_url and session.video_url|is_youtube_url %}
+        <iframe id="course-video" class="course-video youtube-video"
+                src="{{ session.video_url|youtube_embed_url }}"
+                title="{{ session.title }}"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                allowfullscreen webkitallowfullscreen playsinline></iframe>
+    {% elif session.video_url and session.video_url|is_bunny_embed_url %}
+        <a class="phone-watch-link" href="{% firstof play_url watch_fallback %}">
+            {% if cover_url %}<img src="{{ cover_url }}" alt="{{ session.title }}">{% endif %}
+            <span class="video-cover-poster__play" aria-hidden="true"></span>
+            <span class="video-cover-poster__label">{% trans "Tap to play" %}</span>
+        </a>
+        <iframe id="course-video" class="course-video youtube-video bunny-video desktop-embed"
+                src="{{ session.video_url|video_embed_url }}"
+                title="{{ session.title }}"
+                frameborder="0"
+                allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
+                allowfullscreen webkitallowfullscreen playsinline></iframe>
+    {% elif session.video_url %}
+        <video id="course-video" class="course-video" controls playsinline webkit-playsinline x5-playsinline preload="metadata" controlsList="nodownload"
+               {% if cover_url %}poster="{{ cover_url }}"{% endif %}>
+            <source src="{{ session.video_url }}" type="video/mp4">
+            {% trans "Your browser does not support the video tag." %}
+        </video>
+    {% else %}
+        <div class="video-cover-fallback">
+            {% if cover_url %}<img src="{{ cover_url }}" alt="{{ session.title }}">{% endif %}
+            <p class="no-video-hint">{% trans "Video URL not set yet. Add a Bunny or YouTube link in admin." %}</p>
+        </div>
+    {% endif %}
+</div>
+{% if session.video_url and session.video_url|is_bunny_embed_url %}
+<a class="phone-watch-btn" href="{% firstof play_url watch_fallback %}">
+    {% trans "Play video" %}
+</a>
+{% endif %}
+{% endwith %}

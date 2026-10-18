@@ -2,7 +2,7 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}Payment Successful - Tio Academy{% endblock %}
+{% block title %}{% trans "Payment Successful" %} - {% trans "Tio Academy" %}{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -255,26 +255,26 @@
     </div>
     
     <!-- Success Message -->
-    <h1 class="success-title">Payment Successful!</h1>
+    <h1 class="success-title">{% trans "Payment Successful!" %}</h1>
     <p class="success-message">
-        Welcome to Tio Academy! Your subscription is now active and you have access to all your package features.
+        {% trans "Welcome to Tio Academy! Your purchase is now active and you have access to your content." %}
     </p>
     
     <!-- Package Summary -->
     <div class="package-card">
-        <h2 class="package-card__title">{{ package.name }} Package</h2>
+        <h2 class="package-card__title">{{ package.name }} {% trans "Package" %}</h2>
         <p>{{ package.description }}</p>
         
         <div class="package-card__price">
             ${{ package.monthly_price|floatformat:0 }}
             {% if subscription.billing_cycle == 'yearly' %}
-                / year
+                {% trans "/ year" %}
             {% else %}
-                / month
+                {% trans "/ month" %}
             {% endif %}
         </div>
         <div class="package-card__period">
-            Billing: {{ subscription.billing_cycle|title }}
+            {% trans "Billing:" %} {{ subscription.billing_cycle|title }}
         </div>
         
         <ul class="package-features">
@@ -286,57 +286,57 @@
     
     <!-- Next Steps -->
     <div class="next-steps">
-        <h3 class="next-steps__title">What's Next?</h3>
+        <h3 class="next-steps__title">{% trans "What's Next?" %}</h3>
         
         <div class="next-step">
             <div class="next-step__number">1</div>
             <div class="next-step__content">
-                <h4>Access Your Content</h4>
-                <p>Start exploring our video library and begin your dance journey.</p>
+                <h4>{% trans "Access Your Content" %}</h4>
+                <p>{% trans "Start exploring our video library and begin your dance journey." %}</p>
             </div>
         </div>
         
         <div class="next-step">
             <div class="next-step__number">2</div>
             <div class="next-step__content">
-                <h4>Check Your Email</h4>
-                <p>We've sent you a confirmation email with your subscription details.</p>
+                <h4>{% trans "Check Your Email" %}</h4>
+                <p>{% trans "We've sent you a confirmation email with your purchase details." %}</p>
             </div>
         </div>
         
         <div class="next-step">
             <div class="next-step__number">3</div>
             <div class="next-step__content">
-                <h4>Join Our Community</h4>
-                <p>Connect with other dancers and share your progress.</p>
+                <h4>{% trans "Join Our Community" %}</h4>
+                <p>{% trans "Connect with other dancers and share your progress." %}</p>
             </div>
         </div>
     </div>
     
     <!-- Action Buttons -->
     <div class="action-buttons">
-        <a href="{% url 'programs:explore_programs' %}" class="action-button action-button--primary">
+        <a href="{% url 'courses' %}" class="action-button action-button--primary">
             <i class="fas fa-play" style="margin-right: var(--spacing-sm);"></i>
-            Start Learning Now
+            {% trans "Start Learning Now" %}
         </a>
         
         <a href="{% url 'pricing:my_subscription' %}" class="action-button action-button--secondary">
             <i class="fas fa-user" style="margin-right: var(--spacing-sm);"></i>
-            My Subscription
+            {% trans "My Subscription" %}
         </a>
     </div>
     
     <!-- Support Info -->
     <div class="support-info">
-        <p>Need help getting started? We're here for you!</p>
+        <p>{% trans "Need help getting started? We're here for you!" %}</p>
         <div class="support-links">
             <a href="mailto:support@tioacademy.com">
                 <i class="fas fa-envelope" style="margin-right: var(--spacing-sm);"></i>
                 support@tioacademy.com
             </a>
-            <a href="/contact/">
+            <a href="{% url 'contact' %}">
                 <i class="fas fa-phone" style="margin-right: var(--spacing-sm);"></i>
-                Contact Support
+                {% trans "Contact Support" %}
             </a>
         </div>
     </div>

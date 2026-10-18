@@ -238,27 +238,23 @@ def video_detail(request, style_slug, category_slug, level, video_slug):
 
 @login_required
 def purchase_video(request, video_id):
-    """Handle video purchase (placeholder for future Stripe integration)"""
+    """Start paid access flow for a video. Never grants access without payment."""
     video = get_object_or_404(Video, id=video_id, is_active=True)
-    
+
     if video.is_free:
         messages.info(request, "This video is already free!")
         return redirect(video.get_absolute_url())
-    
-    # Check if user already has access
+
     if UserVideoAccess.objects.filter(user=request.user, video=video).exists():
         messages.info(request, "You already have access to this video!")
         return redirect(video.get_absolute_url())
-    
-    # For now, just create a free access record (in real implementation, integrate with Stripe)
-    UserVideoAccess.objects.create(
-        user=request.user,
-        video=video,
-        payment_id=f"demo_{timezone.now().timestamp()}"
+
+    # Do not invent access records here — paid unlock happens only via Stripe webhook.
+    messages.info(
+        request,
+        "Purchase a subscription or lifetime plan to unlock this video.",
     )
-    
-    messages.success(request, f"Successfully purchased access to '{video.title}'!")
-    return redirect(video.get_absolute_url())
+    return redirect('pricing:pricing_page')
 
 
 def search_programs(request):

@@ -200,7 +200,7 @@
                                         <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" loading="lazy">
                         {% else %}
                                         <div class="video-container" style="width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; position: relative; min-height: 200px;">
-                                            <video muted playsinline preload="metadata" style="width: 100%; height: 100%; object-fit: cover; background: #000;">
+                                            <video muted playsinline webkit-playsinline x5-playsinline preload="metadata" style="width: 100%; height: 100%; object-fit: cover; background: #000;">
                                                 <source src="{{ video.get_media_url }}" type="video/quicktime">
                                                 <source src="{{ video.get_media_url }}" type="video/mp4">
                                             </video>
@@ -352,7 +352,7 @@
             <h3 id="videoTitle">{% trans "Video" %}</h3>
         </div>
         <div class="lightbox-image-container" style="background:#000;">
-            <video id="videoPlayer" style="width:100%; height:100%; outline:none;" controls playsinline></video>
+            <video id="videoPlayer" style="width:100%; height:100%; outline:none;" controls playsinline webkit-playsinline x5-playsinline></video>
         </div>
     </div>
 </div>
@@ -1335,7 +1335,7 @@
                             console.log('Video playing');
                         }).catch(error => {
                             console.error('Error playing video:', error);
-                            showToast('Error playing video', 'error');
+                            showToast((window.TIO_I18N && window.TIO_I18N.videoError) || 'Error playing video', 'error');
                         });
                     } else {
                         video.pause();
@@ -1432,7 +1432,7 @@
                     if (src) {
                         downloadMedia(src, title || 'gallery_item', button);
                     } else {
-                        showToast('No media source available', 'error');
+                        showToast((window.TIO_I18N && window.TIO_I18N.noMedia) || 'No media source available', 'error');
                     }
                 }
             }
@@ -1447,7 +1447,7 @@
             button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             button.disabled = true;
             
-            showToast('Starting download...', 'info');
+            showToast((window.TIO_I18N && window.TIO_I18N.startingDownload) || 'Starting download...', 'info');
             
             // Clean filename
             const filename = sanitizeFilename(title) + getFileExtension(url);
@@ -1464,7 +1464,7 @@
                 link.click();
                 document.body.removeChild(link);
                 
-                showToast('Download started! Check your Downloads folder.', 'success');
+                showToast((window.TIO_I18N && window.TIO_I18N.downloadStarted) || 'Download started! Check your Downloads folder.', 'success');
             } catch (proxyError) {
                 console.log('Proxy download failed, trying direct download:', proxyError);
                 
@@ -1479,7 +1479,7 @@
                 link.click();
                 document.body.removeChild(link);
                 
-                showToast('Download started! Check your Downloads folder.', 'success');
+                showToast((window.TIO_I18N && window.TIO_I18N.downloadStarted) || 'Download started! Check your Downloads folder.', 'success');
             }
             
             // Success feedback
@@ -1497,7 +1497,7 @@
             console.error('Download failed:', error);
             button.innerHTML = originalContent;
             button.disabled = false;
-            showToast('Download failed. Try right-clicking and "Save as..."', 'error');
+            showToast((window.TIO_I18N && window.TIO_I18N.downloadFailed) || 'Download failed. Try right-clicking and "Save as..."', 'error');
         }
     }
     
@@ -1609,7 +1609,7 @@ document.addEventListener('keydown', function(e) {
             const item = currentItems[index];
             const src = item.getAttribute('data-src');
             const title = item.getAttribute('data-title');
-            const description = item.getAttribute('data-description') || 'View gallery content';
+            const description = item.getAttribute('data-description') || ((window.TIO_I18N && window.TIO_I18N.viewGallery) || 'View gallery content');
             const type = item.getAttribute('data-type') || 'image';
             
             console.log('Lightbox data:', { src, title, description, type });
@@ -1633,7 +1633,7 @@ document.addEventListener('keydown', function(e) {
                 image.style.display = 'none';
                 placeholder.style.display = 'flex';
                 placeholder.innerHTML = `
-                    <video id="lightboxVideo" controls style="width: 100%; height: 100%; object-fit: contain; background: #000;">
+                    <video id="lightboxVideo" controls playsinline webkit-playsinline x5-playsinline style="width: 100%; height: 100%; object-fit: contain; background: #000;">
                         <source src="${src}" type="video/quicktime">
                         <source src="${src}" type="video/mp4">
                         Your browser does not support the video tag.
@@ -1650,9 +1650,9 @@ document.addEventListener('keydown', function(e) {
                             placeholder.innerHTML = `
                                 <div class="video-play-overlay" onclick="playLightboxVideo()" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: pointer; text-align: center; color: white;">
                                     <i class="fas fa-play-circle" style="font-size: 4rem; color: var(--color-accent);"></i>
-                                    <div class="placeholder-text">Click to play video</div>
+                                    <div class="placeholder-text">${(window.TIO_I18N && window.TIO_I18N.clickToPlay) || 'Click to play video'}</div>
                                 </div>
-                                <video id="lightboxVideo" style="width: 100%; height: 100%; object-fit: contain; background: #000;">
+                                <video id="lightboxVideo" playsinline webkit-playsinline x5-playsinline style="width: 100%; height: 100%; object-fit: contain; background: #000;">
                                     <source src="${src}" type="video/quicktime">
                                     <source src="${src}" type="video/mp4">
                                 </video>
@@ -1667,9 +1667,9 @@ document.addEventListener('keydown', function(e) {
                 placeholder.style.display = 'none';
             }
             
-            titleEl.textContent = title || 'Gallery Item';
+            titleEl.textContent = title || ((window.TIO_I18N && window.TIO_I18N.galleryItem) || 'Gallery Item');
             descriptionEl.textContent = description;
-            counter.textContent = `${index + 1} of ${currentItems.length}`;
+            counter.textContent = `${index + 1} ${(window.TIO_I18N && window.TIO_I18N.of) || 'of'} ${currentItems.length}`;
             
             // Show lightbox
             lightbox.style.display = 'flex';
@@ -1687,7 +1687,7 @@ document.addEventListener('keydown', function(e) {
         lightbox.className = 'lightbox-modal';
         lightbox.innerHTML = `
             <div class="lightbox-content">
-                <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">
+                <button class="lightbox-close" onclick="closeLightbox()" aria-label="${(window.TIO_I18N && window.TIO_I18N.close) || 'Close'}">
                     <i class="fas fa-times"></i>
                 </button>
                 
@@ -1695,25 +1695,25 @@ document.addEventListener('keydown', function(e) {
                     <img id="lightboxImage" style="display: none; width: 100%; height: 100%; object-fit: contain;" />
                     <div id="lightboxPlaceholder" class="lightbox-placeholder">
                         <i class="fas fa-image"></i>
-                        <div class="placeholder-text">Gallery Item</div>
+                        <div class="placeholder-text">${(window.TIO_I18N && window.TIO_I18N.galleryItem) || 'Gallery Item'}</div>
                     </div>
                     <div class="lightbox-navigation">
-                        <button class="nav-btn" onclick="previousItem()" title="Previous">
+                        <button class="nav-btn" onclick="previousItem()" title="${(window.TIO_I18N && window.TIO_I18N.previous) || 'Previous'}">
                             <i class="fas fa-chevron-left"></i>
                         </button>
-                        <button class="nav-btn" onclick="nextItem()" title="Next">
+                        <button class="nav-btn" onclick="nextItem()" title="${(window.TIO_I18N && window.TIO_I18N.next) || 'Next'}">
                             <i class="fas fa-chevron-right"></i>
                         </button>
                     </div>
                 </div>
                 
                 <div class="lightbox-info">
-                    <h3 id="lightboxTitle">Gallery Item</h3>
-                    <p id="lightboxDescription">View gallery content</p>
+                    <h3 id="lightboxTitle">${(window.TIO_I18N && window.TIO_I18N.galleryItem) || 'Gallery Item'}</h3>
+                    <p id="lightboxDescription">${(window.TIO_I18N && window.TIO_I18N.viewGallery) || 'View gallery content'}</p>
                     <div class="lightbox-meta">
-                        <span id="lightboxCounter">1 of 1</span>
+                        <span id="lightboxCounter">1 ${(window.TIO_I18N && window.TIO_I18N.of) || 'of'} 1</span>
                         <button id="lightboxDownload" class="btn btn-primary" style="margin-left: 20px;" onclick="downloadCurrentItem()">
-                            <i class="fas fa-download"></i> Download
+                            <i class="fas fa-download"></i> ${(window.TIO_I18N && window.TIO_I18N.download) || 'Download'}
                         </button>
                     </div>
                 </div>
@@ -1798,10 +1798,10 @@ document.addEventListener('keydown', function(e) {
             if (src) {
                 downloadMedia(src, title || 'gallery_item', document.getElementById('lightboxDownload'));
             } else {
-                showToast('No media source available', 'error');
+                showToast((window.TIO_I18N && window.TIO_I18N.noMedia) || 'No media source available', 'error');
             }
         } else {
-            showToast('No media available to download', 'error');
+            showToast((window.TIO_I18N && window.TIO_I18N.noMediaDownload) || 'No media available to download', 'error');
         }
     };
     
@@ -1818,7 +1818,7 @@ document.addEventListener('keydown', function(e) {
                 }
             }).catch(error => {
                 console.error('Error playing lightbox video:', error);
-                showToast('Error playing video', 'error');
+                showToast((window.TIO_I18N && window.TIO_I18N.videoError) || 'Error playing video', 'error');
             });
         }
     };

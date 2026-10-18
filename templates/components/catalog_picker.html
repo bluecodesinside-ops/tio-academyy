@@ -1,0 +1,124 @@
+{% load i18n %}
+{% load course_extras %}
+{% if course.sell_as_packets %}
+<section class="catalog-picker catalog-picker--packets" data-page-size="5">
+  <div class="catalog-picker__head">
+    <p class="catalog-picker__lead">{% trans "Click a packet to see its videos and buy it." %}</p>
+  </div>
+  <ul class="catalog-picker__list catalog-picker__list--cards catalog-picker__list--packets">
+    {% for package in catalog_packages %}
+    <li data-packet-item>
+      <a href="{% url 'packet_detail' course.id package.id %}"
+         class="catalog-picker__item catalog-picker__item--card catalog-picker__item--link {% if package.has_catalog_access %}is-owned{% endif %}">
+        <span class="catalog-picker__cover catalog-picker__cover--contain">
+          {% if package.get_cover_url %}
+          <img src="{{ package.get_cover_url }}" alt="{{ package.title }}">
+          {% else %}
+          <span class="catalog-picker__cover-empty"><i class="fas fa-image"></i></span>
+          {% endif %}
+        </span>
+        <span class="catalog-picker__copy">
+          <strong>{% if package.chapter_number %}{{ package.chapter_number }}. {% endif %}{{ package.title }}</strong>
+          <small>{{ package.video_count }} {% trans "videos" %}</small>
+        </span>
+        <span class="catalog-picker__price">
+          {% if package.has_catalog_access %}{% trans "Watch" %}{% else %}{% sale_price package.individual_price %}{% endif %}
+        </span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  <nav class="packet-pager" hidden>
+    <button type="button" class="packet-pager__btn" data-packet-prev>
+      <i class="fas fa-chevron-left"></i> {% trans "Previous" %}
+    </button>
+    <span class="packet-pager__status" data-packet-status></span>
+    <button type="button" class="packet-pager__btn" data-packet-next>
+      {% trans "Next" %} <i class="fas fa-chevron-right"></i>
+    </button>
+  </nav>
+</section>
+{% elif catalog_product and not has_course_access and not has_catalog_bundle %}
+<section id="catalog-picker" class="catalog-picker catalog-picker--package"
+         data-product-id="{{ catalog_product.id }}"
+         data-kind="{{ catalog_product.kind }}"
+         data-currency="{{ catalog_product.currency }}"
+         data-bundle-price="{{ catalog_product.bundle_price }}"
+         data-bundle-enabled="{% if catalog_product.bundle_enabled %}1{% else %}0{% endif %}">
+  {% csrf_token %}
+    <div class="catalog-picker__head">
+      <div>
+        <h2 class="catalog-picker__title">{% trans "Course videos" %}</h2>
+        <p class="catalog-picker__lead">{% trans "Click the dances you want. Buy 1, a few, or the full package." %}</p>
+      </div>
+      <div class="catalog-picker__toolbar">
+        <button type="button" class="catalog-picker__text-btn" data-select-all>{% trans "Select all" %}</button>
+        <button type="button" class="catalog-picker__text-btn" data-select-none>{% trans "Clear" %}</button>
+      </div>
+    </div>
+    <ul class="catalog-picker__list catalog-picker__list--cards">
+      {% for asset in catalog_assets %}
+      <li>
+        {% if asset.session and asset.has_catalog_access or asset.session and asset.session.is_free_preview %}
+        <a href="{% url 'course_detail' course.id %}?session={{ asset.session.id }}"
+           class="catalog-picker__item catalog-picker__item--card catalog-picker__item--video catalog-picker__item--link is-owned is-selected">
+          <span class="catalog-picker__cover">
+            {% if asset.get_cover_url %}
+            <img src="{{ asset.get_cover_url }}" alt="{% firstof asset.session.title asset.title %}">
+            {% else %}
+            <span class="catalog-picker__cover-empty"><i class="fas fa-play"></i></span>
+            {% endif %}
+            <span class="catalog-picker__mark" aria-hidden="true"><i class="fas fa-check"></i></span>
+            <span class="catalog-picker__play"><i class="fas fa-play"></i></span>
+          </span>
+          <span class="catalog-picker__copy">
+            <strong>{% firstof asset.session.title asset.title %}</strong>
+            <small>
+              {% if asset.has_catalog_access %}{% trans "Owned" %} · {% trans "Watch" %}{% else %}{% trans "Free preview" %}{% endif %}
+            </small>
+          </span>
+        </a>
+        {% else %}
+        <label class="catalog-picker__item catalog-picker__item--card catalog-picker__item--video {% if asset.has_catalog_access %}is-owned is-selected{% endif %}">
+          <input type="checkbox" name="media_asset_ids" value="{{ asset.id }}"
+                 {% if asset.has_catalog_access %}checked disabled{% endif %}>
+          <span class="catalog-picker__cover">
+            {% if asset.get_cover_url %}
+            <img src="{{ asset.get_cover_url }}" alt="{% firstof asset.session.title asset.title %}">
+            {% else %}
+            <span class="catalog-picker__cover-empty"><i class="fas fa-play"></i></span>
+            {% endif %}
+            <span class="catalog-picker__mark" aria-hidden="true"><i class="fas fa-check"></i></span>
+            <span class="catalog-picker__play"><i class="fas fa-play"></i></span>
+          </span>
+          <span class="catalog-picker__copy">
+            <strong>{% firstof asset.session.title asset.title %}</strong>
+            <small>
+              {% if asset.has_catalog_access %}{% trans "Owned" %}{% else %}{% trans "Locked" %}{% endif %}
+            </small>
+          </span>
+        </label>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% for tier in catalog_tiers %}
+    <span hidden data-dance-tier data-count="{{ tier.video_count }}" data-price="{{ tier.price }}"></span>
+    {% endfor %}
+    <div class="catalog-picker__buybar">
+      <div class="catalog-picker__total">
+        <span>{% trans "Selected total" %}: <strong data-selected-total>€0</strong></span>
+        <span class="catalog-picker__hint">
+          {% for tier in catalog_tiers %}
+            {{ tier.video_count }} {% trans "video" %}{{ tier.video_count|pluralize }} {% sale_price tier.price %}{% if not forloop.last %} · {% endif %}
+          {% endfor %}
+        </span>
+      </div>
+      <div class="catalog-picker__actions">
+        <button type="button" class="purchase-btn primary" data-buy-selected-videos>
+          {% trans "Buy selected videos" %}
+        </button>
+      </div>
+    </div>
+</section>
+{% endif %}

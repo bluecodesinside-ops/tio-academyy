@@ -2,7 +2,7 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}Payment Cancelled - Tio Academy{% endblock %}
+{% block title %}{% trans "Payment Cancelled" %} - {% trans "Tio Academy" %}{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -229,53 +229,53 @@
     </div>
     
     <!-- Cancel Message -->
-    <h1 class="cancel-title">Payment Cancelled</h1>
+    <h1 class="cancel-title">{% trans "Payment Cancelled" %}</h1>
     <p class="cancel-message">
-        No worries! Your payment was cancelled and you haven't been charged.
+        {% trans "No worries! Your payment was cancelled and you haven't been charged." %}
     </p>
     
     <!-- Why Cancel? -->
     <div class="reasons-section">
-        <h3 class="reasons-title">Why did you cancel?</h3>
+        <h3 class="reasons-title">{% trans "Why did you cancel?" %}</h3>
         <p class="reasons-description">
-            We'd love to understand what we can improve. Here are some common reasons:
+            {% trans "We'd love to understand what we can improve. Here are some common reasons:" %}
         </p>
         
         <ul class="reasons-list">
-            <li>Changed your mind about the package</li>
-            <li>Found a better deal elsewhere</li>
-            <li>Need more time to decide</li>
-            <li>Technical issues during checkout</li>
-            <li>Want to try a different package</li>
-            <li>Budget concerns</li>
+            <li>{% trans "Changed your mind about the package" %}</li>
+            <li>{% trans "Found a better deal elsewhere" %}</li>
+            <li>{% trans "Need more time to decide" %}</li>
+            <li>{% trans "Technical issues during checkout" %}</li>
+            <li>{% trans "Want to try a different package" %}</li>
+            <li>{% trans "Budget concerns" %}</li>
         </ul>
     </div>
     
     <!-- What's Next -->
     <div class="next-steps">
-        <h3 class="next-steps__title">What's Next?</h3>
+        <h3 class="next-steps__title">{% trans "What's Next?" %}</h3>
         
         <div class="next-step">
             <div class="next-step__number">1</div>
             <div class="next-step__content">
-                <h4>Try Our Free Content</h4>
-                <p>Explore our free videos to see what we offer before committing.</p>
+                <h4>{% trans "Try Our Free Content" %}</h4>
+                <p>{% trans "Explore our free videos to see what we offer before committing." %}</p>
             </div>
         </div>
         
         <div class="next-step">
             <div class="next-step__number">2</div>
             <div class="next-step__content">
-                <h4>Contact Us</h4>
-                <p>Have questions? We're here to help you find the right plan.</p>
+                <h4>{% trans "Contact Us" %}</h4>
+                <p>{% trans "Have questions? We're here to help you find the right plan." %}</p>
             </div>
         </div>
         
         <div class="next-step">
             <div class="next-step__number">3</div>
             <div class="next-step__content">
-                <h4>Come Back Anytime</h4>
-                <p>You can always return to complete your purchase when you're ready.</p>
+                <h4>{% trans "Come Back Anytime" %}</h4>
+                <p>{% trans "You can always return to complete your purchase when you're ready." %}</p>
             </div>
         </div>
     </div>
@@ -284,26 +284,26 @@
     <div class="action-buttons">
         <a href="{% url 'pricing:pricing_page' %}" class="action-button action-button--primary">
             <i class="fas fa-arrow-left" style="margin-right: var(--spacing-sm);"></i>
-            Back to Pricing
+            {% trans "Back to Pricing" %}
         </a>
         
-        <a href="{% url 'programs:explore_programs' %}" class="action-button action-button--secondary">
+        <a href="{% url 'courses' %}" class="action-button action-button--secondary">
             <i class="fas fa-play" style="margin-right: var(--spacing-sm);"></i>
-            Try Free Content
+            {% trans "Try Free Content" %}
         </a>
     </div>
     
     <!-- Support Info -->
     <div class="support-info">
-        <p>Need help choosing the right plan? We're here to help!</p>
+        <p>{% trans "Need help choosing the right plan? We're here to help!" %}</p>
         <div class="support-links">
             <a href="mailto:support@tioacademy.com">
                 <i class="fas fa-envelope" style="margin-right: var(--spacing-sm);"></i>
                 support@tioacademy.com
             </a>
-            <a href="/contact/">
+            <a href="{% url 'contact' %}">
                 <i class="fas fa-phone" style="margin-right: var(--spacing-sm);"></i>
-                Contact Support
+                {% trans "Contact Support" %}
             </a>
         </div>
     </div>

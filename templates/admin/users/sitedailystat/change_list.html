@@ -1,0 +1,68 @@
+{% extends "admin/change_list.html" %}
+
+{% block content %}
+{% include "admin/users/sitedailystat/_insight_styles.html" %}
+<div class="insight-board">
+<div class="insight-cards">
+  {% for label, row in traffic_cards %}
+  <div class="insight-card">
+    <div class="k">{{ label }}</div>
+    <div class="v">{{ row.unique_visitors }}</div>
+    <div class="s">
+      {{ row.page_views }} page opens<br>
+      {{ row.buy_clicks }} clicked buy<br>
+      {{ row.purchases }} bought
+    </div>
+  </div>
+  {% endfor %}
+  <div class="insight-card total">
+    <div class="k">Bought in total</div>
+    <div class="v">{{ traffic.purchases_ever }}</div>
+    <div class="s">All recorded payments, including before this counter started.</div>
+  </div>
+</div>
+
+{% include "admin/users/sitedailystat/_top_list.html" with toplist_tabs=overview.toplist_tabs %}
+
+<div class="insight-cal">
+  <div class="insight-cal-nav">
+    <a href="?cal={{ calendar.prev }}">&larr;</a>
+    <strong>{{ calendar.title }}</strong>
+    <a href="?cal={{ calendar.next }}">&rarr;</a>
+  </div>
+  <p>Click a date to see countries, devices, pages, clicks, and what people paid that day.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for week in calendar.weeks %}
+      <tr>
+        {% for cell in week %}
+        <td>
+          {% if cell.in_month %}
+            <a href="{% url 'admin:users_sitedailystat_day' cell.iso %}"
+               class="{% if cell.is_today %}is-today{% endif %} {% if cell.has_data %}is-busy{% endif %}">
+              {{ cell.date.day }}
+            </a>
+          {% else %}
+            <span class="mute">{{ cell.date.day }}</span>
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="insight-actions">
+  <a class="xls" href="{% url 'admin:users_sitedailystat_export_excel' %}">Download all Excel</a>
+  <a class="pdf" href="{% url 'admin:users_sitedailystat_export_pdf' %}">Download all PDF</a>
+</div>
+<p class="insight-note">Gold days have traffic. Click a date for that day’s countries, devices, pages, clicks, and payments. Excel/PDF include all of this.</p>
+</div>
+{{ block.super }}
+{% endblock %}

@@ -6,339 +6,113 @@
 {% block title %}{{ course.title|default:_("Course") }} - {% trans "Tio Academy" %}{% endblock %}
 
 {% block content %}
-<div class="course-platform">
-    <!-- Course Header with Multi-Gradient Background -->
-    <header class="course-header">
-        <div class="course-header__background">
-            <div class="gradient-overlay"></div>
-            <div class="hero-pattern"></div>
-            </div>
-        
-        <div class="course-header__content">
-            <div class="course-badge-container">
-                <span class="premium-badge">
-                    <i class="fas fa-crown"></i>
-                    {% trans "Premium Course" %}
-                </span>
-                <span class="quality-badge">
-                    <i class="fas fa-hd-video"></i>
-                    {% trans "4K Streaming" %}
-                </span>
-                <span class="streaming-badge">
-                    <i class="fas fa-shield-alt"></i>
-                    {% trans "Stream Only" %}
-                </span>
-        </div>
-        
-            <h1 class="course-title gradient-text">
-                {{ course.title }}
-            </h1>
-                
-                <div class="course-meta">
-                <div class="instructor-info">
-                    <div class="instructor-avatar">
-                        <img src="{% if course.instructor.avatar %}{{ course.instructor.avatar.url }}{% else %}/static/images/instructor-default.jpg{% endif %}" alt="Instructor">
-                    </div>
-                    <div class="instructor-details">
-                        <span class="instructor-name">{{ course.instructor.name|default:_("Tio Academy Expert") }}</span>
-                        <span class="instructor-title">{{ course.instructor.title|default:_("Professional Dance Instructor") }}</span>
-                    </div>
-                </div>
-                
-                <div class="course-stats">
-                    <div class="stat-item">
-                        <i class="fas fa-users"></i>
-                        <span>{{ course.enrolled_students.count|default:"0" }} {% trans "students" %}</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-clock"></i>
-                        <span>{{ course.get_total_duration }} {% trans "total" %}</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-star"></i>
-                        <span>{{ course.rating }} ({{ course.reviews.count|default:"0" }} {% trans "reviews" %})</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-play-circle"></i>
-                        <span>{{ course.get_total_sessions }} {% trans "sessions" %}</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Course Purchase Section -->
-            <div class="course-purchase">
-                {% if course.price == 0 or has_premium_access %}
-                    <div class="purchase-status purchased">
-                        <i class="fas fa-check-circle"></i>
-                        <span>{% if course.price == 0 %}{% trans "Free Course - Full Access" %}{% else %}{% trans "Course Purchased" %}{% endif %}</span>
-                    </div>
-                    
-                    <div class="progress-section">
-                        <div class="progress-info">
-                            <span class="progress-label">Your Progress</span>
-                            <span class="progress-percentage">{{ course.progress_percentage|default:45 }}%</span>
-                        </div>
-                        <div class="progress-bar-wrapper">
-                            <div class="progress-bar" style="width: {{ course.progress_percentage|default:45 }}%;">
-                                <div class="progress-glow"></div>
-                            </div>
-                        </div>
-                        <div class="progress-message">
-                            {{ course.progress_message|default:"Great progress! You're mastering the fundamentals." }}
-                        </div>
-                    </div>
-                                {% else %}
-                        <div class="purchase-options">
-                            {% if course.price == 0 %}
-                                <div class="free-course-section">
-                                    <div class="free-badge">
-                                        <i class="fas fa-gift"></i>
-                                        <span>{% trans "FREE COURSE" %}</span>
-                        </div>
-                                    <div class="free-features">
-                                        <ul>
-                                            <li><i class="fas fa-play"></i> {{ course.get_total_sessions }} {% trans "Video Lessons" %}</li>
-                                            <li><i class="fas fa-clock"></i> {{ course.get_total_duration }} {% trans "of Content" %}</li>
-                                            <li><i class="fas fa-mobile-alt"></i> {% trans "Mobile & Desktop Access" %}</li>
-                                            <li><i class="fas fa-certificate"></i> {% trans "Certificate of Completion" %}</li>
-                                        </ul>
-                    </div>
-                                    <div class="free-actions">
-                                        <button class="start-free-btn" onclick="startFreeCourse({{ course.id }})">
-                                            <i class="fas fa-play"></i>
-                                            {% trans "Start Free Course" %}
-                                        </button>
-                                    </div>
-                                </div>
-                            {% else %}
-                                <div class="price-section">
-                                    <div class="price-info">
-                                        <span class="current-price">${{ course.price }}</span>
-                                        {% if course.original_price %}
-                                            <span class="original-price">${{ course.original_price }}</span>
-                                            <span class="discount-badge">{{ course.discount_percentage }}% OFF</span>
-                                        {% endif %}
-                                    </div>
-                                    <div class="price-features">
-                                        <ul>
-                                            <li><i class="fas fa-infinity"></i> Lifetime Access</li>
-                                            <li><i class="fas fa-mobile-alt"></i> Mobile & Desktop</li>
-                                            <li><i class="fas fa-certificate"></i> Certificate of Completion</li>
-                                            <li><i class="fas fa-headset"></i> 24/7 Support</li>
-                                        </ul>
-                    </div>
-                </div>
+<div class="course-platform{% if course.sell_as_packets %} course-platform--packets{% endif %}">
+    {% if course.image %}
+    <section class="course-cover-banner" aria-label="{% trans 'Course cover' %}">
+        <img src="{{ course.image.url }}" alt="{{ course.title }}" class="course-cover-banner__img">
+    </section>
+    {% endif %}
 
-                                <div class="purchase-actions">
-                                    <button class="purchase-btn primary" onclick="handleSubscriptionCheckout()">
-                                        <i class="fas fa-sync-alt"></i>
-                                        {% trans "Subscribe" %}
-                                    </button>
-                                    <button class="purchase-btn primary" onclick="handleLifetimeCheckout()" style="margin-left: 10px;">
-                                        <i class="fas fa-infinity"></i>
-                                        {% trans "Buy Lifetime" %}
-                                    </button>
-                                    <button class="purchase-btn secondary" onclick="addToWishlist({{ course.id }})">
-                                        <i class="fas fa-heart"></i>
-                                        {% trans "Add to Wishlist" %}
-                                    </button>
-                                </div>
-                                
-                                <div class="guarantee-badge">
-                                    <i class="fas fa-shield-check"></i>
-                                    <span>30-Day Money Back Guarantee</span>
-            </div>
-                            {% endif %}
-                    </div>
+    <header class="course-header course-header--minimal">
+        <div class="course-header__content">
+            <h1 class="course-title">{{ course.title }}</h1>
+
+            {% if course.price == 0 and not course.sell_as_packets %}
+                <p class="course-access-note">{% trans "Free course — full access" %}</p>
+            {% elif course.sell_as_packets %}
+                {% if current_session and current_session.is_free_preview %}
+                <div class="packet-course-preview">
+                    {% include "components/course_video_player.html" with session=current_session %}
+                    <p class="packet-course-preview__label">
+                        {{ current_session.title }}
+                        <span class="preview-badge">{% trans "FREE PREVIEW" %}</span>
+                    </p>
+                    {% if preview_sessions|length > 1 %}
+                    <ul class="packet-free-list">
+                        {% for session in preview_sessions %}
+                        <li>
+                            <a href="{% url 'course_detail' course.id %}?preview={{ session.id }}"
+                               class="packet-free-list__item {% if current_session.id == session.id %}is-current{% endif %}">
+                                {{ session.title }}
+                                <span class="preview-badge">{% trans "FREE PREVIEW" %}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
                 {% endif %}
-            </div>
+                {% include "components/catalog_picker.html" %}
+            {% elif catalog_product and not catalog_assets %}
+                {% include "components/catalog_picker.html" %}
+            {% elif not has_premium_access and not catalog_product %}
+                <div class="course-unlock-cta">
+                    <button class="purchase-btn primary" type="button" onclick="purchaseCourseWithStripe({{ course.id }})">
+                        <i class="fas fa-unlock"></i>
+                        {% trans "Unlock for" %} {% sale_price course.price %}
+                    </button>
+                </div>
+            {% endif %}
         </div>
     </header>
 
-    <!-- Main Course Content -->
+    {% if not course.sell_as_packets %}
     <main class="course-main">
-        <div class="course-layout">
-            <!-- Video Player Area (75%) -->
+        <div class="course-layout{% if catalog_assets and not has_course_access and not has_catalog_bundle %} course-layout--solo{% endif %}">
             <section class="video-section">
                 {% if current_session %}
-                    {% if current_session.is_free_preview or course.price == 0 or has_premium_access %}
+                    {% with cover_url=current_session.get_cover_url %}
+                    {% if current_session.is_free_preview or course.price == 0 or has_premium_access or current_session.has_access %}
                     <div class="video-container">
-                        <!-- Debug Info -->
-                        <div style="background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px;">
-                            <strong>Debug Info (Cache Cleared):</strong><br>
-                            Current Session: {{ current_session.title|default:"None" }}<br>
-                            Video File: {{ current_session.video_file|default:"None" }}<br>
-                            Video URL: {{ current_session.video_url|default:"None" }}<br>
-                            Is YouTube: {{ current_session.video_url|is_youtube_url|default:"False" }}<br>
-                            Embed URL: {{ current_session.video_url|youtube_embed_url|default:"None" }}<br>
-                            <br>
-                            <strong>Template Logic:</strong><br>
-                            {% if current_session.video_file %}
-                                Using: Video File ({{ current_session.video_file.url }})
-                            {% elif current_session.video_url and current_session.video_url|is_youtube_url %}
-                                Using: YouTube Embed ({{ current_session.video_url|youtube_embed_url }})
-                            {% elif current_session.video_url %}
-                                Using: Direct Video URL ({{ current_session.video_url }})
-                            {% else %}
-                                Using: Fallback Sample Video
-                            {% endif %}
-                        </div>
-                        <div class="video-wrapper">
-                            {% if current_session.video_file %}
-                                <video id="course-video" class="course-video" controls preload="metadata" controlsList="nodownload" width="100%" height="100%">
-                                    <source src="{{ current_session.video_file.url }}" type="video/mp4">
-                                    <source src="{{ current_session.video_file.url }}" type="video/webm">
-                                    <source src="{{ current_session.video_file.url }}" type="video/ogg">
-                                    Your browser does not support the video tag.
-                                </video>
-                            {% elif current_session.video_url and current_session.video_url|is_youtube_url %}
-                                <iframe id="course-video" class="course-video youtube-video" 
-                                        src="{{ current_session.video_url|youtube_embed_url }}" 
-                                        frameborder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                        allowfullscreen
-                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                </iframe>
-                                <div style="display:none; background:#f0f0f0; padding:20px; text-align:center; border-radius:8px;">
-                                    <h3>Video Loading Issue</h3>
-                                    <p>There was a problem loading the video. Please try:</p>
-                                    <ul style="text-align:left; display:inline-block;">
-                                        <li>Refreshing the page</li>
-                                        <li>Using a different browser</li>
-                                        <li>Checking your internet connection</li>
-                                    </ul>
-                                    <p><a href="{{ current_session.video_url }}" target="_blank" style="color:#007bff;">Watch on YouTube instead</a></p>
-                                </div>
-                            {% elif current_session.video_url %}
-                                <video id="course-video" class="course-video" controls preload="metadata" controlsList="nodownload">
-                                    <source src="{{ current_session.video_url }}" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
-                            {% else %}
-                                <video id="course-video" class="course-video" controls preload="metadata" controlsList="nodownload">
-                                    <source src="/static/videos/sample-course.mp4" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
-                            {% endif %}
-                            
-                            <!-- Streaming Protection Overlay -->
-                            <div class="streaming-protection">
-                                <div class="protection-message">
-                                    <i class="fas fa-shield-alt"></i>
-                                    <span>Protected Streaming Content</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Custom Video Controls Overlay -->
-                            <div class="video-controls-overlay" id="video-controls">
-                                <button class="play-pause-btn" id="play-pause">
-                                    <i class="fas fa-play"></i>
-                    </button>
-                                <div class="video-progress-container">
-                                    <div class="video-progress" id="video-progress">
-                                        <div class="video-progress-filled" id="progress-filled"></div>
-                </div>
-                                    <span class="video-time">
-                                        <span id="current-time">0:00</span> / <span id="duration">0:00</span>
-                                    </span>
-            </div>
-                                <div class="video-controls-right">
-                                    <button class="volume-btn" id="volume-btn">
-                                        <i class="fas fa-volume-up"></i>
-                                    </button>
-                                    <button class="settings-btn" id="settings-btn">
-                                        <i class="fas fa-cog"></i>
-                                    </button>
-                                    <button class="fullscreen-btn" id="fullscreen-btn">
-                                        <i class="fas fa-expand"></i>
-                                    </button>
-        </div>
-    </div>
-                </div>
+                        {% include "components/course_video_player.html" with session=current_session %}
 
-                        <!-- Video Info Panel -->
                         <div class="video-info-panel">
                             <div class="current-lesson-info">
-                                <h3 class="lesson-title">{{ current_session.title|default:"Select a session to begin" }}</h3>
-                                <p class="lesson-description">{{ current_session.description|default:"Choose a session from the sidebar to start learning." }}</p>
-                                <div class="session-meta">
-                                    <span class="session-duration-info">
-                                        <i class="fas fa-clock"></i>
-                                        {{ current_session.duration|default:"20" }} minutes
-                                    </span>
-                                    <span class="session-level">
-                                        <i class="fas fa-layer-group"></i>
-                                        {{ current_session.level.name|default:"Level" }}
-                                    </span>
-                    </div>
-                </div>
-
-                            <div class="video-actions">
-                                <button class="action-btn primary" id="mark-complete">
-                                    <i class="fas fa-check"></i>
-                                    Mark Complete
-                                </button>
-                                <button class="action-btn secondary" id="take-notes">
-                                    <i class="fas fa-sticky-note"></i>
-                                    Take Notes
-                                </button>
-                                <button class="action-btn secondary" id="download-resources">
-                                    <i class="fas fa-file-pdf"></i>
-                                    PDF Resources
-                                </button>
-                                    </div>
-                                </div>
-                    </div>
-                                            {% else %}
-                    <!-- Course Preview for Non-Purchasers -->
-                    <div class="course-preview">
-                        <div class="preview-container">
-                            <div class="preview-video">
-                                {% if course.preview_video_file %}
-                                    <video controls preload="metadata" controlsList="nodownload">
-                                        <source src="{{ course.preview_video_file.url }}" type="video/mp4">
-                                        Your browser does not support the video tag.
-                                    </video>
-                                {% elif course.preview_video_url %}
-                                    <video controls preload="metadata" controlsList="nodownload">
-                                        <source src="{{ course.preview_video_url }}" type="video/mp4">
-                                        Your browser does not support the video tag.
-                                    </video>
-                                {% else %}
-                                    <div class="no-preview">
-                                        <div class="course-thumbnail">
-                                            {% if course.image %}
-                                                <img src="{{ course.image.url }}" alt="{{ course.title }}">
-                                            {% else %}
-                                                <div class="placeholder-image">
-                                                    <i class="fas fa-music"></i>
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                        </div>
-                                            {% endif %}
-                                <div class="preview-overlay">
-                                    <div class="preview-content">
-                                        <h3>{% trans "Course Preview" %}</h3>
-                                        <p>{% trans "Get a taste of what you'll learn in" %} {{ course.title }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            
-                            <div class="locked-content-message">
-                                <div class="lock-icon">
-                                    <i class="fas fa-lock"></i>
+                                <h3 class="lesson-title">{{ current_session.title|default:"Select a session to begin" }}
+                                    {% if current_session.is_free_preview %}
+                                        <span class="preview-badge">{% trans "FREE PREVIEW" %}</span>
+                                    {% endif %}
+                                </h3>
+                                {% if current_session.description %}
+                                <p class="lesson-description">{{ current_session.description }}</p>
+                                {% endif %}
                             </div>
-                                <h3>{% trans "Premium Content Locked" %}</h3>
-                                <p>{% trans "Purchase" %} "{{ course.title }}" {% trans "to access all" %} {{ course.get_total_sessions }} {% trans "lessons and features" %}</p>
-                                <button class="unlock-btn" onclick="purchaseCourseWithStripe({{ course.id }})">
-                                    <i class="fas fa-credit-card"></i>
-                                    {% trans "Unlock Course for" %} ${{ course.price }}
-                                </button>
                         </div>
                     </div>
-                </div>
+                    {% else %}
+                    <div class="course-preview">
+                        <div class="preview-container">
+                            <div class="preview-video locked-player">
+                                {% if cover_url %}
+                                    <img class="locked-player__cover" src="{{ cover_url }}" alt="{{ current_session.title }}">
+                                {% elif course.image %}
+                                    <img class="locked-player__cover" src="{{ course.image.url }}" alt="{{ course.title }}">
+                                {% else %}
+                                    <div class="placeholder-image"><i class="fas fa-music"></i></div>
+                                {% endif %}
+                                <div class="preview-overlay">
+                                    <div class="preview-content">
+                                        <i class="fas fa-lock"></i>
+                                        <h3>{% trans "Premium Content Locked" %}</h3>
+                                        <p>{% if catalog_product %}{% trans "Choose packages above to unlock this video." %}{% else %}{% trans "Purchase to unlock this video and the rest of" %} {{ course.title }}{% endif %}</p>
+                                        {% if catalog_product %}
+                                        <button class="unlock-btn" type="button" onclick="document.getElementById('catalog-picker') && document.getElementById('catalog-picker').scrollIntoView({behavior:'smooth'})">
+                                            <i class="fas fa-list"></i>
+                                            {% trans "Choose packages" %}
+                                        </button>
+                                        {% else %}
+                                        <button class="unlock-btn" type="button" onclick="purchaseCourseWithStripe({{ course.id }})">
+                                            <i class="fas fa-credit-card"></i>
+                                            {% trans "Unlock Course for" %} {% sale_price course.price %}
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     {% endif %}
+                    {% endwith %}
                 {% else %}
                     <div class="no-video-message">
                         <p>{% trans "Select a session from the sidebar to start watching." %}</p>
@@ -346,400 +120,199 @@
                 {% endif %}
             </section>
 
-            <!-- Lesson Sidebar (25%) -->
+            {% if not catalog_assets or has_course_access or has_catalog_bundle or has_any_catalog_access %}
             <aside class="lesson-sidebar">
                 <div class="sidebar-header">
-                    <h2 class="sidebar-title">{% trans "Course Content" %}</h2>
+                    <h2 class="sidebar-title">{% trans "Course Videos" %}</h2>
                     {% if course.price == 0 or has_premium_access %}
                         <div class="completion-stats">
                             <span class="completed-count">{{ user_completed_sessions|default:0 }}</span>
-                            <span class="total-count">/ {{ course.get_total_sessions }} {% trans "completed" %}</span>
-                    </div>
+                            <span class="total-count">/ {{ sessions|length }} {% trans "videos" %}</span>
+                        </div>
                     {% else %}
                         <div class="locked-indicator">
                             <i class="fas fa-lock"></i>
                             <span>{% trans "Purchase to unlock" %}</span>
-                </div>
+                        </div>
                     {% endif %}
-            </div>
+                </div>
 
                 <div class="course-levels">
-                    {% for level in course.levels.all %}
-                        <div class="level-section {% if course.price > 0 and not has_premium_access %}locked-level{% endif %}" data-level="{{ level.name|lower }}">
-                            <div class="level-header {{ level.name|lower }}-level">
-                                <div class="level-info">
-                                    <h3 class="level-title">
-                                        {% if level.name == "Beginner" %}
-                                            <i class="fas fa-play-circle"></i>
-                                        {% elif level.name == "Intermediate" %}
-                                            <i class="fas fa-star"></i>
+                    <div class="level-section" data-level="videos">
+                        <div class="level-sessions">
+                            {% for session in sessions %}
+                                {% with thumb=session.get_cover_url %}
+                                <div class="session-item {% if current_session and session.id == current_session.id %}current{% endif %} {% if session.has_access %}{% if session.user_progress and session.user_progress.completed %}completed{% else %}available{% endif %}{% else %}locked{% endif %}"
+                                     data-session="{{ session.id }}"
+                                     {% if session.has_access %}data-video-url="{% if session.video_file %}{{ session.video_file.url }}{% else %}{{ session.video_url }}{% endif %}"{% endif %}
+                                     data-title="{{ session.title }}"
+                                     data-description="{{ session.description }}"
+                                     data-duration="{{ session.duration }}"
+                                     data-cover="{% if thumb %}{{ thumb }}{% endif %}"
+                                     {% if session.has_access %}
+                                     onclick="window.location.href='{% url 'course_detail' course.id %}?session={{ session.id }}'"
+                                     style="cursor: pointer;"
+                                     {% elif catalog_product %}
+                                     onclick="document.getElementById('catalog-picker') && document.getElementById('catalog-picker').scrollIntoView({behavior:'smooth'})"
+                                     style="cursor: pointer;"
+                                     {% else %}
+                                     onclick="purchaseCourseWithStripe({{ course.id }})"
+                                     style="cursor: pointer;"
+                                     {% endif %}>
+                                    <div class="session-thumb">
+                                        {% if thumb %}
+                                            <img src="{{ thumb }}" alt="" loading="lazy">
                                         {% else %}
-                                            <i class="fas fa-crown"></i>
+                                            <div class="session-thumb__placeholder"><i class="fas fa-video"></i></div>
                                         {% endif %}
-                                        {{ level.name }} Level
-                                    </h3>
-                                    <span class="level-duration">{{ level.sessions.count }} lessons • {{ level.get_total_duration|default:"1h 20m" }}</span>
-                        </div>
-                                {% if course.price == 0 or has_premium_access %}
-                                    <div class="level-progress">
-                                        <div class="level-progress-bar">
-                                            <div class="level-progress-fill" style="width: {{ level.progress_percentage|default:0 }}%;"></div>
-                        </div>
-                                        <span class="level-percentage">{{ level.progress_percentage|default:0 }}%</span>
-                        </div>
-                                {% else %}
-                                    <div class="level-lock">
-                                        <i class="fas fa-lock"></i>
-                        </div>
-                                {% endif %}
-                </div>
-
-                            <div class="level-sessions">
-                                {% for session in level.sessions.all %}
-                                    <div class="session-item {% if session.has_access %}{% if session.user_progress.is_completed %}completed{% elif session.is_free_preview %}current{% else %}available{% endif %}{% else %}locked{% endif %}" 
-                                         data-session="{{ session.id }}"
-                                         data-video-url="{% if session.video_file %}{{ session.video_file.url }}{% else %}{{ session.video_url }}{% endif %}"
-                                         data-title="{{ session.title }}"
-                                         data-description="{{ session.description }}"
-                                         data-duration="{{ session.duration }}"
-                                         {% if not session.has_access %}onclick="{% if user.is_authenticated %}window.location.href='{% url 'users:dashboard' %}';{% else %}window.location.href='{% url 'users:login' %}';{% endif %}" style="cursor: pointer;"{% endif %}>
-                                        <div class="session-status">
+                                        <span class="session-thumb__status">
                                             {% if not session.has_access %}
                                                 <i class="fas fa-lock"></i>
-                                            {% elif session.user_progress.is_completed %}
-                                                <i class="fas fa-check-circle"></i>
-                                            {% elif session.is_free_preview %}
-                                                <i class="fas fa-play-circle"></i>
+                                            {% elif session.user_progress.completed %}
+                                                <i class="fas fa-check"></i>
                                             {% else %}
-                                                <i class="fas fa-circle"></i>
+                                                <i class="fas fa-play"></i>
                                             {% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="session-info">
+                                        <h4 class="session-title">
+                                            {{ session.order }}. {{ session.title }}
+                                            {% if session.is_free_preview %}
+                                                <span class="preview-badge">{% trans "FREE PREVIEW" %}</span>
+                                            {% elif not session.has_access %}
+                                                <span class="locked-badge">{% trans "LOCKED" %}</span>
+                                            {% endif %}
+                                        </h4>
+                                    </div>
+                                </div>
+                                {% endwith %}
+                            {% empty %}
+                                <div class="no-content-message">
+                                    <i class="fas fa-info-circle"></i>
+                                    <p>{% trans "Course videos are being prepared. Please check back soon!" %}</p>
+                                </div>
+                            {% endfor %}
                         </div>
-                                        <div class="session-info">
-                                            <h4 class="session-title">
-                                                {{ session.title }}
-                                                {% if session.is_free_preview %}
-                                                    <span class="preview-badge">FREE PREVIEW</span>
-                                                {% elif not session.has_access %}
-                                                    <span class="locked-badge">LOCKED</span>
-                                                {% endif %}
-                                            </h4>
-                                            <span class="session-duration">{{ session.duration }} min</span>
                     </div>
-                </div>
-                                {% endfor %}
-                        </div>
-                        </div>
-                    {% empty %}
-                        <!-- Fallback message if no levels exist -->
-                        <div class="no-content-message">
-                            <i class="fas fa-info-circle"></i>
-                            <p>{% trans "Course content is being prepared. Please check back soon!" %}</p>
-                    </div>
-                    {% endfor %}
                 </div>
 
-                <!-- Sidebar Footer -->
                 <div class="sidebar-footer">
                     {% if course.price == 0 or has_premium_access %}
-                        <button class="continue-btn">
+                        <button class="continue-btn" type="button" onclick="window.location.href='{% url 'course_detail' course.id %}{% if first_session %}?session={{ first_session.id }}{% endif %}'">
                             <i class="fas fa-play"></i>
                             {% if course.price == 0 %}{% trans "Start Learning" %}{% else %}{% trans "Continue Learning" %}{% endif %}
                         </button>
-                        
                         <div class="encouragement-message">
-                            <p>{% if course.price == 0 %}🎉 {% trans "Enjoy this free course!" %}{% else %}🔥 {% trans "You're on fire! Keep up the momentum." %}{% endif %}</p>
+                            <p>{% if course.price == 0 %}{% trans "Enjoy this free course!" %}{% else %}{% trans "All videos unlocked for this course." %}{% endif %}</p>
+                        </div>
+                    {% elif catalog_product %}
+                        <button class="purchase-sidebar-btn" type="button" onclick="document.getElementById('catalog-picker') && document.getElementById('catalog-picker').scrollIntoView({behavior:'smooth'})">
+                            <i class="fas fa-unlock"></i>
+                            {% trans "Choose what to buy" %}
+                        </button>
+                        <div class="preview-message">
+                            <p>{% trans "Pick any videos or packages, or buy all of them." %}</p>
                         </div>
                     {% else %}
-                        <button class="purchase-sidebar-btn" onclick="purchaseCourse({{ course.id }})">
+                        <button class="purchase-sidebar-btn" type="button" onclick="purchaseCourseWithStripe({{ course.id }})">
                             <i class="fas fa-unlock"></i>
-                            {% trans "Purchase for" %} ${{ course.price }}
+                            {% trans "Unlock all for" %} {% sale_price course.price %}
                         </button>
-                        
                         <div class="preview-message">
-                            <p>{% trans "Unlock all lessons and start your dance journey today!" %}</p>
+                            {% if has_free_preview %}
+                            <p>{% trans "One video is free. Purchase unlocks the rest." %}</p>
+                            {% else %}
+                            <p>{% trans "Purchase to unlock these videos." %}</p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
                 </div>
-                {% endif %}
-            </div>
             </aside>
+            {% endif %}
         </div>
+        {% if catalog_product and catalog_assets %}
+        {% include "components/catalog_picker.html" %}
+        {% endif %}
     </main>
-    </div>
+    {% endif %}
+</div>
 {% endblock %}
 
 {% block extra_css %}
 <style>
-/* Course Platform Design Tokens - Using Global Colors */
-
-/* Base Platform Styles */
 .course-platform {
     min-height: 100vh;
-    background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-gray-100) 100%);
+    background: linear-gradient(160deg, #f7f5f2 0%, #efeae3 45%, #f4f1ec 100%);
     font-family: var(--font-family-primary);
+    padding-bottom: var(--spacing-4xl);
 }
 
-/* Course Header */
-.course-header {
-    position: relative;
-    padding: var(--spacing-5xl) var(--spacing-2xl);
-    overflow: hidden;
-    border-radius: 0 0 var(--radius-3xl) var(--radius-3xl);
-    margin-bottom: var(--spacing-3xl);
+/* Full-bleed landscape cover — never crop horizontal banners */
+.course-cover-banner {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #ebe6df;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-.course-header__background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1;
+.course-cover-banner__img {
+    display: block;
+    width: 100%;
+    max-width: 1400px;
+    height: auto;
+    margin: 0 auto;
+    object-fit: contain;
+    object-position: center;
+    vertical-align: middle;
 }
 
-.gradient-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, var(--color-gray-900) 0%, var(--color-gray-800) 100%);
-    opacity: 0.95;
+.course-header--minimal {
+    padding: var(--spacing-2xl) var(--spacing-2xl) var(--spacing-xl);
 }
 
-.hero-pattern {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-    animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-10px) rotate(1deg); }
+.course-platform--packets .course-header--minimal {
+    padding: 1.75rem 2rem 2.5rem;
 }
 
 .course-header__content {
-    position: relative;
-    z-index: 2;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    color: white;
 }
 
-.course-badge-container {
-    display: flex;
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-2xl);
-    animation: slideInDown 0.6s ease;
-    flex-wrap: wrap;
-}
-
-.premium-badge, .quality-badge, .streaming-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-md) var(--spacing-xl);
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    transition: var(--transition-normal);
-    color: var(--color-white);
-}
-
-.premium-badge:hover, .quality-badge:hover, .streaming-badge:hover {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-2px);
+.course-platform--packets .course-header__content {
+    max-width: 1240px;
+    width: 100%;
 }
 
 .course-title {
     font-family: var(--font-family-display);
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
     font-weight: var(--font-weight-light);
-    line-height: 1.1;
-    margin-bottom: var(--spacing-2xl);
-    animation: slideInUp 0.6s ease 0.2s both;
+    line-height: 1.2;
+    margin: 0 0 var(--spacing-md);
+    color: var(--color-gray-900);
 }
 
-.gradient-text {
-    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.course-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-2xl);
-    margin-bottom: var(--spacing-2xl);
-    animation: slideInUp 0.6s ease 0.4s both;
-}
-
-.instructor-info {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-lg);
-}
-
-.instructor-avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    transition: var(--transition-normal);
-}
-
-.instructor-avatar:hover {
-    border-color: rgba(255, 255, 255, 0.6);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-}
-
-.instructor-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.instructor-details {
-    display: flex;
-    flex-direction: column;
-}
-
-.instructor-name {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    margin-bottom: var(--spacing-xs);
-}
-
-.instructor-title {
-    font-size: var(--font-size-sm);
-    opacity: 0.8;
-}
-
-.course-stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-xl);
-}
-
-.stat-item {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    font-size: var(--font-size-sm);
-    opacity: 0.9;
-}
-
-.stat-item i {
-    width: 16px;
-    text-align: center;
-}
-
-/* Course Purchase Section */
-.course-purchase {
-    animation: slideInUp 0.6s ease 0.6s both;
-}
-
-.purchase-status.purchased {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg) var(--spacing-2xl);
-    background: rgba(201, 169, 110, 0.2);
-    border: 1px solid rgba(201, 169, 110, 0.3);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--spacing-2xl);
-}
-
-.purchase-status.purchased i {
-    color: var(--color-accent);
-    font-size: var(--font-size-lg);
-}
-
-.purchase-options {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xl);
-}
-
-.price-section {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-xl);
-    padding: var(--spacing-2xl);
-}
-
-.price-info {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-xl);
-    flex-wrap: wrap;
-}
-
-.current-price {
-    font-size: var(--font-size-4xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-accent);
-}
-
-.original-price {
-    font-size: var(--font-size-xl);
-    text-decoration: line-through;
-    opacity: 0.6;
-}
-
-.discount-badge {
-    background: var(--color-accent);
-    color: var(--color-white);
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-bold);
-}
-
-.price-features ul {
-    list-style: none;
+.course-access-note {
     margin: 0;
-    padding: 0;
-}
-
-.price-features li {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
     font-size: var(--font-size-sm);
-    opacity: 0.9;
+    color: var(--color-gray-600);
 }
 
-.price-features i {
-    color: var(--color-accent);
-    width: 16px;
-}
-
-.purchase-actions {
+.course-unlock-cta {
     display: flex;
-    gap: var(--spacing-lg);
     flex-wrap: wrap;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
 }
 
 .purchase-btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: var(--spacing-md);
-    padding: var(--spacing-lg) var(--spacing-2xl);
+    padding: var(--spacing-md) var(--spacing-xl);
     border-radius: var(--radius-lg);
     border: 1px solid transparent;
     font-family: var(--font-family-primary);
@@ -754,179 +327,13 @@
     background: var(--color-accent);
     color: var(--color-white);
     border-color: var(--color-accent);
-    box-shadow: var(--shadow-lg);
 }
 
 .purchase-btn.primary:hover {
     background: var(--color-accent-dark);
     border-color: var(--color-accent-dark);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-xl);
 }
 
-.purchase-btn.secondary {
-    background: transparent;
-    color: var(--color-white);
-    border-color: rgba(255, 255, 255, 0.3);
-}
-
-.purchase-btn.secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-.guarantee-badge {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-md);
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius-lg);
-    font-size: var(--font-size-sm);
-    opacity: 0.8;
-}
-
-/* Free Course Styling */
-.free-course-section {
-    background: rgba(201, 169, 110, 0.1);
-    border: 1px solid rgba(201, 169, 110, 0.3);
-    border-radius: var(--radius-xl);
-    padding: var(--spacing-2xl);
-}
-
-.free-badge {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg);
-    background: var(--color-accent);
-    color: var(--color-white);
-    border-radius: var(--radius-lg);
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--spacing-xl);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.free-badge i {
-    font-size: var(--font-size-xl);
-}
-
-.free-features ul {
-    list-style: none;
-    margin: 0 0 var(--spacing-xl) 0;
-    padding: 0;
-}
-
-.free-features li {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
-    font-size: var(--font-size-base);
-    color: var(--color-white);
-    opacity: 0.9;
-}
-
-.free-features i {
-    color: var(--color-accent);
-    width: 20px;
-    font-size: var(--font-size-lg);
-}
-
-.start-free-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-md);
-    padding: var(--spacing-xl) var(--spacing-2xl);
-    background: var(--color-accent);
-    color: var(--color-white);
-    border: 2px solid var(--color-accent);
-    border-radius: var(--radius-lg);
-    font-family: var(--font-family-primary);
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-bold);
-    cursor: pointer;
-    transition: var(--transition-fast);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.start-free-btn:hover {
-    background: var(--color-accent-dark);
-    border-color: var(--color-accent-dark);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-xl);
-}
-
-.progress-section {
-    margin-top: var(--spacing-2xl);
-}
-
-.progress-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--spacing-md);
-}
-
-.progress-label {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-}
-
-.progress-percentage {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-accent);
-}
-
-.progress-bar-wrapper {
-    position: relative;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    margin-bottom: var(--spacing-md);
-}
-
-.progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-accent-light) 100%);
-    border-radius: var(--radius-sm);
-    position: relative;
-    transition: width 1s ease;
-}
-
-.progress-glow {
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    width: 12px;
-    height: 12px;
-    background: var(--color-accent);
-    border-radius: 50%;
-    box-shadow: 0 0 10px var(--color-accent);
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.1); }
-}
-
-.progress-message {
-    font-size: var(--font-size-sm);
-    opacity: 0.9;
-    font-style: italic;
-}
-
-/* Course Layout */
 .course-main {
     max-width: 1400px;
     margin: 0 auto;
@@ -935,238 +342,262 @@
 
 .course-layout {
     display: grid;
-    grid-template-columns: 1fr 400px;
-    gap: var(--spacing-4xl);
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: var(--spacing-3xl);
     align-items: start;
 }
-
-/* Video Section */
-.video-section {
-    animation: slideInLeft 0.6s ease;
+.course-layout--solo {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 920px;
 }
 
-.video-container, .course-preview {
+.packet-course-preview {
+    max-width: 820px;
+    margin: 0 0 1.5rem;
+}
+.packet-course-preview__label {
+    margin: 0.6rem 0 0;
+    color: #4b5563;
+}
+.packet-free-list {
+    list-style: none;
+    margin: 0.85rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+.packet-free-list__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    border: 1px solid #ece7df;
+    border-radius: 10px;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+    font-weight: 600;
+}
+.packet-free-list__item.is-current {
+    background: #f7f1e6;
+    border-color: #c9a96e;
+}
+
+.video-container,
+.course-preview {
     background: var(--color-white);
     border-radius: var(--radius-2xl);
     overflow: hidden;
-    box-shadow: var(--shadow-xl);
-    transition: var(--transition-normal);
-}
-
-.video-container:hover, .course-preview:hover {
-    box-shadow: var(--shadow-2xl);
-    transform: translateY(-2px);
-}
-
-.video-wrapper, .preview-container {
-    position: relative;
+    box-shadow: var(--shadow-lg);
 }
 
 .video-wrapper {
-    aspect-ratio: 16/9;
-    background: #000;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 220px;
+    background: #efe8dc;
+    overflow: hidden;
+    border-radius: 12px;
 }
 
 .course-video {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-}
-
-        .youtube-video {
-            width: 100%;
-            height: 100%;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-xl);
-        }
-        
-        .course-video {
-            width: 100%;
-            height: 100%;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-xl);
-            background: #000;
-        }
-        
-        .video-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            min-height: 400px;
-        }
-
-/* Streaming Protection */
-.streaming-protection {
-    position: absolute;
-    top: var(--spacing-lg);
-    left: var(--spacing-lg);
-    z-index: 10;
-}
-
-.protection-message {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-xs);
-}
-
-/* Video Controls */
-.video-controls-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-    padding: var(--spacing-xl);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-lg);
-    opacity: 0;
-    transition: var(--transition-normal);
-}
-
-.video-wrapper:hover .video-controls-overlay {
-    opacity: 1;
-}
-
-.play-pause-btn {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border: none;
-    color: white;
-    font-size: var(--font-size-lg);
-    cursor: pointer;
-    transition: var(--transition-fast);
-}
-
-.play-pause-btn:hover {
-    background: var(--color-accent);
-    transform: scale(1.05);
-}
-
-.video-progress-container {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-lg);
-}
-
-.video-progress {
-    flex: 1;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
-    cursor: pointer;
-}
-
-.video-progress-filled {
-    height: 100%;
-    background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-accent-light) 100%);
-    border-radius: 2px;
-    transition: width 0.1s ease;
-}
-
-.video-time {
-    color: white;
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    white-space: nowrap;
-}
-
-.video-controls-right {
-    display: flex;
-    gap: var(--spacing-md);
-}
-
-.volume-btn, .settings-btn, .fullscreen-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    color: white;
-    cursor: pointer;
-    transition: var(--transition-fast);
-}
-
-.volume-btn:hover, .settings-btn:hover, .fullscreen-btn:hover {
-    background: var(--color-accent);
-}
-
-/* Course Preview (Non-Purchased) */
-.preview-container {
-    position: relative;
-}
-
-.preview-video {
-    aspect-ratio: 16/9;
+    border: 0;
+    object-fit: contain;
     background: #000;
-    position: relative;
 }
 
-.preview-video video {
+.course-video.is-hidden-until-play {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.video-cover-poster {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    padding: 0;
+    width: 100%;
+    background: #efe8dc;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.video-cover-poster img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
+}
+
+.video-cover-poster__play {
+    position: absolute;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: #c9a96e;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.video-cover-poster__play::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    margin-left: 5px;
+    border-style: solid;
+    border-width: 12px 0 12px 20px;
+    border-color: transparent transparent transparent #fff;
+}
+
+.video-cover-poster__label {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    background: rgba(0, 0, 0, 0.55);
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+}
+
+.video-cover-poster:hover .video-cover-poster__play,
+.phone-watch-link:hover .video-cover-poster__play {
+    transform: scale(1.06);
+    background: var(--color-accent);
+}
+
+.phone-watch-link {
+    display: none;
+    position: relative;
+    z-index: 3;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 220px;
+    aspect-ratio: 16 / 9;
+    background: #efe8dc;
+    text-decoration: none;
+    border: 0;
+}
+.phone-watch-btn {
+    display: none;
+    margin-top: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 48px;
+    border-radius: 999px;
+    background: #c9a96e;
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.phone-watch-link img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 1024px) {
+    .phone-watch-link,
+    .phone-watch-btn {
+        display: flex;
+    }
+
+    .desktop-embed {
+        display: none !important;
+    }
+}
+
+.video-cover-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #ebe6df;
+}
+
+.video-cover-fallback img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.no-video-hint {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    margin: 0;
+    text-align: center;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.55);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: var(--font-size-sm);
+}
+
+.locked-player {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: #1a1814;
+}
+
+.locked-player__cover {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
 }
 
 .preview-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
+    inset: 0;
+    background: rgba(20, 18, 14, 0.55);
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     text-align: center;
+    padding: var(--spacing-2xl);
+}
+
+.preview-content i.fa-lock {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.9;
 }
 
 .preview-content h3 {
-    font-size: var(--font-size-2xl);
-    margin-bottom: var(--spacing-md);
-}
-
-.locked-content-message {
-    padding: var(--spacing-3xl);
-    text-align: center;
-    background: var(--color-gray-50);
-}
-
-.lock-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto var(--spacing-xl);
-    background: var(--color-gray-200);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.lock-icon i {
-    font-size: var(--font-size-2xl);
-    color: var(--color-gray-500);
-}
-
-.locked-content-message h3 {
     font-size: var(--font-size-xl);
-    color: var(--color-gray-900);
-    margin-bottom: var(--spacing-md);
+    margin: 0 0 var(--spacing-md);
 }
 
-.locked-content-message p {
-    color: var(--color-gray-600);
-    margin-bottom: var(--spacing-2xl);
+.preview-content p {
+    margin: 0 0 var(--spacing-xl);
+    opacity: 0.9;
 }
 
 .unlock-btn {
@@ -1178,7 +609,6 @@
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-medium);
     cursor: pointer;
-    transition: var(--transition-fast);
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-md);
@@ -1186,98 +616,102 @@
 
 .unlock-btn:hover {
     background: var(--color-accent-dark);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+}
+
+.placeholder-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-height: 200px;
+    background: linear-gradient(135deg, #d4c4a8 0%, #b89a6a 100%);
+}
+
+.placeholder-image i {
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .video-info-panel {
-    padding: var(--spacing-3xl);
-}
-
-.current-lesson-info {
-    margin-bottom: var(--spacing-2xl);
+    padding: var(--spacing-2xl) var(--spacing-3xl);
 }
 
 .lesson-title {
     font-family: var(--font-family-display);
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-xl);
     font-weight: var(--font-weight-medium);
-    margin-bottom: var(--spacing-md);
+    margin: 0 0 var(--spacing-sm);
     color: var(--color-gray-900);
 }
 
 .lesson-description {
     color: var(--color-gray-600);
     line-height: 1.6;
+    margin: 0;
 }
 
-.video-actions {
+.session-meta {
     display: flex;
-    gap: var(--spacing-lg);
-    flex-wrap: wrap;
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-gray-100);
 }
 
-.action-btn {
+.session-duration-info {
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg) var(--spacing-2xl);
-    border-radius: var(--radius-lg);
-    border: 1px solid transparent;
-    font-family: var(--font-family-primary);
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-medium);
-    cursor: pointer;
-    transition: var(--transition-fast);
-    white-space: nowrap;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-600);
 }
 
-.action-btn.primary {
-    background: var(--color-gray-900);
-    color: var(--color-white);
-    border-color: var(--color-gray-900);
+.session-duration-info i {
+    color: var(--color-accent);
 }
 
-.action-btn.primary:hover {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-lg);
+.preview-badge,
+.locked-badge {
+    display: inline-block;
+    margin-left: 0.35rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    vertical-align: middle;
 }
 
-.action-btn.secondary {
-    background: transparent;
-    color: var(--color-gray-900);
-    border-color: var(--color-gray-300);
+.preview-badge {
+    background: rgba(201, 169, 110, 0.2);
+    color: #8a6d35;
 }
 
-.action-btn.secondary:hover {
-    background: var(--color-gray-900);
-    color: var(--color-white);
-    border-color: var(--color-gray-900);
+.locked-badge {
+    background: var(--color-gray-200);
+    color: var(--color-gray-600);
 }
 
-/* Lesson Sidebar */
 .lesson-sidebar {
     background: var(--color-white);
     border-radius: var(--radius-2xl);
-    box-shadow: var(--shadow-xl);
+    box-shadow: var(--shadow-lg);
     overflow: hidden;
     position: sticky;
     top: var(--spacing-2xl);
-    animation: slideInRight 0.6s ease;
 }
 
 .sidebar-header {
-    padding: var(--spacing-3xl);
+    padding: var(--spacing-2xl) var(--spacing-2xl) var(--spacing-lg);
     border-bottom: 1px solid var(--color-gray-100);
 }
 
 .sidebar-title {
     font-family: var(--font-family-display);
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-lg);
     font-weight: var(--font-weight-light);
-    margin-bottom: var(--spacing-md);
+    margin: 0 0 var(--spacing-sm);
     color: var(--color-gray-900);
 }
 
@@ -1300,183 +734,101 @@
 }
 
 .course-levels {
-    max-height: 600px;
+    max-height: min(70vh, 640px);
     overflow-y: auto;
 }
 
-.level-section {
-    border-bottom: 1px solid var(--color-gray-100);
-}
-
-.level-section.locked-level {
-    opacity: 0.6;
-}
-
-.level-header {
-    padding: var(--spacing-2xl) var(--spacing-3xl);
-    cursor: pointer;
-    transition: var(--transition-normal);
-}
-
-.level-header:hover {
-    background: var(--color-gray-50);
-}
-
-.beginner-level {
-    background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-50) 100%);
-    color: var(--color-gray-900);
-}
-
-.intermediate-level {
-    background: linear-gradient(135deg, var(--color-accent-light) 0%, var(--color-gray-100) 100%);
-    color: var(--color-gray-900);
-}
-
-.advanced-level {
-    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-light) 100%);
-    color: var(--color-gray-900);
-}
-
-.level-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--spacing-lg);
-}
-
-.level-title {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-medium);
-}
-
-.level-duration {
-    font-size: var(--font-size-xs);
-    opacity: 0.8;
-}
-
-.level-progress {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-}
-
-.level-progress-bar {
-    flex: 1;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
-    overflow: hidden;
-}
-
-.level-progress-fill {
-    height: 100%;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 2px;
-    transition: width 1s ease;
-}
-
-.level-percentage {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-}
-
-.level-lock {
-    display: flex;
-    align-items: center;
-    color: var(--color-gray-500);
-}
-
 .level-sessions {
-    padding: 0 var(--spacing-3xl) var(--spacing-2xl);
+    padding: var(--spacing-lg) var(--spacing-xl);
 }
 
 .session-item {
-    position: relative;
     display: flex;
     align-items: center;
-    gap: var(--spacing-lg);
-    padding: var(--spacing-lg);
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm);
     border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: var(--transition-normal);
-    margin-bottom: var(--spacing-md);
+    transition: background 0.2s ease, transform 0.2s ease;
+    margin-bottom: var(--spacing-sm);
+    border: 1px solid transparent;
 }
 
 .session-item:hover:not(.locked) {
     background: var(--color-gray-50);
-    transform: translateX(4px);
-}
-
-.session-item.completed {
-    background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-50) 100%);
-    border: 1px solid var(--color-accent-light);
 }
 
 .session-item.current {
-    background: linear-gradient(135deg, var(--color-accent-light) 0%, var(--color-gray-100) 100%);
-    border: 2px solid var(--color-accent);
-    animation: shimmer 2s infinite;
+    background: rgba(201, 169, 110, 0.12);
+    border-color: var(--color-accent);
 }
 
-.session-item.available {
+.session-item.completed {
     background: var(--color-gray-50);
-    border: 1px solid var(--color-gray-200);
 }
 
 .session-item.locked {
-    opacity: 0.4;
-    cursor: not-allowed;
-    background: var(--color-gray-100);
+    opacity: 0.72;
 }
 
-@keyframes shimmer {
-    0%, 100% { box-shadow: 0 0 5px rgba(201, 169, 110, 0.3); }
-    50% { box-shadow: 0 0 15px rgba(201, 169, 110, 0.6); }
+.session-thumb {
+    position: relative;
+    flex-shrink: 0;
+    width: 88px;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ebe6df;
 }
 
-.session-status {
-    width: 24px;
-    height: 24px;
+.session-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+}
+
+.session-thumb__placeholder {
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #a09078;
+    background: linear-gradient(135deg, #efeae3, #e0d7c8);
+}
+
+.session-thumb__status {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    font-size: var(--font-size-xs);
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
 }
 
-.session-item.completed .session-status {
+.session-item.completed .session-thumb__status {
     background: var(--color-accent);
-    color: var(--color-white);
-}
-
-.session-item.current .session-status {
-    background: var(--color-gray-900);
-    color: var(--color-white);
-}
-
-.session-item.available .session-status {
-    background: var(--color-gray-400);
-    color: var(--color-white);
-}
-
-.session-item.locked .session-status {
-    background: var(--color-gray-300);
-    color: var(--color-gray-500);
 }
 
 .session-info {
     flex: 1;
+    min-width: 0;
 }
 
 .session-title {
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
-    margin-bottom: var(--spacing-xs);
+    margin: 0 0 0.25rem;
     color: var(--color-gray-900);
+    line-height: 1.35;
 }
 
 .session-duration {
@@ -1485,11 +837,12 @@
 }
 
 .sidebar-footer {
-    padding: var(--spacing-3xl);
+    padding: var(--spacing-xl) var(--spacing-2xl);
     border-top: 1px solid var(--color-gray-100);
 }
 
-.continue-btn, .purchase-sidebar-btn {
+.continue-btn,
+.purchase-sidebar-btn {
     width: 100%;
     display: flex;
     align-items: center;
@@ -1504,15 +857,13 @@
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-medium);
     cursor: pointer;
-    transition: var(--transition-fast);
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
 }
 
-.continue-btn:hover, .purchase-sidebar-btn:hover {
+.continue-btn:hover,
+.purchase-sidebar-btn:hover {
     background: var(--color-accent);
     border-color: var(--color-accent);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-lg);
 }
 
 .purchase-sidebar-btn {
@@ -1520,543 +871,392 @@
     border-color: var(--color-accent);
 }
 
-.encouragement-message, .preview-message {
+.encouragement-message,
+.preview-message {
     text-align: center;
     font-size: var(--font-size-sm);
     color: var(--color-gray-600);
-    font-style: italic;
 }
 
-/* Session Meta */
-.session-meta {
-    display: flex;
-    gap: var(--spacing-xl);
-    margin-top: var(--spacing-md);
-    padding-top: var(--spacing-md);
-    border-top: 1px solid var(--color-gray-100);
-}
-
-.session-duration-info, .session-level {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    font-size: var(--font-size-sm);
-    color: var(--color-gray-600);
-}
-
-.session-duration-info i, .session-level i {
-    color: var(--color-accent);
-    width: 16px;
-}
-
-/* No Content Message */
-.no-content-message {
+.no-content-message,
+.no-video-message {
     text-align: center;
-    padding: var(--spacing-4xl);
+    padding: var(--spacing-3xl);
     color: var(--color-gray-500);
 }
 
-.no-content-message i {
-    font-size: var(--font-size-3xl);
-    color: var(--color-accent);
-    margin-bottom: var(--spacing-xl);
-}
-
-/* Course Preview Styles */
-.no-preview {
-    aspect-ratio: 16/9;
-    background: var(--color-gray-100);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.course-thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.placeholder-image {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, var(--color-accent-light) 0%, var(--color-accent) 100%);
-}
-
-.placeholder-image i {
-    font-size: 4rem;
-    color: var(--color-white);
-    opacity: 0.8;
-}
-
-/* Animations */
-@keyframes slideInDown {
-    from { opacity: 0; transform: translateY(-30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideInLeft {
-    from { opacity: 0; transform: translateX(-30px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideInRight {
-    from { opacity: 0; transform: translateX(30px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-/* Responsive Design */
 @media (max-width: 1024px) {
     .course-layout {
         grid-template-columns: 1fr;
-        gap: var(--spacing-3xl);
+        gap: var(--spacing-2xl);
     }
-    
+
     .lesson-sidebar {
         position: static;
-        order: -1;
     }
-    
+
     .course-levels {
-        max-height: 400px;
+        max-height: 360px;
     }
 }
 
 @media (max-width: 768px) {
-    .course-header {
-        padding: var(--spacing-4xl) var(--spacing-2xl);
-    }
-    
-    .course-meta {
-        flex-direction: column;
-        gap: var(--spacing-xl);
-    }
-    
-    .course-stats {
-        gap: var(--spacing-xl);
-    }
-    
-    .video-actions, .purchase-actions {
-        flex-direction: column;
-    }
-    
-    .action-btn, .purchase-btn {
-        justify-content: center;
-    }
-    
+    .course-header--minimal,
     .course-main {
-        padding: 0 var(--spacing-2xl);
+        padding-left: var(--spacing-lg);
+        padding-right: var(--spacing-lg);
     }
-    
-    .course-badge-container {
+
+    .session-thumb {
+        width: 72px;
+    }
+
+    .course-unlock-cta {
+        flex-direction: column;
+    }
+
+    .purchase-btn {
         justify-content: center;
     }
 }
 
-@media (max-width: 480px) {
-    .course-badge-container {
-        flex-direction: column;
-        gap: var(--spacing-md);
-    }
-    
-    .premium-badge, .quality-badge, .streaming-badge {
-        justify-content: center;
-    }
-    
-    .video-controls-overlay {
-        padding: var(--spacing-lg);
-        gap: var(--spacing-md);
-    }
-    
-    .video-controls-right {
-        gap: var(--spacing-sm);
-    }
-    
-    .price-info {
-        justify-content: center;
+.catalog-picker {
+    margin-top: 1rem;
+    padding: 1.1rem 1.2rem 1.2rem;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    max-width: 960px;
+}
+.catalog-picker--package {
+    max-width: none;
+    margin-top: 1.75rem;
+    padding: 1.35rem 1.35rem 1.4rem;
+    border-radius: 16px;
+}
+.catalog-picker__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+}
+.catalog-picker__title {
+    margin: 0 0 0.25rem;
+    font-size: 1.15rem;
+    font-weight: 650;
+}
+.catalog-picker__lead { margin: 0; color: #4b5563; }
+.catalog-picker__toolbar { display: flex; gap: 0.75rem; margin-bottom: 0; }
+.catalog-picker__text-btn {
+    background: none; border: 0; color: #8a6a3b; cursor: pointer; font-weight: 600; padding: 0;
+}
+.catalog-picker__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
+.catalog-picker__list--cards {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+.catalog-picker--packets {
+    max-width: none;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+}
+.catalog-picker__list--packets {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.35rem;
+    align-items: stretch;
+}
+.catalog-picker__list--packets > li {
+    min-width: 0;
+    max-width: none;
+}
+.catalog-picker--packets .catalog-picker__item--card {
+    height: 100%;
+    border-radius: 12px;
+    border: 1px solid #e8e0d4;
+    box-shadow: 0 4px 14px rgba(0,0,0,.05);
+    overflow: hidden;
+    background: #fff;
+}
+.catalog-picker--packets .catalog-picker__cover,
+.catalog-picker--packets .catalog-picker__cover--contain {
+    aspect-ratio: unset;
+    height: auto;
+    background: #f4efe8;
+    overflow: visible;
+}
+.catalog-picker--packets .catalog-picker__cover img,
+.catalog-picker--packets .catalog-picker__cover--contain img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    object-position: center center;
+    display: block;
+}
+.packet-pager {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-top: 1.75rem;
+}
+.packet-pager__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.7rem 1.15rem;
+    border: 1px solid #d9cbb3;
+    border-radius: 999px;
+    background: #fff;
+    color: #8a6a3b;
+    font-weight: 650;
+    cursor: pointer;
+}
+.packet-pager__btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+.packet-pager__status {
+    font-weight: 650;
+    color: #4b5563;
+}
+@media (max-width: 900px) {
+    .catalog-picker__list--packets {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
+@media (max-width: 560px) {
+    .catalog-picker__list--packets {
+        grid-template-columns: 1fr;
+    }
+}
+.catalog-picker__item {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 0.75rem; align-items: center;
+    padding: 0.65rem 0.75rem; border: 1px solid #ece7df; border-radius: 8px; cursor: pointer;
+}
+.catalog-picker__item--card {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+    background: #fff;
+}
+.catalog-picker__item--card input { margin: 0 0.85rem; }
+.catalog-picker__item--card .catalog-picker__copy,
+.catalog-picker__item--card .catalog-picker__price { padding: 0.75rem 0.9rem 0.9rem; }
+.catalog-picker__cover {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    background: #1a1814;
+    overflow: hidden;
+}
+.catalog-picker__cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.catalog-picker__cover-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #c4b49a;
+    font-size: 1.6rem;
+}
+.catalog-picker__item.is-owned { opacity: 0.78; }
+a.catalog-picker__item--link {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+a.catalog-picker__item--link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+    opacity: 1;
+}
+.catalog-picker__item--video {
+    position: relative;
+    border-radius: 12px;
+    border: 1px solid #e8e0d4;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.catalog-picker__item--video input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+.catalog-picker__item--video:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+}
+.catalog-picker__item--video.is-selected,
+.catalog-picker__item--video:has(input:checked) {
+    border-color: #8a6a3b;
+    box-shadow: 0 10px 24px rgba(138,106,59,0.18);
+}
+.catalog-picker__mark {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.94);
+    border: 2px solid #e5e0d6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+    font-size: 0.75rem;
+    z-index: 2;
+}
+.catalog-picker__item--video.is-selected .catalog-picker__mark,
+.catalog-picker__item--video:has(input:checked) .catalog-picker__mark {
+    background: #8a6a3b;
+    border-color: #8a6a3b;
+    color: #fff;
+}
+.catalog-picker__play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.35rem;
+    background: rgba(0,0,0,0.22);
+    z-index: 1;
+}
+.catalog-picker__copy { display: flex; flex-direction: column; gap: 0.2rem; }
+.catalog-picker__copy small { color: #6b7280; }
+.catalog-picker__price { font-weight: 700; white-space: nowrap; }
+.catalog-picker__buybar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.25rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid #f0ebe3;
+}
+.catalog-picker__total { margin: 0; color: #4b5563; display: flex; flex-direction: column; gap: 0.2rem; }
+.catalog-picker__hint { margin: 0; color: #6b7280; font-size: 0.92rem; }
+.catalog-picker__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0; }
+.catalog-picker__actions .purchase-btn small { display: block; font-weight: 500; opacity: 0.85; }
+.catalog-picker__actions--tiers .purchase-btn { flex-direction: column; align-items: flex-start; white-space: normal; }
+
 </style>
 {% endblock %}
 
 {% block extra_js %}
+<script src="{% static 'js/catalog_checkout.js' %}"></script>
 <script>
-// Premium Course Platform JavaScript
-class CoursePlayer {
-    constructor() {
-        this.video = document.getElementById('course-video');
-        this.playPauseBtn = document.getElementById('play-pause');
-        this.progressBar = document.getElementById('progress-filled');
-        this.currentTimeSpan = document.getElementById('current-time');
-        this.durationSpan = document.getElementById('duration');
-        
-        this.initializePlayer();
-        this.initializeControls();
-        this.initializeSidebar();
-        this.preventDownload();
-    }
-    
-    initializePlayer() {
-        if (!this.video) return;
-        
-        // Video event listeners
-        this.video.addEventListener('loadedmetadata', () => {
-            if (this.durationSpan) {
-                this.durationSpan.textContent = this.formatTime(this.video.duration);
-            }
-        });
-        
-        this.video.addEventListener('timeupdate', () => {
-            const progress = (this.video.currentTime / this.video.duration) * 100;
-            if (this.progressBar) {
-                this.progressBar.style.width = progress + '%';
-            }
-            if (this.currentTimeSpan) {
-                this.currentTimeSpan.textContent = this.formatTime(this.video.currentTime);
-            }
-        });
-        
-        this.video.addEventListener('play', () => {
-            if (this.playPauseBtn) {
-                this.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-            }
-        });
-        
-        this.video.addEventListener('pause', () => {
-            if (this.playPauseBtn) {
-                this.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-            }
-        });
-    }
-    
-    preventDownload() {
-        if (!this.video) return;
-        
-        // Disable right-click context menu
-        this.video.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            this.showProtectionMessage();
-        });
-        
-        // Disable keyboard shortcuts for downloading
-        document.addEventListener('keydown', (e) => {
-            // Disable Ctrl+S, Ctrl+Shift+I, F12, etc.
-            if ((e.ctrlKey && e.key === 's') || 
-                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                e.key === 'F12') {
-                e.preventDefault();
-                this.showProtectionMessage();
-            }
-        });
-        
-        // Disable drag and drop
-        this.video.addEventListener('dragstart', (e) => {
-            e.preventDefault();
-        });
-    }
-    
-    showProtectionMessage() {
-        const message = document.createElement('div');
-        message.className = 'protection-toast';
-        message.innerHTML = `
-            <div class="toast-content">
-                <i class="fas fa-shield-alt"></i>
-                <span>Content is protected and cannot be downloaded</span>
-            </div>
-        `;
-        
-        document.body.appendChild(message);
-        
-        setTimeout(() => {
-            message.remove();
-        }, 3000);
-    }
-    
-    initializeControls() {
-        // Play/Pause button
-        if (this.playPauseBtn) {
-            this.playPauseBtn.addEventListener('click', () => {
-                if (this.video.paused) {
-                    this.video.play();
-                } else {
-                    this.video.pause();
-                }
-            });
+function revealEmbedFromPoster() {
+    const poster = document.getElementById('video-cover-poster');
+    const frame = document.getElementById('course-video');
+    if (!poster || !frame || poster.dataset.revealed === '1') return;
+    poster.dataset.revealed = '1';
+    let src = frame.getAttribute('data-src') || frame.getAttribute('src') || '';
+    if (src) {
+        src = src.replace(/autoplay=(false|0)/i, 'autoplay=1');
+        const joiner = src.includes('?') ? '&' : '?';
+        if (!/[?&]autoplay=/.test(src)) {
+            src += `${joiner}autoplay=1&playsinline=1`;
+        } else if (!/[?&]playsinline=/.test(src)) {
+            src += `${joiner}playsinline=1`;
         }
-        
-        // Progress bar click
-        const progressContainer = document.getElementById('video-progress');
-        if (progressContainer) {
-            progressContainer.addEventListener('click', (e) => {
-                const rect = progressContainer.getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
-                const width = rect.width;
-                const percentage = clickX / width;
-                this.video.currentTime = percentage * this.video.duration;
-            });
-        }
-        
-        // Volume control
-        const volumeBtn = document.getElementById('volume-btn');
-        if (volumeBtn) {
-            volumeBtn.addEventListener('click', () => {
-                this.video.muted = !this.video.muted;
-                volumeBtn.innerHTML = this.video.muted ? 
-                    '<i class="fas fa-volume-mute"></i>' : 
-                    '<i class="fas fa-volume-up"></i>';
-            });
-        }
-        
-        // Fullscreen control
-        const fullscreenBtn = document.getElementById('fullscreen-btn');
-        if (fullscreenBtn) {
-            fullscreenBtn.addEventListener('click', () => {
-                if (this.video.requestFullscreen) {
-                    this.video.requestFullscreen();
-                }
-            });
-        }
-        
-        // Mark complete button
-        const markCompleteBtn = document.getElementById('mark-complete');
-        if (markCompleteBtn) {
-            markCompleteBtn.addEventListener('click', () => {
-                this.markSessionComplete();
-            });
-        }
+        frame.setAttribute('src', src);
+        frame.removeAttribute('data-src');
     }
-    
-    initializeSidebar() {
-        // Session item clicks (only for purchased courses)
-        const sessionItems = document.querySelectorAll('.session-item:not(.locked)');
-        sessionItems.forEach(item => {
-            item.addEventListener('click', () => {
-                if (!item.classList.contains('locked')) {
-                    this.loadSession(item.dataset.session);
-                }
-            });
-        });
-        
-        // Level header toggles
-        const levelHeaders = document.querySelectorAll('.level-header');
-        levelHeaders.forEach(header => {
-            header.addEventListener('click', () => {
-                const levelSection = header.parentElement;
-                const sessions = levelSection.querySelector('.level-sessions');
-                
-                if (sessions.style.display === 'none') {
-        sessions.style.display = 'block';
-                    sessions.style.animation = 'slideInUp 0.3s ease';
-    } else {
-        sessions.style.display = 'none';
-                }
-            });
-        });
-        
-        // Continue learning button
-        const continueBtn = document.querySelector('.continue-btn');
-        if (continueBtn) {
-            continueBtn.addEventListener('click', () => {
-                this.continueToNextSession();
-            });
-        }
-    }
-    
-    formatTime(seconds) {
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins}:${secs.toString().padStart(2, '0')}`;
-    }
-    
-    loadSession(sessionId) {
-        // Remove current class from all sessions
-        document.querySelectorAll('.session-item').forEach(item => {
-            item.classList.remove('current');
-        });
-        
-        // Add current class to selected session
-        const selectedSession = document.querySelector(`[data-session="${sessionId}"]`);
-        if (selectedSession) {
-            selectedSession.classList.add('current');
-            
-            // Update lesson title and description from data attributes
-            const lessonTitle = document.querySelector('.lesson-title');
-            const lessonDescription = document.querySelector('.lesson-description');
-            const sessionDurationInfo = document.querySelector('.session-duration-info');
-            const sessionLevel = document.querySelector('.session-level');
-            
-            const title = selectedSession.dataset.title;
-            const description = selectedSession.dataset.description;
-            const videoUrl = selectedSession.dataset.videoUrl;
-            
-            if (lessonTitle && title) {
-                lessonTitle.textContent = title;
-            }
-            if (lessonDescription && description) {
-                lessonDescription.textContent = description;
-            }
-            
-            // Update video source
-            if (this.video && videoUrl) {
-                this.video.src = videoUrl;
-                this.video.load(); // Reload the video with new source
-            }
-            
-            // Show loading animation
-            this.showLoadingAnimation();
-        }
-    }
-    
-    markSessionComplete() {
-        const currentSession = document.querySelector('.session-item.current');
-        if (currentSession) {
-            currentSession.classList.remove('current');
-            currentSession.classList.add('completed');
-            
-            // Update status icon
-            const statusIcon = currentSession.querySelector('.session-status i');
-            if (statusIcon) {
-                statusIcon.className = 'fas fa-check-circle';
-            }
-            
-            // Show celebration animation
-            this.showCelebrationAnimation();
-            
-            // Auto-advance to next session after delay
-            setTimeout(() => {
-                this.continueToNextSession();
-            }, 2000);
-        }
-    }
-    
-    continueToNextSession() {
-        const currentSession = document.querySelector('.session-item.current');
-        if (currentSession) {
-            const allSessions = document.querySelectorAll('.session-item');
-            let nextSession = null;
-            
-            // Find next session
-            for (let i = 0; i < allSessions.length; i++) {
-                if (allSessions[i] === currentSession && i + 1 < allSessions.length) {
-                    nextSession = allSessions[i + 1];
-                    break;
-                }
-            }
-            
-            if (nextSession && (nextSession.classList.contains('locked') || nextSession.classList.contains('available'))) {
-                nextSession.classList.remove('locked', 'available');
-                nextSession.classList.add('current');
-                currentSession.classList.remove('current');
-                currentSession.classList.add('completed');
-                
-                // Update progress bars
-                this.updateProgressBars();
-                
-                // Load next session
-                this.loadSession(nextSession.dataset.session);
-            }
-        }
-    }
-    
-    updateProgressBars() {
-        // Update level progress bars based on completed sessions
-        const levels = document.querySelectorAll('.level-section');
-        levels.forEach(level => {
-            const sessions = level.querySelectorAll('.session-item');
-            const completed = level.querySelectorAll('.session-item.completed');
-            const percentage = sessions.length > 0 ? (completed.length / sessions.length) * 100 : 0;
-            
-            const progressFill = level.querySelector('.level-progress-fill');
-            const progressText = level.querySelector('.level-percentage');
-            
-            if (progressFill) progressFill.style.width = percentage + '%';
-            if (progressText) progressText.textContent = Math.round(percentage) + '%';
-        });
-    }
-    
-    showLoadingAnimation() {
-        const overlay = document.createElement('div');
-        overlay.className = 'loading-overlay';
-        overlay.innerHTML = `
-            <div class="loading-spinner">
-                <i class="fas fa-spinner fa-spin"></i>
-                <p>Loading session...</p>
-            </div>
-        `;
-        
-        document.body.appendChild(overlay);
-        
-        setTimeout(() => {
-            overlay.remove();
-        }, 2000);
-    }
-    
-    showCelebrationAnimation() {
-        const overlay = document.createElement('div');
-        overlay.className = 'celebration-overlay';
-        overlay.innerHTML = `
-            <div class="celebration-content">
-                <i class="fas fa-trophy"></i>
-                <h3>Session Complete!</h3>
-                <p>Great job! Moving to the next lesson...</p>
-            </div>
-        `;
-        
-        document.body.appendChild(overlay);
-        
-        setTimeout(() => {
-            overlay.remove();
-        }, 3000);
-    }
+    frame.classList.remove('is-hidden-until-play');
+    poster.remove();
 }
 
-// Stripe Payment Functions
-async function purchaseCourseWithStripe(courseId) {
+document.addEventListener('DOMContentLoaded', () => {
+    const poster = document.getElementById('video-cover-poster');
+    if (poster) {
+        poster.addEventListener('click', revealEmbedFromPoster);
+        poster.addEventListener('pointerup', revealEmbedFromPoster);
+        poster.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                revealEmbedFromPoster();
+            }
+        });
+    }
+
+    const video = document.getElementById('course-video');
+    if (video && video.tagName === 'VIDEO') {
+        video.addEventListener('contextmenu', (e) => e.preventDefault());
+    }
+});
+
+async function purchaseCourseWithStripe(courseId, triggerEl) {
+    const button = triggerEl || (typeof event !== 'undefined' ? event.target.closest('button') : null);
+    const originalText = button ? button.innerHTML : '';
     try {
-        // Show loading state
-        const button = event.target;
-        const originalText = button.innerHTML;
-        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-        button.disabled = true;
-        
-        // Create checkout session
-        const response = await fetch(`/payments/create-checkout-session/${courseId}/`, {
+        if (button) {
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            button.disabled = true;
+        }
+
+        const response = await fetch(`/api/create-checkout-session/${courseId}/`, {
             method: 'POST',
+            credentials: 'same-origin',
             headers: {
                 'X-CSRFToken': getCookie('csrftoken'),
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
             },
         });
-        
-        const data = await response.json();
-        
-        if (data.checkout_url) {
-            // Redirect to Stripe checkout
-            window.location.href = data.checkout_url;
-        } else {
-            throw new Error('No checkout URL received');
+
+        let data = {};
+        try {
+            data = await response.json();
+        } catch (e) {
+            data = {};
         }
-        
+
+        if (response.status === 401 && data.login_url) {
+            window.location.href = data.login_url;
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Payment failed. Please try again.');
+        }
+
+        if (data.checkout_url) {
+            window.location.href = data.checkout_url;
+            return;
+        }
+
+        throw new Error(data.error || 'No checkout URL received');
     } catch (error) {
         console.error('Payment error:', error);
-        alert('Payment failed. Please try again.');
-        
-        // Reset button state
-        const button = event.target;
-        button.innerHTML = originalText;
-        button.disabled = false;
+        alert(error.message || 'Payment failed. Please try again.');
+        if (button) {
+            button.innerHTML = originalText;
+            button.disabled = false;
+        }
     }
 }
 
-// Helper function to get CSRF token
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -2071,288 +1271,5 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-
-// Course Purchase Functions
-function purchaseCourse(courseId) {
-    // Get course data from the page
-    const courseTitle = document.querySelector('.course-title').textContent.trim();
-    const coursePrice = document.querySelector('.current-price').textContent.trim();
-    
-    const modal = document.createElement('div');
-    modal.className = 'purchase-modal';
-    modal.innerHTML = `
-        <div class="modal-backdrop" onclick="closePurchaseModal()"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Complete Your Purchase</h3>
-                <button onclick="closePurchaseModal()" class="close-btn">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="purchase-summary">
-                    <h4>Course: ${courseTitle}</h4>
-                    <div class="price-breakdown">
-                        <div class="price-line">
-                            <span>Course Price:</span>
-                            <span>${coursePrice}</span>
-                        </div>
-                        <div class="price-line total">
-                            <span>Total:</span>
-                            <span>${coursePrice}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="payment-methods">
-                    <button class="payment-btn stripe-btn" onclick="processPayment('stripe', ${courseId})">
-                        <i class="fab fa-cc-stripe"></i>
-                        Pay with Card
-                    </button>
-                    <button class="payment-btn paypal-btn" onclick="processPayment('paypal', ${courseId})">
-                        <i class="fab fa-paypal"></i>
-                        Pay with PayPal
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(modal);
-}
-
-function closePurchaseModal() {
-    const modal = document.querySelector('.purchase-modal');
-    if (modal) {
-        modal.remove();
-    }
-}
-
-function processPayment(method, courseId) {
-    console.log(`Processing payment for course ${courseId} with ${method}`);
-    
-    // In a real implementation, you would:
-    // 1. Send AJAX request to Django backend with course ID and payment method
-    // 2. Handle Stripe/PayPal integration
-    // 3. Update user's course access in database
-    // 4. Redirect to success page or reload current page
-    
-    // For now, simulate the process
-    closePurchaseModal();
-    
-    // Show processing animation
-    const processingOverlay = document.createElement('div');
-    processingOverlay.className = 'loading-overlay';
-    processingOverlay.innerHTML = `
-        <div class="loading-spinner">
-            <i class="fas fa-credit-card fa-spin"></i>
-            <p>Processing payment...</p>
-        </div>
-    `;
-    
-    document.body.appendChild(processingOverlay);
-    
-    // Simulate payment processing
-    setTimeout(() => {
-        processingOverlay.remove();
-        alert(`Payment successful! You now have access to the course. Page will reload.`);
-        // In real implementation: window.location.reload();
-    }, 3000);
-}
-
-function addToWishlist(courseId) {
-    alert('Course added to wishlist!');
-}
-
-function startFreeCourse(courseId) {
-    // For free courses, immediately scroll to video and start first session
-    const firstSession = document.querySelector('.session-item[data-session]');
-    if (firstSession) {
-        // Load the first session
-        const coursePlayer = new CoursePlayer();
-        coursePlayer.loadSession(firstSession.dataset.session);
-        
-        // Scroll to video section
-        const videoSection = document.querySelector('.video-section');
-        if (videoSection) {
-            videoSection.scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // Show welcome message for free course
-        const welcomeOverlay = document.createElement('div');
-        welcomeOverlay.className = 'celebration-overlay';
-        welcomeOverlay.innerHTML = `
-            <div class="celebration-content">
-                <i class="fas fa-gift"></i>
-                <h3>Welcome to Your Free Course!</h3>
-                <p>Enjoy learning Bachata with our premium content.</p>
-            </div>
-        `;
-        
-        document.body.appendChild(welcomeOverlay);
-        
-        setTimeout(() => {
-            welcomeOverlay.remove();
-        }, 3000);
-    }
-}
-
-// Additional CSS for modals and toasts
-const additionalStyles = `
-<style>
-.loading-overlay, .celebration-overlay, .purchase-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease;
-}
-
-.loading-spinner, .celebration-content {
-    background: white;
-    padding: 2rem;
-    border-radius: 1rem;
-    text-align: center;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.modal-content {
-    background: white;
-    border-radius: var(--radius-2xl);
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--spacing-2xl);
-    border-bottom: 1px solid var(--color-gray-100);
-}
-
-.modal-header h3 {
-    margin: 0;
-    color: var(--color-gray-900);
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    font-size: var(--font-size-lg);
-    color: var(--color-gray-500);
-    cursor: pointer;
-}
-
-.modal-body {
-    padding: var(--spacing-2xl);
-}
-
-.purchase-summary {
-    margin-bottom: var(--spacing-2xl);
-}
-
-.price-breakdown {
-    margin-top: var(--spacing-lg);
-}
-
-.price-line {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: var(--spacing-md);
-}
-
-.price-line.total {
-    font-weight: var(--font-weight-bold);
-    border-top: 1px solid var(--color-gray-200);
-    padding-top: var(--spacing-md);
-}
-
-.payment-methods {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-lg);
-}
-
-.payment-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg);
-    border: 1px solid var(--color-gray-300);
-    border-radius: var(--radius-lg);
-    background: var(--color-white);
-    cursor: pointer;
-    transition: var(--transition-fast);
-}
-
-.payment-btn:hover {
-    border-color: var(--color-accent);
-    background: var(--color-gray-50);
-}
-
-.protection-toast {
-    position: fixed;
-    top: var(--spacing-2xl);
-    right: var(--spacing-2xl);
-    background: var(--color-gray-900);
-    color: var(--color-white);
-    padding: var(--spacing-lg);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-xl);
-    z-index: 1001;
-    animation: slideInRight 0.3s ease;
-}
-
-.toast-content {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-}
-
-.loading-spinner i {
-    font-size: 2rem;
-    color: var(--color-accent);
-    margin-bottom: 1rem;
-}
-
-.celebration-content i {
-    font-size: 3rem;
-    color: var(--color-accent);
-    margin-bottom: 1rem;
-}
-
-.celebration-content h3 {
-    color: var(--color-gray-900);
-    margin-bottom: 0.5rem;
-}
-
-.celebration-content p {
-    color: var(--color-gray-600);
-    margin: 0;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-</style>
-`;
-
-document.head.insertAdjacentHTML('beforeend', additionalStyles);
-
-// Initialize the course player when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    new CoursePlayer();
-});
 </script>
 {% endblock %}

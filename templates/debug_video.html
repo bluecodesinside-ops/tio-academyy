@@ -29,7 +29,7 @@
     
     <h2>Video Display:</h2>
     {% if session.video_file %}
-        <video controls width="400">
+        <video controls playsinline webkit-playsinline x5-playsinline width="400">
             <source src="{{ session.video_file.url }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
@@ -37,10 +37,11 @@
         <iframe width="400" height="225" 
                 src="{{ session.video_url|youtube_embed_url }}" 
                 frameborder="0" 
-                allowfullscreen>
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                allowfullscreen webkitallowfullscreen playsinline>
         </iframe>
     {% elif session.video_url %}
-        <video controls width="400">
+        <video controls playsinline webkit-playsinline x5-playsinline width="400">
             <source src="{{ session.video_url }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>

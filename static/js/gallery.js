@@ -578,7 +578,7 @@ function openVideoModal(videoUrl) {
                     <i class="fas fa-times"></i>
                 </button>
                 <div class="video-container">
-                    <video id="modalVideo" controls autoplay>
+                    <video id="modalVideo" controls autoplay playsinline webkit-playsinline x5-playsinline>
                         <source src="" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>

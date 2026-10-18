@@ -21,7 +21,7 @@ def youtube_embed_url(url):
             video_id = match.group(1)
             # Clean the video ID (remove any extra parameters)
             video_id = video_id.split('?')[0].split('&')[0]
-            return f"https://www.youtube.com/embed/{video_id}"
+            return f"https://www.youtube.com/embed/{video_id}?playsinline=1&rel=0"
     
     return None
 

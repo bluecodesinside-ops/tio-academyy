@@ -326,19 +326,19 @@
     <div class="package-summary">
         <div class="package-summary__header">
             <div>
-                <h1 class="package-summary__title">{{ package.name }} Package</h1>
+                <h1 class="package-summary__title">{{ package.name }} {% trans "Package" %}</h1>
                 <p class="package-summary__description">{{ package.description }}</p>
             </div>
             
             <!-- Billing Toggle -->
             <div class="billing-toggle">
                 <button id="monthly-toggle" class="active" onclick="toggleBilling('monthly')">
-                    Monthly
+                    {% trans "Monthly" %}
                 </button>
                 <button id="yearly-toggle" onclick="toggleBilling('yearly')">
-                    Yearly
+                    {% trans "Yearly" %}
                     {% if package.yearly_price %}
-                    <span class="yearly-discount">Save {{ package.get_yearly_discount_percentage }}%</span>
+                    <span class="yearly-discount">{% blocktrans with pct=package.get_yearly_discount_percentage %}Save {{ pct }}%{% endblocktrans %}</span>
                     {% endif %}
                 </button>
             </div>
@@ -348,7 +348,7 @@
             $<span id="package-price">{{ package.monthly_price|floatformat:0 }}</span>
         </div>
         <div class="package-summary__period">
-            <span id="billing-period">per month</span>
+            <span id="billing-period">{% trans "per month" %}</span>
         </div>
         
         <!-- Features -->
@@ -361,7 +361,7 @@
     
     <!-- Checkout Form -->
     <div class="checkout-form">
-        <h2 class="checkout-form__title">Complete Your Purchase</h2>
+        <h2 class="checkout-form__title">{% trans "Complete Your Purchase" %}</h2>
         
         <form id="checkout-form">
             {% csrf_token %}
@@ -369,21 +369,21 @@
             
             <!-- Email Field -->
             <div class="form-group">
-                <label for="email" class="form-label">Email Address</label>
+                <label for="email" class="form-label">{% trans "Email Address" %}</label>
                 <input 
                     type="email" 
                     id="email" 
                     name="email" 
                     class="form-input" 
                     value="{% if user.is_authenticated %}{{ user.email }}{% endif %}"
-                    placeholder="Enter your email address"
+                    placeholder="{% trans 'Enter your email address' %}"
                     required
                 >
             </div>
             
             <!-- Payment Section -->
             <div class="form-group">
-                <label class="form-label">Payment Information</label>
+                <label class="form-label">{% trans "Payment Information" %}</label>
                 <div id="card-element" class="form-input" style="padding: var(--spacing-lg);">
                     <!-- Stripe Elements will be inserted here -->
                 </div>
@@ -392,13 +392,13 @@
             
             <!-- Billing Address -->
             <div class="form-group">
-                <label for="billing_name" class="form-label">Name on Card</label>
+                <label for="billing_name" class="form-label">{% trans "Name on Card" %}</label>
                 <input 
                     type="text" 
                     id="billing_name" 
                     name="billing_name" 
                     class="form-input"
-                    placeholder="Full name as it appears on card"
+                    placeholder="{% trans 'Full name as it appears on card' %}"
                 >
             </div>
             
@@ -406,16 +406,16 @@
             <div class="form-checkbox">
                 <input type="checkbox" id="terms" name="terms" required>
                 <label for="terms">
-                    I agree to the <a href="/terms/">Terms of Service</a> 
-                    and <a href="/privacy/">Privacy Policy</a>
+                    {% trans "I agree to the" %} <a href="{% url 'terms' %}">{% trans "Terms of Service" %}</a>
+                    {% trans "and" %} <a href="{% url 'privacy' %}">{% trans "Privacy Policy" %}</a>
                 </label>
             </div>
             
             <!-- Submit Button -->
             <button type="submit" id="checkout-button" class="checkout-button">
-                <span id="button-text">Complete Purchase - $<span id="total-price">{{ package.monthly_price|floatformat:0 }}</span></span>
+                <span id="button-text">{% trans "Complete Purchase" %} - $<span id="total-price">{{ package.monthly_price|floatformat:0 }}</span></span>
                 <span id="button-loading" class="hidden">
-                    <span class="loading-spinner"></span> Processing...
+                    <span class="loading-spinner"></span> {% trans "Processing..." %}
                 </span>
             </button>
         </form>
@@ -493,7 +493,7 @@ form.addEventListener('submit', async function(event) {
         
     } catch (error) {
         console.error('Error:', error);
-        alert('Payment processing failed: ' + error.message);
+        alert('{% filter escapejs %}{% trans "Payment processing failed:" %}{% endfilter %} ' + error.message);
         
         // Reset button state
         button.disabled = false;
@@ -516,14 +516,14 @@ function toggleBilling(cycle) {
         yearlyToggle.classList.remove('active');
         packagePrice.textContent = '{{ package.monthly_price|floatformat:0 }}';
         totalPrice.textContent = '{{ package.monthly_price|floatformat:0 }}';
-        billingPeriod.textContent = 'per month';
+        billingPeriod.textContent = '{% filter escapejs %}{% trans "per month" %}{% endfilter %}';
         billingCycle.value = 'monthly';
     } else {
         yearlyToggle.classList.add('active');
         monthlyToggle.classList.remove('active');
         packagePrice.textContent = '{{ package.yearly_price|floatformat:0 }}';
         totalPrice.textContent = '{{ package.yearly_price|floatformat:0 }}';
-        billingPeriod.textContent = 'per year';
+        billingPeriod.textContent = '{% filter escapejs %}{% trans "per year" %}{% endfilter %}';
         billingCycle.value = 'yearly';
     }
 }

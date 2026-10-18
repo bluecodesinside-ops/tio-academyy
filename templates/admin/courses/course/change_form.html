@@ -1,0 +1,86 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+  .udemy-help {
+    margin: 0 0 18px;
+    padding: 14px 16px;
+    background: #f7f4ee;
+    border: 1px solid #e6dcc8;
+    border-radius: 10px;
+    color: #4b3f2f;
+  }
+  .packet-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 8px 0 20px;
+  }
+  .packet-card {
+    display: block;
+    background: #fff;
+    border: 1px solid #e5e0d6;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  .packet-card:hover { border-color: #c9b48a; }
+  .packet-card__cover {
+    aspect-ratio: 16/10;
+    background: #efe8dc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c4b49a;
+    font-size: 13px;
+  }
+  .packet-card__cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .packet-card__body { padding: 10px 12px 12px; }
+  .packet-card__title { font-weight: 700; margin: 0 0 4px; }
+  .packet-card__meta { color: #6b6256; font-size: 12px; }
+  .packet-add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    border: 1px dashed #c9b48a;
+    border-radius: 12px;
+    color: #8a6a3b;
+    font-weight: 700;
+    text-decoration: none;
+    background: #fbf8f2;
+  }
+</style>
+{% endblock %}
+
+{% block after_field_sets %}
+{{ block.super }}
+{% if original and original.sell_as_packets %}
+<section class="udemy-help">
+  <strong>Packets</strong> — each card is a mini-course. Click a packet to set its cover, price, and videos.
+</section>
+<div class="packet-board">
+  {% for packet in course_packets %}
+  <a class="packet-card" href="{% url 'admin:courses_packet_change' packet.id %}">
+    <div class="packet-card__cover">
+      {% if packet.cover %}
+      <img src="{{ packet.cover.url }}" alt="">
+      {% else %}
+      Add cover
+      {% endif %}
+    </div>
+    <div class="packet-card__body">
+      <p class="packet-card__title">{{ packet.order }}. {{ packet.title }}</p>
+      <p class="packet-card__meta">€{{ packet.price }} · {{ packet.video_count }} videos</p>
+    </div>
+  </a>
+  {% endfor %}
+  {% if add_packet_url %}
+  <a class="packet-add" href="{{ add_packet_url }}">+ Add packet</a>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

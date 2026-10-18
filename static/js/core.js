@@ -654,3 +654,24 @@ TioAcademy.ErrorHandler = {
 
 // Initialize the application
 TioAcademy.App.init();
+
+// Play videos inline on iPhone, Android, Samsung, and in-app browsers.
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('video').forEach(function (video) {
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.setAttribute('x5-playsinline', '');
+    video.playsInline = true;
+    video.setAttribute('preload', video.getAttribute('preload') || 'metadata');
+  });
+
+  document.querySelectorAll('iframe.course-video, iframe.youtube-video, iframe[src*="youtube"], iframe[src*="mediadelivery"]').forEach(function (frame) {
+    var allow = frame.getAttribute('allow') || '';
+    if (allow.indexOf('fullscreen') === -1) {
+      frame.setAttribute('allow', allow ? allow + '; fullscreen' : 'autoplay; encrypted-media; fullscreen; picture-in-picture');
+    }
+    frame.setAttribute('allowfullscreen', '');
+    frame.setAttribute('webkitallowfullscreen', '');
+    frame.setAttribute('playsinline', '');
+  });
+});

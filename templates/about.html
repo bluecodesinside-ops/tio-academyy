@@ -6,1111 +6,241 @@
 
 {% block content %}
 <div class="about-page">
-    <!-- Hero Section -->
-    <section class="about-hero">
-        <div class="hero-background">
-            <div class="hero-gradient"></div>
-            <div class="hero-pattern"></div>
-    </div>
-
-    <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <h1 class="hero-title fade-in-up">
-                        {% trans "Dance Your Way to Excellence" %}
-                    </h1>
-                    <p class="hero-subtitle fade-in-up delay-1">
-                        {% trans "Transform your passion into mastery with our world-class Latin dance education platform" %}
-                    </p>
-                    <div class="hero-cta fade-in-up delay-2">
-                        <a href="{% url 'programs:explore_programs' %}" class="hero-btn primary">
-                            <i class="fas fa-play"></i>
-                            {% trans "Start Learning" %}
-                        </a>
-                        <a href="#about-story" class="hero-btn secondary">
-                            <i class="fas fa-arrow-down"></i>
-                            {% trans "Our Story" %}
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="hero-image fade-in-right">
-                    <div class="image-container">
-                        <img src="https://images.unsplash.com/photo-1547153760-18fc86324498?w=600&h=700&fit=crop" alt="Professional Dancer" loading="lazy">
-                        <div class="image-overlay">
-                            <div class="play-button">
-                                <i class="fas fa-play"></i>
-                    </div>
-                    </div>
-                    </div>
-                </div>
-            </div>
+    <section class="about-hero" aria-label="{% trans 'About Tio Academy' %}">
+        <img
+            class="about-hero__media"
+            src="{% static 'images/about-hero.jpg' %}"
+            alt="{% trans 'Students training at Tio Academy' %}"
+            fetchpriority="high">
+        <div class="about-hero__scrim"></div>
+        <div class="about-hero__content">
+            <p class="about-hero__brand">{% trans "Tio Academy" %}</p>
+            <h1 class="about-hero__title">{% trans "Learn from home. Train with purpose." %}</h1>
+            <p class="about-hero__subtitle">
+                {% trans "Online courses in dance, physiotherapy, and fitness." %}
+            </p>
+            <a href="{% url 'courses' %}" class="about-hero__cta">
+                {% trans "Browse Courses" %}
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
     </section>
 
-    <!-- Stats Section -->
-    <section class="stats-section">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item scale-in delay-1">
-                    <div class="stat-number">10K+</div>
-                    <div class="stat-label">{% trans "Dancers" %}</div>
-                    <div class="stat-description">{% trans "Students worldwide" %}</div>
-                </div>
-                <div class="stat-item scale-in delay-2">
-                    <div class="stat-number">50+</div>
-                    <div class="stat-label">{% trans "Dance Styles" %}</div>
-                    <div class="stat-description">{% trans "Comprehensive curriculum" %}</div>
-                </div>
-                <div class="stat-item scale-in delay-3">
-                    <div class="stat-number">4.9★</div>
-                    <div class="stat-label">{% trans "Rating" %}</div>
-                    <div class="stat-description">{% trans "Student satisfaction" %}</div>
-                </div>
-                <div class="stat-item scale-in delay-4">
-                    <div class="stat-number">15+</div>
-                    <div class="stat-label">{% trans "Years" %}</div>
-                    <div class="stat-description">{% trans "Teaching experience" %}</div>
+    <section class="about-story">
+        <div class="container about-story__grid">
+            <div class="about-story__copy">
+                <h2>{% trans "Who we are" %}</h2>
+                <p>
+                    {% trans "Tio Academy is an online platform for clear, practical video training. Unlock a course once, then learn step by step at your own pace." %}
+                </p>
+                <p>
+                    {% trans "From traditional dance to guided physiotherapy and fitness — quality instruction, available whenever you are ready." %}
+                </p>
             </div>
-        </div>
-    </div>
-</section>
-
-    <!-- Features Cards Section -->
-    <section class="features-section">
-    <div class="container">
-        <div class="section-header">
-                <h2 class="section-title fade-in-up">{% trans "Why Choose Tio Academy" %}</h2>
-                <p class="section-subtitle fade-in-up delay-1">{% trans "Experience the difference of professional dance education" %}</p>
-        </div>
-        
-            <div class="features-grid">
-                <div class="feature-card fade-in-up delay-1">
-                    <div class="feature-icon">
-                        <i class="fas fa-play"></i>
-                    </div>
-                    <h3 class="feature-title">{% trans "HD Video Lessons" %}</h3>
-                    <p class="feature-description">
-                        {% trans "Crystal-clear 4K video instruction with multiple camera angles and slow-motion breakdowns for perfect technique mastery." %}
-                    </p>
-                    <div class="feature-highlight">
-                        <span>{% trans "Professional Quality" %}</span>
-                    </div>
-                </div>
-                
-                <div class="feature-card fade-in-up delay-2">
-                    <div class="feature-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <h3 class="feature-title">{% trans "Learn Anytime" %}</h3>
-                    <p class="feature-description">
-                        {% trans "Access your courses 24/7 from anywhere in the world. Learn at your own pace with lifetime access to all content." %}
-                    </p>
-                    <div class="feature-highlight">
-                        <span>{% trans "Flexible Schedule" %}</span>
-                </div>
-            </div>
-            
-                <div class="feature-card fade-in-up delay-3">
-                    <div class="feature-icon">
-                        <i class="fas fa-music"></i>
-                </div>
-                    <h3 class="feature-title">{% trans "All Dance Styles" %}</h3>
-                    <p class="feature-description">
-                        {% trans "From salsa and bachata to merengue and cha cha, master the complete spectrum of Latin dance styles." %}
-                    </p>
-                    <div class="feature-highlight">
-                        <span>{% trans "Complete Curriculum" %}</span>
-                    </div>
-                </div>
+            <div class="about-story__photos" aria-hidden="true">
+                <img src="{% static 'images/about-vallet.jpg' %}" alt="" loading="lazy">
+                <img src="{% static 'images/about-military.jpg' %}" alt="" loading="lazy">
             </div>
         </div>
     </section>
-
-    <!-- About Story Section -->
-    <section class="about-story" id="about-story">
-        <div class="container">
-            <div class="story-layout">
-                <div class="story-content fade-in-up">
-                    <div class="story-header">
-                        <span class="story-label">{% trans "Our Journey" %}</span>
-                        <h2 class="story-title">{% trans "15+ Years of Dance Excellence" %}</h2>
-                </div>
-                    
-                    <div class="story-text">
-                        <p>
-                            {% trans "Founded by professional dancers with over 15 years of experience, Tio Academy was born from a passion to make authentic Latin dance accessible to everyone." %}
-                        </p>
-                        <p>
-                            {% trans "Our unique teaching method breaks complex moves into simple, digestible steps that anyone can master. Whether you're a complete beginner or an advanced dancer, our progressive curriculum adapts to your skill level." %}
-                        </p>
-                        <p>
-                            {% trans "With HD video lessons, personalized feedback, and 24/7 accessibility, we've revolutionized how people learn to dance. Join our global community and discover the joy of Latin dance." %}
-                        </p>
-                    </div>
-                    
-                    <div class="story-highlights">
-                        <div class="highlight-item">
-                            <div class="highlight-icon">
-                                <i class="fas fa-award"></i>
-                            </div>
-                            <div class="highlight-text">
-                                <h4>{% trans "Expert Instructors" %}</h4>
-                                <p>{% trans "Professional dancers with international recognition" %}</p>
-                            </div>
-                        </div>
-                        
-                        <div class="highlight-item">
-                            <div class="highlight-icon">
-                                <i class="fas fa-graduation-cap"></i>
-                            </div>
-                            <div class="highlight-text">
-                                <h4>{% trans "Proven Method" %}</h4>
-                                <p>{% trans "Simplified learning approach for faster progress" %}</p>
-                </div>
-            </div>
-            
-                        <div class="highlight-item">
-                            <div class="highlight-icon">
-                                <i class="fas fa-globe"></i>
-                            </div>
-                            <div class="highlight-text">
-                                <h4>{% trans "Global Community" %}</h4>
-                                <p>{% trans "Connect with dancers from around the world" %}</p>
-                            </div>
-                        </div>
-                </div>
-                    
-                    <div class="story-cta">
-                        <a href="{% url 'programs:explore_programs' %}" class="story-btn">
-                            {% trans "Explore Our Courses" %}
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-    <!-- Mission Section -->
-    <section class="mission-section">
-    <div class="container">
-            <div class="mission-content">
-                <div class="mission-header fade-in-up">
-                    <h2 class="mission-title">{% trans "Our Mission" %}</h2>
-                    <p class="mission-subtitle">{% trans "Preserving culture while embracing innovation" %}</p>
-                </div>
-                
-                <div class="mission-grid">
-                    <div class="mission-card fade-in-up delay-1">
-                        <div class="mission-icon">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                        <h3>{% trans "Cultural Preservation" %}</h3>
-                        <p>{% trans "Honor the authentic roots and traditions of Latin dance while making it accessible to modern learners." %}</p>
-            </div>
-            
-                    <div class="mission-card fade-in-up delay-2">
-                        <div class="mission-icon">
-                            <i class="fas fa-lightbulb"></i>
-                </div>
-                        <h3>{% trans "Innovation" %}</h3>
-                        <p>{% trans "Leverage cutting-edge technology to create the most effective and engaging dance learning experience." %}</p>
-            </div>
-            
-                    <div class="mission-card fade-in-up delay-3">
-                        <div class="mission-icon">
-                            <i class="fas fa-hands-helping"></i>
-                </div>
-                        <h3>{% trans "Accessibility" %}</h3>
-                        <p>{% trans "Break down barriers and make professional dance education available to anyone, anywhere in the world." %}</p>
-            </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    </div>
+</div>
 {% endblock %}
 
 {% block extra_css %}
 <style>
-/* About Page Styles - Using Website Colors */
-
-/* Base Page Styles */
 .about-page {
-    background: #faf6f0;
-    font-family: var(--font-family-primary);
+    background: #f4f1ec;
 }
 
-/* Hero Section */
 .about-hero {
     position: relative;
-    min-height: 100vh;
+    min-height: min(88vh, 760px);
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     overflow: hidden;
+    color: #fafafa;
 }
 
-.hero-background {
+.about-hero__media {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    transform: scale(1.04);
+    animation: aboutHeroDrift 18s ease-in-out infinite alternate;
 }
 
-.hero-gradient {
+@keyframes aboutHeroDrift {
+    from { transform: scale(1.04) translate3d(0, 0, 0); }
+    to { transform: scale(1.1) translate3d(-1.5%, -1%, 0); }
+}
+
+.about-hero__scrim {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #faf6f0;
-    opacity: 0.95;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(10,10,10,0.18) 0%, rgba(10,10,10,0.28) 40%, rgba(10,10,10,0.78) 100%);
+    pointer-events: none;
 }
 
-.hero-pattern {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        radial-gradient(circle at 20% 50%, rgba(201, 169, 110, 0.1) 0%, transparent 40%),
-        radial-gradient(circle at 80% 20%, rgba(201, 169, 110, 0.1) 0%, transparent 40%);
-    animation: float 8s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-15px) rotate(1deg); }
-}
-
-.hero-content {
+.about-hero__content {
     position: relative;
     z-index: 2;
-    display: flex;
+    width: min(720px, 92%);
+    margin: 0 auto 0 8%;
+    padding: 0 0 clamp(2.5rem, 7vw, 4.5rem);
+    animation: aboutFadeUp 0.9s ease-out both;
+}
+
+@keyframes aboutFadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.about-hero__brand {
+    margin: 0 0 0.75rem;
+    font-family: var(--font-family-display, Georgia, serif);
+    font-size: clamp(1.4rem, 2.8vw, 1.9rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.about-hero__title {
+    margin: 0 0 0.85rem;
+    font-family: var(--font-family-display, Georgia, serif);
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    max-width: 14ch;
+}
+
+.about-hero__subtitle {
+    margin: 0 0 1.4rem;
+    max-width: 28rem;
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    line-height: 1.55;
+    color: rgba(250, 250, 250, 0.9);
+}
+
+.about-hero__cta {
+    display: inline-flex;
     align-items: center;
-    gap: var(--spacing-5xl);
-    color: var(--color-white);
+    gap: 0.55rem;
+    padding: 0.9rem 1.35rem;
+    border-radius: 999px;
+    background: #fafafa;
+    color: #0a0a0a;
+    text-decoration: none;
+    font-weight: 650;
+    transition: transform 0.2s ease, background 0.2s ease;
 }
 
-.hero-text {
-    flex: 1;
-    max-width: 600px;
+.about-hero__cta:hover {
+    transform: translateY(-2px);
+    background: #fff;
+    color: #0a0a0a;
 }
 
-.hero-title {
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-6xl);
-    font-weight: var(--font-weight-light);
-    line-height: 1.1;
-    margin-bottom: var(--spacing-xl);
+.about-story {
+    padding: clamp(3rem, 8vw, 5.5rem) 0;
+}
+
+.about-story__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;
+}
+
+.about-story__copy h2 {
+    margin: 0 0 1rem;
+    font-family: var(--font-family-display, Georgia, serif);
+    font-size: clamp(1.7rem, 3vw, 2.3rem);
+    color: #0a0a0a;
     letter-spacing: -0.02em;
 }
 
-.hero-subtitle {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-light);
-    line-height: 1.6;
-    opacity: 0.9;
-    margin-bottom: var(--spacing-3xl);
-}
-
-.hero-cta {
-    display: flex;
-    gap: var(--spacing-xl);
-    flex-wrap: wrap;
-}
-
-.hero-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg) var(--spacing-2xl);
-    border-radius: var(--radius-lg);
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-medium);
-    text-decoration: none;
-    transition: var(--transition-fast);
-    border: 1px solid transparent;
-}
-
-.hero-btn.primary {
-    background: var(--color-accent);
-    color: var(--color-white);
-    border-color: var(--color-accent);
-}
-
-.hero-btn.primary:hover {
-    background: var(--color-accent-dark);
-    border-color: var(--color-accent-dark);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-xl);
-}
-
-.hero-btn.secondary {
-    background: transparent;
-    color: var(--color-white);
-    border-color: rgba(255, 255, 255, 0.3);
-}
-
-.hero-btn.secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-.hero-image {
-    flex: 0 0 400px;
-}
-
-.image-container {
-    position: relative;
-    border-radius: var(--radius-2xl);
-    overflow: hidden;
-    box-shadow: var(--shadow-2xl);
-}
-
-.image-container img {
-    width: 100%;
-    height: 500px;
-    object-fit: cover;
-    transition: var(--transition-slow);
-}
-
-.image-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: var(--transition-normal);
-}
-
-.image-container:hover .image-overlay {
-    opacity: 1;
-}
-
-.image-container:hover img {
-    transform: scale(1.05);
-}
-
-.play-button {
-    width: 80px;
-    height: 80px;
-    background: var(--color-accent);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-white);
-    font-size: var(--font-size-2xl);
-    box-shadow: var(--shadow-xl);
-    transition: var(--transition-fast);
-    cursor: pointer;
-}
-
-.play-button:hover {
-    transform: scale(1.1);
-    background: var(--color-accent-dark);
-}
-
-/* Stats Section */
-.stats-section {
-    padding: var(--spacing-5xl) 0;
-    background: #faf6f0;
-}
-
-.stats-grid {
-    display: flex;
-    justify-content: center;
-    gap: var(--spacing-4xl);
-    flex-wrap: wrap;
-}
-
-.stat-item {
-    text-align: center;
-    padding: var(--spacing-2xl);
-    background: #faf6f0;
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--color-gray-100);
-    transition: var(--transition-normal);
-    min-width: 200px;
-}
-
-.stat-item:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--color-accent-light);
-}
-
-.stat-number {
-    font-size: var(--font-size-4xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-accent);
-    margin-bottom: var(--spacing-sm);
-    font-family: var(--font-family-display);
-}
-
-.stat-label {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-gray-900);
-    margin-bottom: var(--spacing-xs);
-}
-
-.stat-description {
-    font-size: var(--font-size-sm);
-    color: var(--color-gray-600);
-}
-
-/* Features Section */
-.features-section {
-    padding: var(--spacing-6xl) 0;
-    background: #faf6f0;
-}
-
-.section-header {
-    text-align: center;
-    margin-bottom: var(--spacing-5xl);
-}
-
-.section-title {
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-4xl);
-    font-weight: var(--font-weight-light);
-    color: var(--color-gray-900);
-    margin-bottom: var(--spacing-xl);
-}
-
-.section-subtitle {
-    font-size: var(--font-size-xl);
-    color: var(--color-gray-600);
-    max-width: 600px;
-    margin: 0 auto;
-    line-height: 1.6;
-}
-
-.features-grid {
-    display: flex;
-    gap: var(--spacing-3xl);
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.feature-card {
-    flex: 1;
-    min-width: 300px;
-    max-width: 380px;
-    background: #faf6f0;
-    border: 1px solid var(--color-gray-100);
-    border-radius: var(--radius-2xl);
-    padding: var(--spacing-3xl);
-    text-align: center;
-    transition: var(--transition-normal);
-    box-shadow: var(--shadow-sm);
-}
-
-.feature-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-xl);
-    border-color: var(--color-accent-light);
-}
-
-.feature-icon {
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, var(--color-accent-light) 0%, var(--color-accent) 100%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto var(--spacing-xl);
-    transition: var(--transition-normal);
-}
-
-.feature-card:hover .feature-icon {
-    transform: scale(1.1);
-    box-shadow: 0 0 30px rgba(201, 169, 110, 0.3);
-}
-
-.feature-icon i {
-    font-size: var(--font-size-2xl);
-    color: var(--color-white);
-}
-
-.feature-title {
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-gray-900);
-    margin-bottom: var(--spacing-lg);
-}
-
-.feature-description {
-    font-size: var(--font-size-base);
-    color: var(--color-gray-600);
-    line-height: 1.6;
-    margin-bottom: var(--spacing-xl);
-}
-
-.feature-highlight {
-    display: inline-block;
-    background: var(--color-accent-light);
-    color: var(--color-gray-900);
-    padding: var(--spacing-sm) var(--spacing-lg);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-}
-
-/* About Story Section */
-.about-story {
-    padding: var(--spacing-6xl) 0;
-    background: #faf6f0;
-}
-
-.story-layout {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.story-content {
-    width: 100%;
-}
-
-.story-header {
-    margin-bottom: var(--spacing-2xl);
-}
-
-.story-label {
-    display: inline-block;
-    background: var(--color-accent);
-    color: var(--color-white);
-    padding: var(--spacing-sm) var(--spacing-lg);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: var(--spacing-lg);
-}
-
-.story-title {
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-light);
-    color: var(--color-gray-900);
-    line-height: 1.2;
-}
-
-.story-text {
-    margin-bottom: var(--spacing-3xl);
-}
-
-.story-text p {
-    font-size: var(--font-size-base);
-    color: var(--color-gray-600);
+.about-story__copy p {
+    margin: 0 0 1rem;
+    color: #3f3f3f;
+    font-size: 1.05rem;
     line-height: 1.7;
-    margin-bottom: var(--spacing-xl);
 }
 
-.story-highlights {
-    margin-bottom: var(--spacing-3xl);
+.about-story__photos {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 0.85rem;
+    min-height: 320px;
 }
 
-.highlight-item {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-xl);
-    padding: var(--spacing-lg);
-    background: #faf6f0;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-gray-100);
-    transition: var(--transition-fast);
-}
-
-.highlight-item:hover {
-    border-color: var(--color-accent-light);
-    box-shadow: var(--shadow-sm);
-}
-
-.highlight-icon {
-    width: 50px;
-    height: 50px;
-    background: var(--color-accent-light);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.highlight-icon i {
-    font-size: var(--font-size-lg);
-    color: var(--color-gray-900);
-}
-
-.highlight-text h4 {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-gray-900);
-    margin-bottom: var(--spacing-xs);
-}
-
-.highlight-text p {
-    font-size: var(--font-size-sm);
-    color: var(--color-gray-600);
-    margin: 0;
-}
-
-.story-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg) var(--spacing-2xl);
-    background: var(--color-gray-900);
-    color: var(--color-white);
-    border: 1px solid var(--color-gray-900);
-    border-radius: var(--radius-lg);
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-medium);
-    text-decoration: none;
-    transition: var(--transition-fast);
-}
-
-.story-btn:hover {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
-}
-
-.story-btn i {
-    font-size: var(--font-size-sm);
-    transition: var(--transition-fast);
-}
-
-.story-btn:hover i {
-    transform: translateX(4px);
-}
-
-/* Mission Section */
-.mission-section {
-    padding: var(--spacing-6xl) 0;
-    background: #faf6f0;
-}
-
-.mission-content {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.mission-header {
-    text-align: center;
-    margin-bottom: var(--spacing-5xl);
-}
-
-.mission-title {
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-4xl);
-    font-weight: var(--font-weight-light);
-    color: var(--color-gray-900);
-    margin-bottom: var(--spacing-xl);
-}
-
-.mission-subtitle {
-    font-size: var(--font-size-xl);
-    color: var(--color-gray-600);
-    line-height: 1.6;
-}
-
-.mission-grid {
-    display: flex;
-    gap: var(--spacing-3xl);
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.mission-card {
-    flex: 1;
-    min-width: 280px;
-    max-width: 350px;
-    background: #faf6f0;
-    border: 1px solid var(--color-gray-100);
-    border-radius: var(--radius-2xl);
-    padding: var(--spacing-3xl);
-    text-align: center;
-    transition: var(--transition-normal);
-    box-shadow: var(--shadow-sm);
-}
-
-.mission-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-xl);
-    border-color: var(--color-accent-light);
-}
-
-.mission-icon {
-    width: 70px;
-    height: 70px;
-    background: var(--color-gray-100);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto var(--spacing-xl);
-    transition: var(--transition-normal);
-}
-
-.mission-card:hover .mission-icon {
-    background: var(--color-accent-light);
-    transform: scale(1.1);
-}
-
-.mission-icon i {
-    font-size: var(--font-size-xl);
-    color: var(--color-gray-700);
-    transition: var(--transition-normal);
-}
-
-.mission-card:hover .mission-icon i {
-    color: var(--color-gray-900);
-}
-
-.mission-card h3 {
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-gray-900);
-    margin-bottom: var(--spacing-lg);
-}
-
-.mission-card p {
-    font-size: var(--font-size-base);
-    color: var(--color-gray-600);
-    line-height: 1.6;
-    margin: 0;
-}
-
-/* Animations */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes fadeInRight {
-    from {
-        opacity: 0;
-        transform: translateX(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes scaleIn {
-    from {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.fade-in-up {
-    animation: fadeInUp 0.8s ease forwards;
-}
-
-.fade-in-left {
-    animation: fadeInLeft 0.8s ease forwards;
-}
-
-.fade-in-right {
-    animation: fadeInRight 0.8s ease forwards;
-}
-
-.scale-in {
-    animation: scaleIn 0.6s ease forwards;
-}
-
-.delay-1 { animation-delay: 0.2s; }
-.delay-2 { animation-delay: 0.4s; }
-.delay-3 { animation-delay: 0.6s; }
-.delay-4 { animation-delay: 0.8s; }
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .hero-content {
-        flex-direction: column;
-        text-align: center;
-        gap: var(--spacing-4xl);
-    }
-    
-    .hero-image {
-        flex: none;
-        max-width: 400px;
-    }
-}
-
-@media (max-width: 768px) {
-    .hero-title {
-        font-size: var(--font-size-4xl);
-    }
-    
-    .hero-subtitle {
-        font-size: var(--font-size-lg);
-    }
-    
-    .hero-cta {
-        justify-content: center;
-    }
-    
-    .stats-grid {
-        gap: var(--spacing-2xl);
-    }
-    
-    .stat-item {
-        min-width: 150px;
-        padding: var(--spacing-xl);
-    }
-    
-    .features-grid {
-        flex-direction: column;
-        gap: var(--spacing-2xl);
-    }
-    
-    .feature-card {
-        min-width: auto;
-        max-width: none;
-    }
-    
-    .mission-grid {
-        flex-direction: column;
-        gap: var(--spacing-2xl);
-    }
-    
-    .mission-card {
-        min-width: auto;
-        max-width: none;
-    }
-}
-
-@media (max-width: 480px) {
-    .about-hero {
-        min-height: 80vh;
-    }
-    
-    .hero-content {
-        gap: var(--spacing-3xl);
-    }
-    
-    .hero-title {
-        font-size: var(--font-size-3xl);
-    }
-    
-    .hero-cta {
-        flex-direction: column;
-        gap: var(--spacing-lg);
-    }
-    
-    .hero-btn {
-        justify-content: center;
-    }
-    
-    .stats-grid {
-        flex-direction: column;
-        gap: var(--spacing-xl);
-    }
-    
-    .feature-card, .mission-card {
-        padding: var(--spacing-2xl);
-    }
-}
-</style>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-// About Page Animations and Interactions
-class AboutPageManager {
-    constructor() {
-        this.initializeScrollAnimations();
-        this.initializeInteractions();
-    }
-    
-    initializeScrollAnimations() {
-        // Intersection Observer for scroll-triggered animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animationPlayState = 'running';
-                }
-            });
-        }, observerOptions);
-        
-        // Observe all animated elements
-        document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right, .scale-in').forEach(el => {
-            el.style.animationPlayState = 'paused';
-            observer.observe(el);
-        });
-    }
-    
-    initializeInteractions() {
-        // Hero play button interaction
-        const playButton = document.querySelector('.play-button');
-        if (playButton) {
-            playButton.addEventListener('click', () => {
-                this.showVideoModal();
-            });
-        }
-        
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', (e) => {
-                e.preventDefault();
-                const target = document.querySelector(anchor.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-    }
-    
-    showVideoModal() {
-        const modal = document.createElement('div');
-        modal.className = 'video-modal';
-        modal.innerHTML = `
-            <div class="modal-backdrop" onclick="closeVideoModal()"></div>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>About Tio Academy</h3>
-                    <button onclick="closeVideoModal()" class="close-btn">
-                        <i class="fas fa-times"></i>
-                    </button>
-            </div>
-                <div class="modal-video">
-                    <video controls autoplay>
-                        <source src="/static/videos/about-tio-academy.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-        </div>
-    </div>
-        `;
-        
-        document.body.appendChild(modal);
-    }
-}
-
-function closeVideoModal() {
-    const modal = document.querySelector('.video-modal');
-    if (modal) {
-        modal.remove();
-    }
-}
-
-// Additional CSS for video modal
-const modalStyles = `
-<style>
-.video-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease;
-}
-
-.video-modal .modal-content {
-    background: white;
-    border-radius: var(--radius-2xl);
-    max-width: 800px;
-    width: 90%;
-    overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.video-modal .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--spacing-xl);
-    border-bottom: 1px solid var(--color-gray-100);
-}
-
-.video-modal .modal-header h3 {
-    margin: 0;
-    color: var(--color-gray-900);
-}
-
-.video-modal .close-btn {
-    background: none;
-    border: none;
-    font-size: var(--font-size-lg);
-    color: var(--color-gray-500);
-    cursor: pointer;
-}
-
-.modal-video video {
+.about-story__photos img {
     width: 100%;
-    height: auto;
-    max-height: 60vh;
+    height: 100%;
+    min-height: 280px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+.about-story__photos img:first-child {
+    animation: aboutPhotoIn 0.9s ease-out 0.1s both;
+}
+
+.about-story__photos img:last-child {
+    margin-top: 1.75rem;
+    animation: aboutPhotoIn 0.9s ease-out 0.25s both;
+}
+
+@keyframes aboutPhotoIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+    .about-hero__content {
+        margin: 0 auto;
+        width: min(640px, 90%);
+        text-align: left;
+    }
+
+    .about-story__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-story__photos {
+        min-height: auto;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .about-story__photos img {
+        min-height: 200px;
+    }
+
+    .about-story__photos img:last-child {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 560px) {
+    .about-hero {
+        min-height: 78vh;
+    }
+
+    .about-story__photos {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .about-hero__media,
+    .about-hero__content,
+    .about-story__photos img {
+        animation: none !important;
+    }
 }
 </style>
-`;
-
-document.head.insertAdjacentHTML('beforeend', modalStyles);
-
-// Initialize the about page manager when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    new AboutPageManager();
-});
-</script>
 {% endblock %}

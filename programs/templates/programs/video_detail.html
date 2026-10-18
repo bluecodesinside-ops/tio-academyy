@@ -301,7 +301,7 @@
     <section class="video-player-section">
         <div class="video-player-container">
             {% if video.video_file %}
-                <video id="video-player" class="w-full h-full" controls preload="metadata" controlsList="nodownload">
+                <video id="video-player" class="w-full h-full" controls playsinline webkit-playsinline preload="metadata" controlsList="nodownload">
                     <source src="{{ video.video_file.url }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
@@ -311,11 +311,11 @@
                     class="w-full h-full" 
                     src="{{ video.video_url|youtube_embed_url }}" 
                     frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen>
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" 
+                    allowfullscreen webkitallowfullscreen playsinline>
                 </iframe>
             {% elif video.video_url %}
-                <video id="video-player" class="w-full h-full" controls preload="metadata" controlsList="nodownload">
+                <video id="video-player" class="w-full h-full" controls playsinline webkit-playsinline preload="metadata" controlsList="nodownload">
                     <source src="{{ video.video_url }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>

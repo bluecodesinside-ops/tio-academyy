@@ -1,41 +1,46 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}Login{% endblock %}
+{% block title %}{% trans "Sign in" %} - {% trans "Tio Academy" %}{% endblock %}
 
-{% block content %}
-<div style="max-width: 400px; margin: 50px auto; padding: 20px;">
-    <h2>Login</h2>
-    
-    {% if messages %}
-        {% for message in messages %}
-            <div style="padding: 10px; margin: 10px 0; background: {% if message.tags == 'error' %}#fee{% else %}#efe{% endif %}; border: 1px solid {% if message.tags == 'error' %}#c00{% else %}#0c0{% endif %};">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
-    
-    <form method="post">
-        {% csrf_token %}
-        {% if request.GET.next %}
-            <input type="hidden" name="next" value="{{ request.GET.next }}">
-        {% endif %}
-        <div style="margin: 15px 0;">
-            <label>Email:</label>
-            <input type="email" name="email" required style="width: 100%; padding: 8px; margin-top: 5px;">
-        </div>
-        <div style="margin: 15px 0;">
-            <label>Password:</label>
-            <input type="password" name="password" required style="width: 100%; padding: 8px; margin-top: 5px;">
-        </div>
-        <button type="submit" style="width: 100%; padding: 10px; background: #007bff; color: white; border: none; cursor: pointer;">
-            Login
-        </button>
-    </form>
-    
-    <p style="margin-top: 20px; text-align: center;">
-        Don't have an account? <a href="{% url 'users:register' %}">Register here</a>
-    </p>
-</div>
+{% block extra_css %}
+{{ block.super }}
+{% include 'users/_auth_styles.html' %}
 {% endblock %}
 
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card">
+        {% include 'components/profile_icon.html' %}
+        <h1>{% trans "Sign in" %}</h1>
+        <p class="auth-card__lead">{% trans "Use the email and password you created for Tio Academy — not your Gmail password." %}</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="auth-alert {% if message.tags == 'error' %}auth-alert--error{% else %}auth-alert--success{% endif %}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" onsubmit="this.querySelector('.auth-submit').disabled = true;">
+            {% csrf_token %}
+            {% if next_url %}<input type="hidden" name="next" value="{{ next_url }}">{% endif %}
+            <div class="auth-field">
+                <label for="email">{% trans "Your email address" %}</label>
+                <input id="email" type="email" name="email" required autocomplete="email" placeholder="you@email.com">
+            </div>
+            <div class="auth-field">
+                <label for="password">{% trans "Password for this account" %}</label>
+                <input id="password" type="password" name="password" required autocomplete="current-password">
+                <p class="auth-hint">{% trans "This password is only for this site." %}</p>
+            </div>
+            <button class="auth-submit" type="submit">{% trans "Sign in" %}</button>
+        </form>
+
+        <p class="auth-switch">
+            {% trans "New here?" %}
+            <a href="{% url 'users:register' %}{% if next_url %}?next={{ next_url|urlencode }}{% endif %}">{% trans "Create a profile" %}</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -80,6 +80,21 @@ def create_checkout_session(request, package_slug):
             return JsonResponse({
                 'error': 'Price ID not configured for this package'
             }, status=400)
+
+        # Block demo/placeholder Stripe price IDs from setup_pricing_data
+        fake_markers = (
+            '_test',
+            'standard_monthly',
+            'standard_yearly',
+            'pro_monthly',
+            'pro_yearly',
+            'gold_monthly',
+            'gold_yearly',
+        )
+        if any(marker in price_id for marker in fake_markers):
+            return JsonResponse({
+                'error': 'This plan is not available for purchase yet. Please buy a course instead.'
+            }, status=400)
         
         # Create or get customer
         customer_email = request.POST.get('email')

@@ -1,0 +1,55 @@
+{% extends "admin/base_site.html" %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a>
+  &rsaquo; <a href="{% url 'admin:users_sitedailystat_changelist' %}">Website traffic</a>
+  &rsaquo; {{ picked|date:"j M Y" }}
+</div>
+{% endblock %}
+
+{% block content %}
+{% include "admin/users/sitedailystat/_insight_styles.html" %}
+<div class="insight-board">
+<h1>Insights for {{ picked|date:"l j F Y" }}</h1>
+<div class="insight-actions">
+  <a class="xls" href="{% url 'admin:users_sitedailystat_export_excel' %}?day={{ picked|date:'Y-m-d' }}">Excel this day</a>
+  <a class="pdf" href="{% url 'admin:users_sitedailystat_export_pdf' %}?day={{ picked|date:'Y-m-d' }}">PDF this day</a>
+</div>
+<p class="insight-note"><a href="{% url 'admin:users_sitedailystat_changelist' %}">Back to calendar</a></p>
+
+<div class="insight-cards">
+  <div class="insight-card">
+    <div class="k">People</div>
+    <div class="v">{{ report.headline.unique_visitors }}</div>
+  </div>
+  <div class="insight-card">
+    <div class="k">Traffic</div>
+    <div class="v">{{ report.headline.page_views }}</div>
+    <div class="s">page opens</div>
+  </div>
+  <div class="insight-card">
+    <div class="k">Clicked buy</div>
+    <div class="v">{{ report.headline.buy_clicks }}</div>
+  </div>
+  <div class="insight-card">
+    <div class="k">Bought</div>
+    <div class="v">{{ report.headline.purchases }}</div>
+  </div>
+</div>
+
+{% include "admin/users/sitedailystat/_top_list.html" with toplist_tabs=report.toplist_tabs %}
+
+<div class="insight-paid">
+  <h2>What they paid</h2>
+  {% for row in report.paid_items %}
+    <div class="paid-row">
+      <strong>{{ row.label }}</strong>
+      <div class="s">{{ row.when|date:"H:i" }} · {{ row.amount }}</div>
+    </div>
+  {% empty %}
+    <p class="empty">No purchases this day.</p>
+  {% endfor %}
+</div>
+</div>
+{% endblock %}

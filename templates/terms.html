@@ -1,32 +1,31 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}Terms of Service - Latina Dance Academy{% endblock %}
+{% block title %}{% trans "Terms of Service" %} - {% trans "Tio Academy" %}{% endblock %}
 
 {% block content %}
-<!-- Page Header -->
 <section class="page-header">
     <div class="container">
-        <h1>Terms of Service</h1>
-        <p>Our terms and conditions</p>
+        <h1>{% trans "Terms of Service" %}</h1>
+        <p>{% trans "Our terms and conditions" %}</p>
     </div>
 </section>
 
-<!-- Terms Content -->
 <section class="terms-content">
     <div class="container">
         <div class="terms-text">
-            <h2>Terms and Conditions</h2>
-            <p>By using our platform, you agree to these terms and conditions. Please read them carefully.</p>
-            
-            <h3>Course Access</h3>
-            <p>Course access is granted for personal, non-commercial use only. You may not share your account or course materials with others.</p>
-            
-            <h3>Payment Terms</h3>
-            <p>All payments are processed securely. Course fees are non-refundable unless otherwise specified.</p>
-            
-            <h3>User Conduct</h3>
-            <p>You agree to use our platform responsibly and not to engage in any activities that could harm our services or other users.</p>
+            <h2>{% trans "Terms and Conditions" %}</h2>
+            <p>{% trans "By using our platform, you agree to these terms and conditions. Please read them carefully." %}</p>
+
+            <h3>{% trans "Course Access" %}</h3>
+            <p>{% trans "Course access is granted for personal, non-commercial use only. You may not share your account or course materials with others." %}</p>
+
+            <h3>{% trans "Payment Terms" %}</h3>
+            <p>{% trans "All payments are processed securely. Course fees are non-refundable unless otherwise specified." %}</p>
+
+            <h3>{% trans "User Conduct" %}</h3>
+            <p>{% trans "You agree to use our platform responsibly and not to engage in any activities that could harm our services or other users." %}</p>
         </div>
     </div>
 </section>

@@ -108,25 +108,26 @@ class SlideshowItem(models.Model):
         return None
 
     def get_youtube_embed_url(self):
-        """Bare embed URL (no query params)."""
+        """Embed URL with inline playback for phones."""
         vid = self.get_youtube_video_id()
         if not vid:
             return None
-        return f'https://www.youtube.com/embed/{vid}'
+        return f'https://www.youtube.com/embed/{vid}?playsinline=1'
 
     def get_youtube_embed_src(self, origin=None):
         """
         Embed URL with parameters that reduce player configuration issues (e.g. Error 153)
         when origin matches the parent page (scheme + host + port).
         """
-        base = self.get_youtube_embed_url()
-        if not base:
+        vid = self.get_youtube_video_id()
+        if not vid:
             return None
         params = {
+            'playsinline': '1',
             'enablejsapi': '1',
             'rel': '0',
             'modestbranding': '1',
         }
         if origin:
             params['origin'] = origin
-        return f'{base}?{urlencode(params)}'
+        return f'https://www.youtube.com/embed/{vid}?{urlencode(params)}'

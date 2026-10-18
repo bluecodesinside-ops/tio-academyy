@@ -486,33 +486,34 @@
 <!-- Hero Section -->
 <section class="pricing-hero">
     <div class="container">
-        <h1 class="pricing-hero__title">Choose Your Perfect Plan</h1>
+        <h1 class="pricing-hero__title">{% trans "Course Access" %}</h1>
         <p class="pricing-hero__subtitle">
-            Start your dance journey with our comprehensive programs. 
-            All plans include access to our video library and community.
+            {% trans "Unlock individual courses with a one-time payment. Browse the catalog and purchase the course you want." %}
         </p>
         
+        {% if packages %}
         <!-- Billing Toggle -->
         <div class="billing-toggle">
             <button id="monthly-toggle" class="active" onclick="toggleBilling('monthly')">
-                Monthly
+                {% trans "Monthly" %}
             </button>
             <button id="yearly-toggle" onclick="toggleBilling('yearly')">
-                Yearly
-                <span class="yearly-discount" id="yearly-discount">Save 20%</span>
+                {% trans "Yearly" %}
+                <span class="yearly-discount" id="yearly-discount">{% trans "Save 20%" %}</span>
             </button>
         </div>
+        {% endif %}
     </div>
 </section>
 
-<!-- Pricing Cards -->
+<!-- Pricing Cards / Course purchase CTA -->
 <section class="pricing-section">
     <div class="pricing-grid">
         {% for package in packages %}
         {% if package.is_price_set and package.is_active %}
         <div class="pricing-card {% if package.is_popular %}popular{% endif %}">
             {% if package.is_popular %}
-            <div class="popular-badge">Most Popular</div>
+            <div class="popular-badge">{% trans "Most Popular" %}</div>
             {% endif %}
             
             <h3 class="pricing-card__name">{{ package.name }}</h3>
@@ -523,12 +524,12 @@
                 <span class="yearly-price hidden">{{ package.yearly_price|floatformat:0 }}</span>
             </div>
             <div class="pricing-card__period">
-                <span class="monthly-text">per month</span>
-                <span class="yearly-text hidden">per year</span>
+                <span class="monthly-text">{% trans "per month" %}</span>
+                <span class="yearly-text hidden">{% trans "per year" %}</span>
             </div>
             {% if package.yearly_price %}
             <div class="pricing-card__discount yearly-discount-text hidden">
-                Save {{ package.get_yearly_discount_percentage }}% with yearly billing
+                {% blocktrans with pct=package.get_yearly_discount_percentage %}Save {{ pct }}% with yearly billing{% endblocktrans %}
             </div>
             {% endif %}
             
@@ -543,41 +544,22 @@
             </a>
         </div>
         {% endif %}
+        {% empty %}
         {% endfor %}
     </div>
-</section>
-
-<!-- Subscription Options Section -->
-<section class="pricing-section" style="background: #ebebe8;">
-    <div class="container" style="max-width: 800px; margin: 0 auto; padding: 0 var(--spacing-xl);">
-        <h2 style="text-align: center; font-family: var(--font-family-display); font-size: var(--font-size-4xl); font-weight: var(--font-weight-bold); color: #0a0a0a; margin-bottom: var(--spacing-2xl);">
-            Premium Access Options
+    {% if not packages %}
+    <div class="container" style="max-width: 640px; margin: 0 auto; padding: 0 var(--spacing-xl); text-align: center;">
+        <h2 style="font-family: var(--font-family-display); font-size: var(--font-size-3xl); color: #0a0a0a; margin-bottom: var(--spacing-lg);">
+            {% trans "Buy courses individually" %}
         </h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-2xl); margin-top: var(--spacing-4xl);">
-            <div class="pricing-option-card">
-                <h3 style="font-family: var(--font-family-display); font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: #0a0a0a; margin-bottom: var(--spacing-lg);">
-                    Subscribe
-                </h3>
-                <p style="color: #525252; margin-bottom: var(--spacing-2xl); line-height: 1.6;">
-                    Get unlimited access to all premium content with a monthly subscription.
-                </p>
-                <button type="button" onclick="handleSubscriptionCheckout()" class="pricing-card__button" style="width: 100%;">
-                    Subscribe Now
-                </button>
-            </div>
-            <div class="pricing-option-card">
-                <h3 style="font-family: var(--font-family-display); font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: #0a0a0a; margin-bottom: var(--spacing-lg);">
-                    Buy Lifetime
-                </h3>
-                <p style="color: #525252; margin-bottom: var(--spacing-2xl); line-height: 1.6;">
-                    One-time payment for lifetime access to all premium content.
-                </p>
-                <button type="button" onclick="handleLifetimeCheckout()" class="pricing-card__button" style="width: 100%;">
-                    Buy Lifetime Access
-                </button>
-            </div>
-        </div>
+        <p style="color: #525252; margin-bottom: var(--spacing-2xl); line-height: 1.6;">
+            {% trans "Unlock the course you want with a one-time payment. No subscriptions required." %}
+        </p>
+        <a href="{% url 'courses' %}" class="pricing-card__button" style="display: inline-block;">
+            {% trans "Browse Courses" %}
+        </a>
     </div>
+    {% endif %}
 </section>
 
 <!-- Money-Back Guarantee Section -->
@@ -596,14 +578,14 @@
             {% if guarantee_content.customer_count %}
             <div class="guarantee-stat">
                 <span class="guarantee-stat__number">{{ guarantee_content.customer_count|floatformat:0 }}+</span>
-                <span class="guarantee-stat__label">Happy Students</span>
+                <span class="guarantee-stat__label">{% trans "Happy Students" %}</span>
             </div>
             {% endif %}
             
             {% if guarantee_content.star_rating %}
             <div class="guarantee-stat">
                 <span class="guarantee-stat__number">{{ guarantee_content.star_rating }}/5</span>
-                <span class="guarantee-stat__label">Average Rating</span>
+                <span class="guarantee-stat__label">{% trans "Average Rating" %}</span>
             </div>
             {% endif %}
         </div>
@@ -615,33 +597,33 @@
 <!-- FAQ Section -->
 <section class="faq-section">
     <div class="faq-container">
-        <h2 class="faq-title">Frequently Asked Questions</h2>
+        <h2 class="faq-title">{% trans "Frequently Asked Questions" %}</h2>
         
         <div class="faq-item">
-            <h3 class="faq-question">Can I change my plan later?</h3>
+            <h3 class="faq-question">{% trans "How do I buy a course?" %}</h3>
             <p class="faq-answer">
-                Yes! You can upgrade or downgrade your plan at any time. Changes will be prorated and take effect immediately.
+                {% trans "Open any course and click Unlock. You will pay once for that course and get full access to its videos." %}
             </p>
         </div>
         
         <div class="faq-item">
-            <h3 class="faq-question">What payment methods do you accept?</h3>
+            <h3 class="faq-question">{% trans "What payment methods do you accept?" %}</h3>
             <p class="faq-answer">
-                We accept all major credit cards (Visa, MasterCard, American Express) through our secure Stripe payment processor.
+                {% trans "We accept all major credit cards (Visa, MasterCard, American Express) through our secure Stripe payment processor." %}
             </p>
         </div>
         
         <div class="faq-item">
-            <h3 class="faq-question">Can I cancel anytime?</h3>
+            <h3 class="faq-question">{% trans "Do I need an account?" %}</h3>
             <p class="faq-answer">
-                Absolutely! You can cancel your subscription at any time. You'll continue to have access until the end of your current billing period.
+                {% trans "You can start checkout as a guest. After payment, access is linked to the email you use at checkout." %}
             </p>
         </div>
         
         <div class="faq-item">
-            <h3 class="faq-question">Do you offer refunds?</h3>
+            <h3 class="faq-question">{% trans "Do you offer refunds?" %}</h3>
             <p class="faq-answer">
-                Yes! We offer a {{ guarantee_content.days }}-day money-back guarantee. If you're not satisfied, we'll refund your payment, no questions asked.
+                {% blocktrans with days=guarantee_content.days %}Yes! We offer a {{ days }}-day money-back guarantee. If you're not satisfied, we'll refund your payment, no questions asked.{% endblocktrans %}
             </p>
         </div>
     </div>

@@ -152,7 +152,7 @@ class LightboxModal {
         
         <div class="lightbox__media-container">
           <img class="lightbox__media" style="display: none;">
-          <video class="lightbox__media" controls style="display: none;">
+          <video class="lightbox__media" controls playsinline webkit-playsinline x5-playsinline style="display: none;">
             <source type="video/mp4">
           </video>
         </div>

@@ -4,190 +4,179 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
+
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-12 19:09+0000\n"
+"POT-Creation-Date: 2026-08-14 06:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Home"
-msgstr "Kreu"
+#: courses_overview.html:5 templates/courses_overview.html:5
+#| msgid "Courses - Latina Dance Academy"
 
-msgid "About Us - Tio Academy"
-msgstr "Rreth Nesh - Tio Academy"
+msgid "Courses - Tio Academy"
+msgstr "Kurset - Akademia e Kërcimit Latino"
 
-msgid "Dance Your Way to Excellence"
-msgstr "Kërce Rrugën Tënde Drejt Ekselencës"
+#: courses_overview.html:13
 
-msgid ""
-"Transform your passion into mastery with our world-class Latin dance "
-"education platform"
-msgstr ""
-"Transformo pasionin tënd në mjeshtëri me platformën tonë botërore të "
-"edukimit të kërcimit latino"
+msgid "Our Programs & Courses"
+msgstr "Programet dhe kurset tona"
+
+msgid "Master your craft with our premium course collection across dance, physiotherapy, and fitness"
+msgstr "Përsos artin tënd me koleksionin tonë të kurseve në valle, fizioterapi dhe fitnes"
+
+msgid "Included"
+msgstr "Përfshirë"
+
+#: courses_overview.html:73 templates/course_detail.html:228
+#: templates/courses_overview.html:73
 
 msgid "Start Learning"
-msgstr "Fillo Mësimin"
+msgstr "Fillo të mësosh"
 
-msgid "Our Story"
-msgstr "Historia Jonë"
+msgid "No courses available"
+msgstr "Nuk ka kurse të disponueshme"
 
-msgid "Dancers"
-msgstr "Kërcyes"
+#: courses_overview.html:83 templates/courses_overview.html:83
 
-msgid "Students worldwide"
-msgstr "Studentë në mbarë botën"
+msgid "Check back soon for new courses!"
+msgstr "Kontrolloni së shpejti për kurse të reja!"
 
-msgid "Dance Styles"
-msgstr "Stile Kërcimi"
+#: courses_overview.html:94
+#| msgid "Ready to Start Your Dance Journey?"
 
-msgid "Comprehensive curriculum"
-msgstr "Kurrikulë gjithëpërfshirëse"
+msgid "Ready to Start Your Journey?"
+msgstr "Gati për të Filluar Udhëtimin Tënd të Kërcimit?"
+
+#: courses_overview.html:95
+
+msgid "Join thousands of students learning with our expert instructors across all programs"
+msgstr "Bashkohu me mijëra studentë që mësojnë me instruktorët tanë në të gjitha programet"
+
+msgid "Students"
+msgstr "Studentë"
+
+#: courses_overview.html:103 templates/base.html:480
+#: templates/courses_overview.html:103
+
+msgid "Courses"
+msgstr "Kurset"
 
 msgid "Rating"
 msgstr "Vlerësim"
 
-msgid "Student satisfaction"
-msgstr "Kënaqësia e studentëve"
+#: newsletter/templates/admin/newsletter/send_newsletter.html:62
+#: templates/base.html:478
 
-msgid "Years"
-msgstr "Vjet"
+msgid "Home"
+msgstr "Kreu"
 
-msgid "Teaching experience"
-msgstr "Përvojë mësimdhënie"
+msgid "Course Access"
+msgstr "Qasja në kurse"
 
-msgid "Why Choose Tio Academy"
-msgstr "Pse Të Zgjedhësh Tio Academy"
+msgid "Unlock individual courses with a one-time payment. Browse the catalog and purchase the course you want."
+msgstr "Zhblloko kurse individuale me një pagesë të vetme. Shfleto katalogun dhe bli kursin që dëshiron."
 
-msgid "Experience the difference of professional dance education"
-msgstr "Përjeto ndryshimin e edukimit profesional të kërcimit"
+msgid "Monthly"
+msgstr "Mujore"
 
-msgid "HD Video Lessons"
-msgstr "Mësime Video HD"
+msgid "Yearly"
+msgstr "Vjetore"
 
-msgid ""
-"Crystal-clear 4K video instruction with multiple camera angles and slow-"
-"motion breakdowns for perfect technique mastery."
-msgstr ""
+msgid "Save 20%%"
+msgstr "Kurseni 20%"
 
-msgid "Professional Quality"
-msgstr "Cilësi Profesionale"
+msgid "Most Popular"
+msgstr "Më e popullarizuara"
 
-msgid "Learn Anytime"
-msgstr "Mëso Kurdo"
+msgid "per month"
+msgstr "në muaj"
 
-msgid ""
-"Access your courses 24/7 from anywhere in the world. Learn at your own pace "
-"with lifetime access to all content."
-msgstr ""
+msgid "per year"
+msgstr "në vit"
 
-msgid "Flexible Schedule"
-msgstr "Orar Fleksibël"
+msgid "Save %(pct)s%% with yearly billing"
+msgstr "Kurseni %(pct)s%% me faturim vjetor"
 
-msgid "All Dance Styles"
-msgstr "Të Gjitha Stilet e Kërcimit"
+msgid "Buy courses individually"
+msgstr "Bli kurse individualisht"
 
-msgid ""
-"From salsa and bachata to merengue and cha cha, master the complete spectrum "
-"of Latin dance styles."
-msgstr ""
+msgid "Unlock the course you want with a one-time payment. No subscriptions required."
+msgstr "Zhblloko kursin që dëshiron me një pagesë të vetme. Nuk kërkohet abonim."
 
-msgid "Complete Curriculum"
-msgstr "Kurrikulë e Plotë"
+msgid "Browse Courses"
+msgstr "Shfleto kurset"
 
-msgid "Our Journey"
-msgstr "Udhëtimi Ynë"
+msgid "Happy Students"
+msgstr "Studentë të kënaqur"
 
-msgid "15+ Years of Dance Excellence"
-msgstr "15+ Vjet Ekselence Kërcimi"
+msgid "Average Rating"
+msgstr "Vlerësimi mesatar"
 
-msgid ""
-"Founded by professional dancers with over 15 years of experience, Tio "
-"Academy was born from a passion to make authentic Latin dance accessible to "
-"everyone."
-msgstr ""
+msgid "Frequently Asked Questions"
+msgstr "Pyetjet e shpeshta"
 
-msgid ""
-"Our unique teaching method breaks complex moves into simple, digestible "
-"steps that anyone can master. Whether you're a complete beginner or an "
-"advanced dancer, our progressive curriculum adapts to your skill level."
-msgstr ""
+msgid "How do I buy a course?"
+msgstr "Si të blej një kurs?"
 
-msgid ""
-"With HD video lessons, personalized feedback, and 24/7 accessibility, we've "
-"revolutionized how people learn to dance. Join our global community and "
-"discover the joy of Latin dance."
-msgstr ""
+msgid "Open any course and click Unlock. You will pay once for that course and get full access to its videos."
+msgstr "Hap çdo kurs dhe kliko Zhblloko. Paguan një herë për atë kurs dhe merr qasje të plotë te videot."
 
-msgid "Expert Instructors"
-msgstr "Instruktorë Ekspertë"
+msgid "What payment methods do you accept?"
+msgstr "Çfarë metodash pagese pranoni?"
 
-msgid "Professional dancers with international recognition"
-msgstr "Kërcyes profesionalë me njohje ndërkombëtare"
+msgid "We accept all major credit cards (Visa, MasterCard, American Express) through our secure Stripe payment processor."
+msgstr "Pranojmë të gjitha kartat kryesore (Visa, MasterCard, American Express) përmes procesorit të sigurt Stripe."
 
-msgid "Proven Method"
-msgstr "Metodë e Provuar"
+msgid "Do I need an account?"
+msgstr "A më duhet një llogari?"
 
-msgid "Simplified learning approach for faster progress"
-msgstr "Qasje e thjeshtuar e të mësuarit për progres më të shpejtë"
+msgid "You can start checkout as a guest. After payment, access is linked to the email you use at checkout."
+msgstr "Mund të fillosh pagesën si mysafir. Pas pagesës, qasja lidhet me emailin që përdor në checkout."
 
-msgid "Global Community"
-msgstr "Komunitet Global"
+msgid "Do you offer refunds?"
+msgstr "A ofroni rimbursime?"
 
-msgid "Connect with dancers from around the world"
-msgstr "Lidhu me kërcyes nga mbarë bota"
+msgid "Yes! We offer a %(days)s-day money-back guarantee. If you're not satisfied, we'll refund your payment, no questions asked."
+msgstr "Po! Ofrojmë garanci kthimi parash %(days)s-ditore. Nëse nuk je i kënaqur, ta kthejmë pagesën — pa pyetje."
 
-#, fuzzy
-#| msgid "Explore Courses"
-msgid "Explore Our Courses"
-msgstr "Eksploro Kurset"
+msgid "About Us - Tio Academy"
+msgstr "Rreth nesh - Tio Academy"
 
-msgid "Our Mission"
-msgstr "Misioni Ynë"
+msgid "About Tio Academy"
+msgstr "Rreth Tio Academy"
 
-msgid "Preserving culture while embracing innovation"
-msgstr "Ruajtja e kulturës ndërsa përqafojmë inovacionin"
-
-msgid "Cultural Preservation"
-msgstr "Ruajtja e Kulturës"
-
-msgid ""
-"Honor the authentic roots and traditions of Latin dance while making it "
-"accessible to modern learners."
-msgstr ""
-
-msgid "Innovation"
-msgstr "Inovacion"
-
-msgid ""
-"Leverage cutting-edge technology to create the most effective and engaging "
-"dance learning experience."
-msgstr ""
-
-msgid "Accessibility"
-msgstr "Aksesueshmëri"
-
-msgid ""
-"Break down barriers and make professional dance education available to "
-"anyone, anywhere in the world."
-msgstr ""
+msgid "Students training at Tio Academy"
+msgstr "Studentë që trajnohen në Tio Academy"
 
 msgid "Tio Academy"
 msgstr "Tio Academy"
 
-msgid "About"
-msgstr "Rreth Nesh"
+msgid "Learn from home. Train with purpose."
+msgstr "Mëso nga shtëpia. Trajnohu me qëllim."
 
-msgid "Courses"
-msgstr "Kurset"
+msgid "Online courses in dance, physiotherapy, and fitness."
+msgstr "Kurse online në valle, fizioterapi dhe fitnes."
+
+msgid "Who we are"
+msgstr "Kush jemi"
+
+msgid "Tio Academy is an online platform for clear, practical video training. Unlock a course once, then learn step by step at your own pace."
+msgstr "Tio Academy është një platformë online për trajnim video të qartë dhe praktik. Zhblloko një kurs një herë, pastaj mëso hap pas hapi me ritmin tënd."
+
+msgid "From traditional dance to guided physiotherapy and fitness — quality instruction, available whenever you are ready."
+msgstr "Nga vallet tradicionale te fizioterapia e udhëzuar dhe fitnesi — udhëzim cilësor, i disponueshëm kurdo që je gati."
+
+msgid "About"
+msgstr "Rreth nesh"
 
 msgid "Dashboard"
 msgstr "Paneli"
@@ -199,10 +188,12 @@ msgid "Login"
 msgstr "Hyr"
 
 msgid "Premium dance education since 2010"
-msgstr "Edukim premium i kërcimit që nga viti 2010"
+msgstr "Edukim premium që nga 2010"
 
 msgid "All rights reserved."
 msgstr "Të gjitha të drejtat të rezervuara."
+
+#: templates/base.html:569
 
 msgid "Privacy"
 msgstr "Privatësia"
@@ -213,158 +204,92 @@ msgstr "Kushtet"
 msgid "Designed and developed by"
 msgstr "Dizajnuar dhe zhvilluar nga"
 
-#, fuzzy
+#: templates/course_detail.html:6
 #| msgid "Courses"
+
 msgid "Course"
-msgstr "Kurs"
+msgstr "Kursi"
 
-#, fuzzy
-#| msgid "Explore Courses"
-msgid "Premium Course"
-msgstr "Kurs Premium"
+msgid "Course cover"
+msgstr "Kopertina e kursit"
 
-msgid "4K Streaming"
-msgstr "Transmetim 4K"
+msgid "Free course — full access"
+msgstr "Kurs falas — qasje e plotë"
 
-msgid "Stream Only"
-msgstr "Vetëm Transmetim"
+msgid "Unlock for"
+msgstr "Zhblloko për"
 
-#, fuzzy
-#| msgid "Tio Academy"
-msgid "Tio Academy Expert"
-msgstr "Ekspert Tio Academy"
+msgid "Play video"
+msgstr "Luaj videon"
 
-#, fuzzy
-#| msgid "Professional graduates"
-msgid "Professional Dance Instructor"
-msgstr "Instruktor Profesional i Kërcimit"
+msgid "Video URL not set yet. Add a Bunny or YouTube link in admin."
+msgstr "URL e videos nuk është vendosur ende. Shto një lidhje Bunny ose YouTube në admin."
 
-#, fuzzy
-#| msgid "Students"
-msgid "students"
-msgstr "Studentë"
-
-msgid "total"
-msgstr "gjithsej"
-
-#, fuzzy
-#| msgid "Previous"
-msgid "reviews"
-msgstr "vlerësime"
-
-msgid "sessions"
-msgstr "sesione"
-
-msgid "Free Course - Full Access"
-msgstr "Kurs Falas - Akses i Plotë"
-
-#, fuzzy
-#| msgid "Courses"
-msgid "Course Purchased"
-msgstr "Kurset"
-
-msgid "FREE COURSE"
-msgstr "KURS FALAS"
-
-#, fuzzy
-#| msgid "HD Video Lessons"
-msgid "Video Lessons"
-msgstr "Mësime Video HD"
-
-msgid "of Content"
-msgstr "Përmbajtje"
-
-msgid "Mobile & Desktop Access"
-msgstr "Akses Mobil dhe Desktop"
-
-#, fuzzy
-#| msgid "Certified professionals"
-msgid "Certificate of Completion"
-msgstr "Certifikatë Përfundimi"
-
-msgid "Start Free Course"
-msgstr "Fillo Kursin Falas"
-
-#, fuzzy
-#| msgid "Subscribe Now"
-msgid "Subscribe"
-msgstr "Abonohuni Tani"
-
-msgid "Buy Lifetime"
-msgstr "Bli Përgjithmonë"
-
-msgid "Add to Wishlist"
-msgstr "Shto në Listë Dëshirash"
-
-msgid "Course Preview"
-msgstr "Parapamje Kursi"
-
-msgid "Get a taste of what you'll learn in"
-msgstr "Shijoni një pjesë të asaj që do të mësoni në"
+msgid "FREE PREVIEW"
+msgstr "PARAPAMJE FALAS"
 
 msgid "Premium Content Locked"
-msgstr "Përmbajtja Premium e Mbyllur"
+msgstr "Përmbajtja premium është e bllokuar"
 
-msgid "Purchase"
-msgstr "Bli"
-
-msgid "to access all"
-msgstr "për të aksesuar të gjitha"
-
-msgid "lessons and features"
-msgstr "mësimet dhe veçoritë"
+msgid "Purchase to unlock this video and the rest of"
+msgstr "Bli për të zhbllokuar këtë video dhe pjesën tjetër të"
 
 msgid "Unlock Course for"
-msgstr "Hap Kursin për"
+msgstr "Zhblloko kursin për"
 
 msgid "Select a session from the sidebar to start watching."
-msgstr "Zgjidh një sesion nga menuja anësore për të filluar shikimin."
+msgstr "Zgjidh një sesion nga ana për të filluar shikimin."
 
-msgid "Course Content"
-msgstr "Përmbajtja e Kursit"
+msgid "Course Videos"
+msgstr "Videot e kursit"
 
-msgid "completed"
-msgstr "përfunduar"
+msgid "videos"
+msgstr "video"
 
 msgid "Purchase to unlock"
-msgstr "Bli për të hapur"
+msgstr "Bli për të zhbllokuar"
 
-msgid "Course content is being prepared. Please check back soon!"
-msgstr "Përmbajtja e kursit po përgatitet. Ju lutemi kontrolloni së shpejti!"
+msgid "LOCKED"
+msgstr "E BLLUKUAR"
+
+msgid "Course videos are being prepared. Please check back soon!"
+msgstr "Videot e kursit po përgatiten. Ju lutemi kontrolloni së shpejti!"
 
 msgid "Continue Learning"
-msgstr "Vazhdo Mësimin"
+msgstr "Vazhdo mësimin"
 
 msgid "Enjoy this free course!"
-msgstr "Gëzo këtë kurs falas!"
+msgstr "Shijo këtë kurs falas!"
 
-msgid "You're on fire! Keep up the momentum."
-msgstr "Je në flakë! Vazhdo me momentumin."
+msgid "All videos unlocked for this course."
+msgstr "Të gjitha videot janë të zhbllokuara për këtë kurs."
 
-msgid "Purchase for"
-msgstr "Bli për"
+msgid "Unlock all for"
+msgstr "Zhblloko të gjitha për"
 
-msgid "Unlock all lessons and start your dance journey today!"
-msgstr "Hap të gjitha mësimet dhe fillo udhëtimin tënd të kërcimit sot!"
+msgid "First video is free. Purchase unlocks the rest."
+msgstr "Videoja e parë është falas. Blerja zhbllokon pjesën tjetër."
 
-#, fuzzy
-#| msgid "Explore Courses"
 msgid "Explore Courses - Tio Academy"
-msgstr "Eksploro Kurset"
+msgstr "Eksploro kurset - Tio Academy"
 
 msgid "Explore Courses"
-msgstr "Eksploro Kurset"
+msgstr "Eksploro kurset"
 
-msgid ""
-"Discover our comprehensive collection of Latin dance courses designed by "
-"world-class instructors"
-msgstr ""
+msgid "Discover our comprehensive collection of Latin dance courses designed by world-class instructors"
+msgstr "Zbulo koleksionin tonë të kurseve të kërcimit latino, të krijuara nga instruktorë të klasit botëror"
 
 msgid "Search courses..."
 msgstr "Kërko kurse..."
 
+msgid "Try a different search"
+msgstr "Provo një kërkim tjetër"
+
+msgid "Clear search"
+msgstr "Pastro kërkimin"
+
 msgid "All Levels"
-msgstr "Të Gjitha Nivelet"
+msgstr "Të gjitha nivelet"
 
 msgid "Beginner"
 msgstr "Fillestar"
@@ -373,10 +298,10 @@ msgid "Intermediate"
 msgstr "Mesatar"
 
 msgid "Advanced"
-msgstr "I Përparuar"
+msgstr "I avancuar"
 
 msgid "Any Duration"
-msgstr "Çdo Kohëzgjatje"
+msgstr "Çdo kohëzgjatje"
 
 msgid "Under 3 hours"
 msgstr "Nën 3 orë"
@@ -396,96 +321,101 @@ msgstr "FALAS"
 msgid "by"
 msgstr "nga"
 
+#: templates/courses.html:130
+
+msgid "sessions"
+msgstr "sesione"
+
+#: templates/courses.html:138
+
 msgid "Start Free"
-msgstr "Fillo Falas"
+msgstr "Fillo falas"
 
 msgid "Enroll Now"
-msgstr "Regjistrohu Tani"
+msgstr "Regjistrohu tani"
 
 msgid "No courses found"
 msgstr "Nuk u gjetën kurse"
 
+#: templates/courses.html:153
+
 msgid "Try adjusting your search or filter criteria"
 msgstr "Provoni të rregulloni kriteret e kërkimit ose filtrit"
 
-msgid "Reset Filters"
-msgstr "Rivendos Filtra"
+#: templates/courses.html:155
 
-#, fuzzy
-#| msgid "Explore Courses"
+msgid "Reset Filters"
+msgstr "Rivendos filtrat"
+
 msgid "Load More Courses"
 msgstr "Eksploro Kurset"
 
-#, fuzzy
-#| msgid "Courses - Latina Dance Academy"
-msgid "Courses - Tio Academy"
-msgstr "Kurset - Akademia e Kërcimit Latino"
-
-#, fuzzy
+#: templates/courses_overview.html:13
 #| msgid "Explore Courses"
+
 msgid "Latin Dance Courses"
 msgstr "Kurset Tona të Kërcimit"
 
-#, fuzzy
-#| msgid ""
-#| "Master authentic Latin dance styles with our comprehensive curriculum"
+#: templates/courses_overview.html:14
+
 msgid "Master the art of Latin dance with our premium course collection"
-msgstr ""
-"Zotëro artin e kërcimit latino me koleksionin tonë premium të "
-"kurseveZotëroni stile autentike kërcimi latino me kurrikulën tonë "
-"gjithëpërfshirëse"
-
-msgid "Included"
-msgstr "Përfshirë"
-
-msgid "No courses available"
-msgstr "Nuk ka kurse të disponueshme"
-
-msgid "Check back soon for new courses!"
-msgstr "Kontrolloni së shpejti për kurse të reja!"
+msgstr "Përsos artin e kërcimit latino me koleksionin tonë premium të kurseve"
 
 msgid "Ready to Start Your Dance Journey?"
 msgstr "Gati për të Filluar Udhëtimin Tënd të Kërcimit?"
 
-msgid ""
-"Join thousands of students learning Latin dance with our expert instructors"
-msgstr ""
-"Bashkohu me mijëra studentë që mësojnë kërcimin latino me instruktorët tanë "
-"ekspertë"
+#: templates/courses_overview.html:95
 
-msgid "Students"
-msgstr "Studentë"
+msgid "Join thousands of students learning Latin dance with our expert instructors"
+msgstr "Bashkohu me mijëra studentë që mësojnë kërcim latino me instruktorët tanë"
 
 msgid "Gallery - Tio Academy"
 msgstr "Galeria - Tio Academy"
 
+#: templates/gallery.html:16
+
 msgid "Gallery"
 msgstr "Galeria"
 
+#: templates/gallery.html:17
+
 msgid "Download and enjoy our premium collection of dance photos and videos"
-msgstr ""
-"Shkarko dhe gëzo koleksionin tonë premium të fotove dhe videove të kërcimit"
+msgstr "Shkarko dhe shijo koleksionin tonë premium të fotove dhe videove"
 
 msgid "Photos"
 msgstr "Foto"
 
+#: templates/gallery.html:25 templates/gallery.html:47
+
 msgid "Videos"
 msgstr "Video"
+
+#: templates/gallery.html:28
 
 msgid "Free"
 msgstr "Falas"
 
+#: templates/gallery.html:29
+
 msgid "Downloads"
 msgstr "Shkarkime"
+
+#: templates/gallery.html:50
 
 msgid "NEW"
 msgstr "E RE"
 
+#: templates/gallery.html:59
+
 msgid "All"
 msgstr "Të Gjitha"
 
+#: templates/gallery.html:135 templates/gallery.html:262
+
 msgid "Showing"
 msgstr "Duke treguar"
+
+#: templates/gallery.html:135 templates/gallery.html:262
 
 msgid "of"
 msgstr "nga"
@@ -493,34 +423,40 @@ msgstr "nga"
 msgid "photos"
 msgstr "foto"
 
+#: templates/gallery.html:145 templates/gallery.html:272
+#: templates/gallery.html:324
+
 msgid "Previous"
-msgstr "Paraardhës"
+msgstr "Mbrapa"
 
 msgid "Next"
-msgstr "Tjetër"
+msgstr "Para"
 
 msgid "No Photos Available"
 msgstr "Nuk ka Foto të Disponueshme"
 
+#: templates/gallery.html:177
+
 msgid "Photos will appear here once they're uploaded to the gallery."
 msgstr "Fotot do të shfaqen këtu pasi të ngarkohen në galeri."
 
-msgid "videos"
-msgstr "video"
+#: templates/gallery.html:303
 
 msgid "No Videos Available"
 msgstr "Nuk ka Video të Disponueshme"
 
+#: templates/gallery.html:304
+
 msgid "Videos will appear here once they're uploaded to the gallery."
 msgstr "Videot do të shfaqen këtu pasi të ngarkohen në galeri."
+
+#: templates/gallery.html:313 templates/gallery.html:348
 
 msgid "Close"
 msgstr "Mbyll"
 
-#, fuzzy
-#| msgid "Gallery"
 msgid "Gallery Item"
-msgstr "Galeria"
+msgstr "Element i galerisë"
 
 msgid "View gallery content"
 msgstr "Shiko përmbajtjen e galerisë"
@@ -531,69 +467,68 @@ msgstr "Shkarko"
 msgid "Video"
 msgstr "Video"
 
-msgid "Tio Academy - Premium Dance Education"
-msgstr "Tio Academy - Edukim Premium i Kërcimit"
+#: templates/index.html:5
+#| msgid "Tio Academy - Premium Dance Education"
 
-#, fuzzy
-#| msgid "Dancers"
-msgid "Dance"
-msgstr "Kërcim"
+msgid "Tio Academy - Expert Education & Training"
+msgstr "Tio Academy - Edukim & Trajnim Ekspert"
+
+msgid "Expert"
+msgstr "Ekspert"
 
 msgid "Education"
-msgstr "Edukim"
+msgstr "Edukimi"
 
 msgid "Training"
-msgstr "Trajnim"
+msgstr "Trajnimi"
 
 msgid "Learn from"
 msgstr "Mëso nga"
 
-msgid "masters"
-msgstr "mjeshtër"
+msgid "certified instructors"
+msgstr "instruktorë të certifikuar"
 
-msgid "in techniques, dance, fitness and more."
-msgstr "në teknika, kërcim, fitness dhe më shumë."
-
-#, fuzzy
-#| msgid "Explore Courses"
-msgid "Explore Programs"
-msgstr "Eksploro Kurset"
+msgid "across dance, physiotherapy, and fitness."
+msgstr "në valle, fizioterapi dhe fitnes."
 
 msgid "Members"
 msgstr "Anëtarë"
 
+msgid "Years"
+msgstr "Vite"
+
 msgid "Success"
 msgstr "Sukses"
 
-msgid "Explore Dance Programs"
-msgstr "Eksploro Programet e Kërcimit"
+msgid "Explore Our Courses"
+msgstr "Eksploro kurset tona"
 
-msgid ""
-"Discover our comprehensive dance programs. Choose your style and start your "
-"dance journey today!"
-msgstr ""
+msgid "Discover our courses — dance, physiotherapy, and fitness. Choose your path and start your journey today!"
+msgstr "Zbulo kurset tona — valle, fizioterapi dhe fitnes. Zgjidh rrugën tënde dhe nisu sot!"
 
-#, fuzzy
-#| msgid "Explore Courses"
-msgid "Explore"
-msgstr "Eksploro Kurset"
+msgid "View course"
+msgstr "Shiko kursin"
 
-msgid "No dance programs available at the moment."
+msgid "No courses available at the moment."
 msgstr "Nuk ka programe kërcimi të disponueshme për momentin."
 
-msgid "View All Programs"
-msgstr "Shiko Të Gjitha Programet"
+#: templates/index.html:101
+#| msgid "Courses"
 
-msgid "Discover what makes our dance education exceptional"
-msgstr "Zbuloni çfarë e bën edukimin tonë të kërcimit të jashtëzakonshëm"
+msgid "View All Courses"
+msgstr "Shiko të gjitha kurset"
+
+msgid "Why Choose Tio Academy"
+msgstr "Pse të zgjedhësh Tio Academy"
+
+msgid "Discover what makes our programs exceptional"
+msgstr "Zbulo çfarë i bën programet tona të veçanta"
 
 msgid "Expert Instruction"
-msgstr "Udhëzim Ekspert"
+msgstr "Udhëzim ekspert"
 
-msgid ""
-"Learn from internationally certified instructors with decades of "
-"professional experience in Latin dance traditions."
-msgstr ""
+msgid "Learn from certified instructors with decades of professional experience across all our programs."
+msgstr "Mëso nga instruktorë të certifikuar me dekada përvojë profesionale në të gjitha programet tona."
 
 msgid "Certified professionals"
 msgstr "Profesionistë të certifikuar"
@@ -601,232 +536,867 @@ msgstr "Profesionistë të certifikuar"
 msgid "Personalized attention"
 msgstr "Vëmendje e personalizuar"
 
-msgid "Cultural authenticity"
-msgstr "Autenticitet kulturor"
-
-msgid "Small Class Sizes"
-msgstr "Klase të Vogla"
-
-msgid ""
-"Maximum 12 students per class ensures individual attention and rapid skill "
-"development in our intimate learning environment."
-msgstr ""
-
-msgid "Max 12 students"
-msgstr "Maksimumi 12 studentë"
-
-msgid "Individual feedback"
-msgstr "Feedback individual"
-
-msgid "Accelerated learning"
-msgstr "Të mësuar i përshpejtuar"
+msgid "Program excellence"
+msgstr "Përsosmëri programi"
 
 msgid "Proven Results"
-msgstr "Rezultate të Provuara"
+msgstr "Rezultate të dëshmuara"
 
-#, python-format
-msgid ""
-"98%% student satisfaction rate with graduates performing professionally "
-"worldwide and competing at international levels."
-msgstr ""
+msgid "98%% student satisfaction rate with graduates performing professionally worldwide and competing at international levels."
+msgstr "98% kënaqësi e studentëve, me absolventë që performojnë profesionalisht në botë dhe konkurrojnë në nivele ndërkombëtare."
 
-#, python-format
 msgid "98%% satisfaction"
-msgstr ""
+msgstr "98% kënaqësi"
 
 msgid "Professional graduates"
-msgstr "Diplomuar profesionalë"
+msgstr "Absolventë profesionistë"
 
 msgid "Competition winners"
-msgstr "Fitues garash"
+msgstr "Fitues konkurrimesh"
 
-#, python-format
 msgid "100%% Money-Back Guarantee"
-msgstr ""
+msgstr "Garancë 100% kthimi parash"
 
-#, python-format
-msgid ""
-"We're so confident in our dance programs that we offer a 100%% money-back "
-"guarantee. If you're not completely satisfied with your learning experience "
-"within 30 days, we'll refund your entire subscription - no questions asked."
-msgstr ""
+msgid "We're so confident in our dance programs that we offer a 100%% money-back guarantee. If you're not completely satisfied with your learning experience within 30 days, we'll refund your entire subscription - no questions asked."
+msgstr "Jemi aq të sigurt te programet tona sa ofrojmë garanci 100% kthimi parash. Nëse nuk je i kënaqur brenda 30 ditëve, ta kthejmë pagesën — pa pyetje."
 
 msgid "30-day risk-free trial"
 msgstr "Provojë 30-ditëshe pa rrezik"
 
+#: templates/index.html:164
+
 msgid "Full refund guarantee"
 msgstr "Garancion kthim i plotë parash"
+
+#: templates/index.html:168
 
 msgid "No questions asked"
 msgstr "Pa pyetje"
 
+#: templates/index.html:181
+
 msgid "Stay Connected"
-msgstr "Qëndro i Lidhur"
+msgstr "Qëndro i lidhur"
 
 msgid "Exclusive insights and masterclass invitations await."
-msgstr "Njohuri ekskluzive dhe ftesa për masterclass po presin."
+msgstr "Njohuri ekskluzive dhe ftesa për masterclass të presin."
 
-#, fuzzy
-#| msgid "Enter your email address"
 msgid "Enter your email"
-msgstr "Shkruani adresën tuaj të email-it"
+msgstr "Shkruaj emailin tënd"
 
-#, fuzzy
-#| msgid "Courses - Latina Dance Academy"
+msgid "Subscribe"
+msgstr "Abonohu"
+
+msgid "Back to Course"
+msgstr "Kthehu te kursi"
+
+msgid "Your browser does not support the video tag."
+msgstr "Shfletuesi yt nuk e mbështet etiketën e videos."
+
+msgid "Video Coming Soon"
+msgstr "Video së shpejti"
+
+msgid "Add a Bunny or YouTube URL for this video in admin."
+msgstr "Shto një URL Bunny ose YouTube për këtë video në admin."
+
+msgid "Session Progress"
+msgstr "Progresi i sesionit"
+
+msgid "Your Progress"
+msgstr "Progresi yt"
+
+msgid "Time Watched"
+msgstr "Koha e shikuar"
+
+msgid "Next Session"
+msgstr "Sesioni tjetër"
+
+msgid "Mark as Complete"
+msgstr "Shëno si të përfunduar"
+
+msgid "Session Overview"
+msgstr "Përmbledhja e sesionit"
+
+msgid "Key Points"
+msgstr "Pikat kryesore"
+
+msgid "Focus on proper technique and form"
+msgstr "Fokuso teknikën dhe formën e duhur"
+
+msgid "Practice the movements slowly at first"
+msgstr "Praktikoi lëvizjet ngadalë në fillim"
+
+msgid "Pay attention to timing and rhythm"
+msgstr "Kushto vëmendje kohës dhe ritmit"
+
+msgid "Don't rush - quality over quantity"
+msgstr "Mos u nxito — cilësia mbi sasinë"
+
+msgid "View full course →"
+msgstr "Shiko kursin e plotë →"
+
+msgid "Navigation"
+msgstr "Navigimi"
+
+msgid "Next Video"
+msgstr "Videoja tjetër"
+
 msgid "Upload Media - Latina Dance Academy"
 msgstr "Kurset - Akademia e Kërcimit Latino"
+
+#: templates/upload_media.html:66
 
 msgid "Upload Media"
 msgstr "Ngarko Media"
 
+#: templates/upload_media.html:67
+
 msgid "Simple upload: Category → Content Type → Files → Done"
 msgstr "Ngarkim i thjeshtë: Kategori → Lloj Përmbajtjeje → Skedarë → Bërë"
+
+#: templates/users/dashboard.html:417
 
 msgid "My Profile"
 msgstr "Profili Im"
 
+#: templates/users/dashboard.html:426
+
 msgid "Subscription Status:"
 msgstr "Statusi i Abonimit:"
 
-msgid "Lifetime Access:"
-msgstr "Akses Përgjithmonë:"
+#: templates/users/dashboard.html:432
 
-#, fuzzy
-#| msgid "Years"
+msgid "Lifetime Access:"
+msgstr "Qasje përjetë:"
+
 msgid "Yes"
 msgstr "Po"
 
 msgid "No"
 msgstr "Jo"
 
-#, fuzzy
-#| msgid "Explore Courses"
 msgid "Premium Access:"
-msgstr "Akses Premium:"
+msgstr "Qasje premium:"
 
 msgid "Active"
-msgstr "Aktiv"
+msgstr "Aktive"
 
 msgid "Not Active"
-msgstr "Jo Aktiv"
+msgstr "Jo aktive"
 
-msgid "Get Premium Access"
-msgstr "Merr Akses Premium"
+msgid "Unlock a course"
+msgstr "Zhblloko një kurs"
 
-msgid "You need premium access to view all courses. Choose an option:"
-msgstr ""
-"Ju duhet akses premium për të parë të gjitha kurset. Zgjidhni një opsion:"
+msgid "Purchase individual courses to get full access to their videos."
+msgstr "Bli kurse individuale për të marrë qasje të plotë te videot."
 
-msgid "month"
-msgstr "muaj"
-
-#, fuzzy
-#| msgid "Courses"
 msgid "My Courses"
-msgstr "Kurset e Mia"
+msgstr "Kurset e mia"
 
 msgid "Unlocked"
 msgstr "E Hapur"
 
+#: templates/users/dashboard.html:482
+
 msgid "Locked"
 msgstr "E Mbyllur"
+
+#: templates/users/dashboard.html:490
 
 msgid "Progress"
 msgstr "Progresi"
 
-#, fuzzy
+#: templates/users/dashboard.html:497
 #| msgid "completed"
+
 msgid "sessions completed"
 msgstr "sesione të përfunduara"
+
+#: templates/users/dashboard.html:504
 
 msgid "Videos & Materials"
 msgstr "Video dhe Materiale"
 
-#, fuzzy
+#: templates/users/dashboard.html:522
 #| msgid "Admin"
+
 msgid "min"
 msgstr "Admin"
 
-#, fuzzy
+#: templates/users/dashboard.html:526
 #| msgid "Watch Preview"
+
 msgid "Watch Video"
 msgstr "Shiko Parapreken"
 
-#, fuzzy
+#: templates/users/dashboard.html:529
 #| msgid "Purchase to unlock"
+
 msgid "Purchase course to unlock"
 msgstr "Bli kursin për të hapur"
 
-#, fuzzy
+#: templates/users/dashboard.html:538
 #| msgid "Courses"
+
 msgid "View Course"
-msgstr "Kurs"
+msgstr "Shiko kursin"
 
-#, fuzzy
-#| msgid "No courses available"
 msgid "No courses available."
-msgstr "Nuk ka kurse të disponueshme"
+msgstr "Nuk ka kurse të disponueshme."
 
-#~ msgid "Portfolio"
-#~ msgstr "Portofolio"
+msgid "Email"
+msgstr "Email"
 
-#, fuzzy
-#~| msgid "Success"
-#~ msgid "Access:"
-#~ msgstr "Akses:"
+msgid "Password"
+msgstr "Fjalëkalimi"
 
-#~ msgid "Something went wrong. Please try again."
-#~ msgstr "Diçka shkoi keq. Ju lutemi provoni përsëri."
+msgid "Don't have an account?"
+msgstr "Nuk ke një llogari?"
 
-#~ msgid "Tournaments"
-#~ msgstr "Turnetë"
+msgid "Register here"
+msgstr "Regjistrohu këtu"
 
-#~ msgid "Blog"
-#~ msgstr "Blog"
+msgid "Register"
+msgstr "Regjistrohu"
 
-#, fuzzy
-#~| msgid "About"
-#~ msgid "About Us"
-#~ msgstr "Rreth Nesh"
+msgid "Confirm Password"
+msgstr "Konfirmo fjalëkalimin"
 
-#~ msgid "Terms of Service"
-#~ msgstr "Kushtet e Shërbimit"
+msgid "Already have an account?"
+msgstr "Ke tashmë një llogari?"
 
-#~ msgid "Contact Info"
-#~ msgstr "Informacion Kontakti"
+msgid "Login here"
+msgstr "Hyr këtu"
 
-#, fuzzy
-#~| msgid "Courses"
-#~ msgid "All Courses"
-#~ msgstr "Kurset"
+msgid "98% student satisfaction rate with graduates performing professionally worldwide and competing at international levels."
+msgstr "98% kënaqësi e studentëve, me absolventë që performojnë profesionalisht në botë dhe konkurrojnë në nivele ndërkombëtare."
 
-#~ msgid "Latina Dance Academy - Learn Authentic Latin Dance"
-#~ msgstr "Akademia e Kërcimit Latino - Mëso Kërcime Autentike Latino"
+msgid "98% satisfaction"
+msgstr "98% kënaqësi"
 
-#~ msgid "Master the Art of Latin Dance"
-#~ msgstr "Zotëro Artin e Kërcimit Latino"
+msgid "100% Money-Back Guarantee"
+msgstr "Garancë 100% kthimi parash"
 
-#~ msgid ""
-#~ "Learn authentic Latin dance styles from professional instructors. From "
-#~ "beginner to advanced, discover the rhythm and passion of Latin culture."
-#~ msgstr ""
-#~ "Mëso stile autentike kërcimi latino nga instruktorë profesionalë. Nga "
-#~ "fillestar deri tek i përparuar, zbulo ritmin dhe pasionin e kulturës "
-#~ "latino."
+msgid "We're so confident in our dance programs that we offer a 100% money-back guarantee. If you're not completely satisfied with your learning experience within 30 days, we'll refund your entire subscription - no questions asked."
+msgstr "Jemi aq të sigurt te programet tona sa ofrojmë garanci 100% kthimi parash. Nëse nuk je i kënaqur brenda 30 ditëve, ta kthejmë pagesën — pa pyetje."
 
-#~ msgid "Join Our Dance Family!"
-#~ msgstr "Bashkohu me Familjen Tonë të Kërcimit!"
+msgid "Save 20%"
+msgstr "Kurseni 20%"
 
-#~ msgid ""
-#~ "Get exclusive dance tips, course updates, and special offers delivered to "
-#~ "your inbox. Be the first to know about new tutorials and events!"
-#~ msgstr ""
-#~ "Merr këshilla ekskluzive kërcimi, përditësime kursesh dhe oferta të "
-#~ "veçanta direkt në email. Bëhu i pari që di për tutoriale të reja dhe "
-#~ "evenimente!"
+msgid "Train with Tio Academy"
+msgstr "Trajnohu me Tio Academy"
 
-#~ msgid "First Name"
-#~ msgstr "Emri"
+msgid "Dance, fitness, and expert-led courses — learn anytime, anywhere."
+msgstr "Valle, fitnes dhe kurse nga ekspertë — mëso kurdo dhe kudo."
 
-#~ msgid "Last Name"
-#~ msgstr "Mbiemri"
+msgid "Vallet Shqiptare"
+msgstr "Vallet Shqiptare"
+
+msgid "Traditional Albanian dance — unlock the full course and start learning."
+msgstr "Valle tradicionale shqiptare — zhblloko kursin e plotë dhe nisu të mësosh."
+
+msgid "Military Training"
+msgstr "Trajnim ushtarak"
+
+msgid "Discipline, strength, and guided sessions for serious progress."
+msgstr "Disiplinë, forcë dhe sesione të udhëzuara për progres serioz."
+
+msgid "Expert Education"
+msgstr "Edukim ekspert"
+
+msgid "Certified instructors across dance, physiotherapy, and fitness."
+msgstr "Instruktorë të certifikuar në valle, fizioterapi dhe fitnes."
+
+msgid "by Tio Academy"
+msgstr "nga Tio Academy"
+
+msgid "Processing..."
+msgstr "Duke përpunuar..."
+
+msgid "Payment failed. Please try again."
+msgstr "Pagesa dështoi. Ju lutemi provo përsëri."
+
+msgid "Toggle menu"
+msgstr "Hap/mbyll menunë"
+
+msgid "English"
+msgstr "English"
+
+msgid "Shqip"
+msgstr "Shqip"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "FAQ"
+msgstr "Pyetjet e shpeshta"
+
+msgid "Choose Your Plan"
+msgstr "Zgjidh planin tënd"
+
+msgid "Sign in"
+msgstr "Hyr"
+
+msgid "Create profile"
+msgstr "Krijo profil"
+
+msgid "70% off"
+msgstr "70% zbritje"
+
+msgid "Create account"
+msgstr "Krijo llogari"
+
+msgid "Create an account"
+msgstr "Krijo një llogari"
+
+msgid "Create an account to enroll"
+msgstr "Krijo një llogari për t'u regjistruar"
+
+msgid "Create account to enroll"
+msgstr "Krijo llogari për t'u regjistruar"
+
+msgid "Email address"
+msgstr "Adresa e emailit"
+
+msgid "Create a password for this platform"
+msgstr "Krijo një fjalëkalim për këtë platformë"
+
+msgid "Confirm the password for this platform"
+msgstr "Konfirmo fjalëkalimin për këtë platformë"
+
+msgid "If you already have an account, enter your email and password to watch your courses."
+msgstr "Nëse ke tashmë një llogari, shkruaj emailin dhe fjalëkalimin për të parë kurset."
+
+msgid "Create an account to enroll and watch courses. This account is only for courses on this platform."
+msgstr "Krijo një llogari për t'u regjistruar dhe për të parë kurset. Kjo llogari është vetëm për kurset në këtë platformë."
+
+msgid "This account is only for courses on this platform."
+msgstr "Kjo llogari është vetëm për kurset në këtë platformë."
+
+msgid "Use this account only to buy and watch courses."
+msgstr "Përdor këtë llogari vetëm për të blerë dhe parë kurse."
+
+msgid "New here?"
+msgstr "Je i ri këtu?"
+
+msgid "Click a packet to see its videos and buy it."
+msgstr "Kliko një paketë për të parë videot dhe për ta blerë."
+
+msgid "Click the dances you want. Buy 1, a few, or the full package."
+msgstr "Zgjidh vallet që dëshiron. Bli 1, disa, ose paketën e plotë."
+
+msgid "Course videos"
+msgstr "Videot e kursit"
+
+msgid "Select all"
+msgstr "Zgjidh të gjitha"
+
+msgid "Clear"
+msgstr "Pastro"
+
+msgid "Free preview"
+msgstr "Parapamje falas"
+
+msgid "Owned"
+msgstr "E blerë"
+
+msgid "Selected total"
+msgstr "Totali i zgjedhur"
+
+msgid "video"
+msgstr "video"
+
+msgid "Buy selected videos"
+msgstr "Bli videot e zgjedhura"
+
+msgid "Buy this packet"
+msgstr "Bli këtë paketë"
+
+msgid "Packet videos"
+msgstr "Videot e paketës"
+
+msgid "This packet includes the videos on the right. Buy it to start watching."
+msgstr "Kjo paketë përfshin videot në të djathtë. Blije për të filluar shikimin."
+
+msgid "Videos for this packet are being prepared."
+msgstr "Videot e kësaj pakete po përgatiten."
+
+msgid "Video URL not set yet."
+msgstr "URL e videos nuk është vendosur ende."
+
+msgid "Back to packet"
+msgstr "Kthehu te paketa"
+
+msgid "Choose packages above to unlock this video."
+msgstr "Zgjidh paketat më sipër për të zhbllokuar këtë video."
+
+msgid "Choose packages"
+msgstr "Zgjidh paketat"
+
+msgid "Choose what to buy"
+msgstr "Zgjidh çfarë të blesh"
+
+msgid "Pick any videos or packages, or buy all of them."
+msgstr "Zgjidh çdo video ose paketë, ose bli të gjitha."
+
+msgid "Packages"
+msgstr "Paketat"
+
+msgid "All fields are required"
+msgstr "Të gjitha fushat janë të detyrueshme"
+
+msgid "Passwords do not match"
+msgstr "Fjalëkalimet nuk përputhen"
+
+msgid "Email already registered"
+msgstr "Ky email është tashmë i regjistruar"
+
+msgid "Account created. You can enroll and watch courses."
+msgstr "Llogaria u krijua. Tani mund të regjistrohesh dhe të shikosh kurse."
+
+msgid "Email and password are required"
+msgstr "Email-i dhe fjalëkalimi janë të detyrueshëm"
+
+msgid "Invalid email or password"
+msgstr "Email ose fjalëkalim i pasaktë"
+
+msgid "You have been logged out"
+msgstr "Je shkëputur"
+
+msgid "Buy this packet to unlock these videos."
+msgstr "Bli këtë paketë për të zhbllokuar këto video."
+
+msgid "This video is not linked to a course."
+msgstr "Kjo video nuk është e lidhur me një kurs."
+
+msgid "Contact Us"
+msgstr "Na kontakto"
+
+msgid "Get in touch with our team"
+msgstr "Lidhu me ekipin tonë"
+
+msgid "Get In Touch"
+msgstr "Na shkruaj"
+
+msgid "Have questions about our courses or need support? We're here to help!"
+msgstr "Ke pyetje për kurset ose të duhet ndihmë? Jemi këtu për ty!"
+
+msgid "Phone"
+msgstr "Telefoni"
+
+msgid "Address"
+msgstr "Adresa"
+
+msgid "Send us a Message"
+msgstr "Na dërgo një mesazh"
+
+msgid "Your Name"
+msgstr "Emri yt"
+
+msgid "Your Email"
+msgstr "Emaili yt"
+
+msgid "Subject"
+msgstr "Subjekti"
+
+msgid "Your Message"
+msgstr "Mesazhi yt"
+
+msgid "Send Message"
+msgstr "Dërgo mesazhin"
+
+msgid "Find answers to common questions about our courses"
+msgstr "Gjej përgjigje për pyetjet e zakonshme rreth kurseve"
+
+msgid "How do I get started with the courses?"
+msgstr "Si të filloj me kurset?"
+
+msgid "Simply browse our course catalog and choose the dance style that interests you. Each course is designed for beginners and progresses to advanced levels."
+msgstr "Shfleto katalogun e kurseve dhe zgjidh stilin që të intereson. Çdo kurs fillon nga niveli fillestar dhe ecën drejt niveleve të avancuara."
+
+msgid "Do I need any special equipment?"
+msgstr "A më duhet pajisje e veçantë?"
+
+msgid "No special equipment is required. Just wear comfortable clothing and shoes that allow you to move freely. A dance floor or open space is recommended."
+msgstr "Nuk kërkohet pajisje e veçantë. Vesh rroba dhe këpucë të rehatshme që të lëvizin lirisht. Rekomandohet një hapësirë e hapur."
+
+msgid "Can I learn at my own pace?"
+msgstr "A mund të mësoj me ritmin tim?"
+
+msgid "Absolutely! All our courses are self-paced, so you can learn whenever it's convenient for you. You have lifetime access to the course materials."
+msgstr "Po! Të gjitha kurset janë me ritmin tënd, kështu që mëson kur të të volitë. Ke qasje të përhershme te materialet."
+
+msgid "Privacy Policy"
+msgstr "Politika e privatësisë"
+
+msgid "How we protect your information"
+msgstr "Si e mbrojmë informacionin tënd"
+
+msgid "Your Privacy Matters"
+msgstr "Privatësia jote ka rëndësi"
+
+msgid "We are committed to protecting your privacy and ensuring the security of your personal information. This privacy policy explains how we collect, use, and safeguard your data."
+msgstr "Jemi të përkushtuar të mbrojmë privatësinë tënde dhe sigurinë e të dhënave. Kjo politikë shpjegon si i mbledhim, përdorim dhe mbrojmë të dhënat."
+
+msgid "Information We Collect"
+msgstr "Informacioni që mbledhim"
+
+msgid "We collect information you provide directly to us, such as when you create an account, enroll in courses, or contact us for support."
+msgstr "Mbledhim informacionin që na jep drejtpërdrejt, si kur krijon llogari, regjistrohesh në kurse, ose na kontakton."
+
+msgid "How We Use Your Information"
+msgstr "Si e përdorim informacionin"
+
+msgid "We use your information to provide our services, process payments, send you updates about your courses, and improve our platform."
+msgstr "E përdorim informacionin për të ofruar shërbimet, përpunuar pagesat, dërguar njoftime për kurset dhe përmirësuar platformën."
+
+msgid "Data Security"
+msgstr "Siguria e të dhënave"
+
+msgid "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction."
+msgstr "Zbatojmë masa sigurie për të mbrojtur të dhënat e tua nga qasja, ndryshimi, zbulimi ose shkatërrimi i paautorizuar."
+
+msgid "Terms of Service"
+msgstr "Kushtet e shërbimit"
+
+msgid "Our terms and conditions"
+msgstr "Kushtet tona"
+
+msgid "Terms and Conditions"
+msgstr "Terma dhe kushte"
+
+msgid "By using our platform, you agree to these terms and conditions. Please read them carefully."
+msgstr "Duke përdorur platformën, pranon këto kushte. Të lutem lexoji me kujdes."
+
+msgid "Course access is granted for personal, non-commercial use only. You may not share your account or course materials with others."
+msgstr "Qasja në kurse jepet vetëm për përdorim personal, jo-komercial. Nuk mund ta ndash llogarinë ose materialet me të tjerë."
+
+msgid "Payment Terms"
+msgstr "Kushtet e pagesës"
+
+msgid "All payments are processed securely. Course fees are non-refundable unless otherwise specified."
+msgstr "Të gjitha pagesat përpunohen në mënyrë të sigurt. Tarifat e kurseve nuk kthehen, përveçse kur thuhet ndryshe."
+
+msgid "User Conduct"
+msgstr "Sjellja e përdoruesit"
+
+msgid "You agree to use our platform responsibly and not to engage in any activities that could harm our services or other users."
+msgstr "Pranon ta përdorësh platformën me përgjegjësi dhe të mos bësh veprime që dëmtojnë shërbimet ose përdoruesit e tjerë."
+
+msgid "This video unlocks after purchasing the course (or with an active subscription / lifetime access). The first video is free as a preview."
+msgstr "Kjo video zhbllokohet pasi blen kursin (ose me abonim / qasje përjetë). Videoja e parë është falas si parapamje."
+
+msgid "Payment failed."
+msgstr "Pagesa dështoi."
+
+msgid "No checkout URL received"
+msgstr "Nuk u mor URL e pagesës"
+
+msgid "Select at least one package."
+msgstr "Zgjidh të paktën një paketë."
+
+msgid "Select at least one video."
+msgstr "Zgjidh të paktën një video."
+
+msgid "This packet is not ready for checkout yet."
+msgstr "Kjo paketë nuk është gati për pagesë ende."
+
+msgid "No courses match your criteria"
+msgstr "Asnjë kurs nuk përputhet me kriteret"
+
+msgid "Try adjusting your search or filter settings"
+msgstr "Provo të ndryshosh kërkimin ose filtrat"
+
+msgid "Filters applied successfully"
+msgstr "Filtrat u aplikuan me sukses"
+
+msgid "Click to play video"
+msgstr "Kliko për të luajtur videon"
+
+msgid "Download started! Check your Downloads folder."
+msgstr "Shkarkimi filloi! Kontrollo dosjen e shkarkimeve."
+
+msgid "Download failed. Try right-clicking and \"Save as...\""
+msgstr "Shkarkimi dështoi. Provo klikun e djathtë dhe \"Ruaj si...\""
+
+msgid "Starting download..."
+msgstr "Po fillon shkarkimi..."
+
+msgid "No media source available"
+msgstr "Nuk ka burim medie"
+
+msgid "No media available to download"
+msgstr "Nuk ka medie për t'u shkarkuar"
+
+msgid "Error playing video"
+msgstr "Gabim gjatë luajtjes së videos"
+
+msgid "3 Levels"
+msgstr "3 nivele"
+
+msgid "4 Sessions per Level"
+msgstr "4 sesione për nivel"
+
+msgid "HD Video Content"
+msgstr "Përmbajtje video HD"
+
+msgid "Progress Tracking"
+msgstr "Ndjekje e progresit"
+
+msgid "Completion Certificate"
+msgstr "Certifikatë përfundimi"
+
+msgid "12 hours"
+msgstr "12 orë"
+
+msgid "Tio Academy Showcase"
+msgstr "Vitrina Tio Academy"
+
+msgid "Add slideshow images or videos in the admin."
+msgstr "Shto imazhe ose video të slideshow-it në admin."
+
+msgid "Payment Successful"
+msgstr "Pagesa u krye"
+
+msgid "Payment Successful!"
+msgstr "Pagesa u krye!"
+
+msgid "Welcome to Tio Academy! Your purchase is now active and you have access to your content."
+msgstr "Mirë se vjen në Tio Academy! Blerja jote është aktive dhe ke qasje te përmbajtja."
+
+msgid "Package"
+msgstr "Paketa"
+
+msgid "/ year"
+msgstr "/ vit"
+
+msgid "/ month"
+msgstr "/ muaj"
+
+msgid "Billing:"
+msgstr "Faturimi:"
+
+msgid "What's Next?"
+msgstr "Çfarë tjetër?"
+
+msgid "Access Your Content"
+msgstr "Hyr te përmbajtja"
+
+msgid "Start exploring our video library and begin your dance journey."
+msgstr "Fillo të eksplorosh bibliotekën e videove dhe nisu në udhëtimin tënd."
+
+msgid "Check Your Email"
+msgstr "Kontrollo emailin"
+
+msgid "We've sent you a confirmation email with your purchase details."
+msgstr "Të kemi dërguar një email konfirmimi me detajet e blerjes."
+
+msgid "Join Our Community"
+msgstr "Bashkohu me komunitetin"
+
+msgid "Connect with other dancers and share your progress."
+msgstr "Lidhu me kërcimtarë të tjerë dhe ndaj progresin tënd."
+
+msgid "Start Learning Now"
+msgstr "Fillo të mësosh tani"
+
+msgid "My Subscription"
+msgstr "Abonimi im"
+
+msgid "Need help getting started? We're here for you!"
+msgstr "Ke nevojë për ndihmë për të filluar? Jemi këtu për ty!"
+
+msgid "Contact Support"
+msgstr "Kontakto mbështetjen"
+
+msgid "Payment Cancelled"
+msgstr "Pagesa u anulua"
+
+msgid "No worries! Your payment was cancelled and you haven't been charged."
+msgstr "Mos u shqetëso! Pagesa u anulua dhe nuk të është debitur asgjë."
+
+msgid "Why did you cancel?"
+msgstr "Pse e anulove?"
+
+msgid "We'd love to understand what we can improve. Here are some common reasons:"
+msgstr "Do të donim të kuptonim çfarë mund të përmirësojmë. Ja disa arsye të zakonshme:"
+
+msgid "Changed your mind about the package"
+msgstr "Ndryshave mendje për paketën"
+
+msgid "Found a better deal elsewhere"
+msgstr "Gjetë një ofertë më të mirë tjetërkund"
+
+msgid "Need more time to decide"
+msgstr "Ke nevojë për më shumë kohë për të vendosur"
+
+msgid "Technical issues during checkout"
+msgstr "Probleme teknike gjatë pagesës"
+
+msgid "Want to try a different package"
+msgstr "Do të provosh një paketë tjetër"
+
+msgid "Budget concerns"
+msgstr "Shqetësime për buxhetin"
+
+msgid "Try Our Free Content"
+msgstr "Provo përmbajtjen falas"
+
+msgid "Explore our free videos to see what we offer before committing."
+msgstr "Eksploro videot falas për të parë çfarë ofrojmë para se të vendosësh."
+
+msgid "Have questions? We're here to help you find the right plan."
+msgstr "Ke pyetje? Jemi këtu për të të ndihmuar të gjesh planin e duhur."
+
+msgid "Come Back Anytime"
+msgstr "Kthehu kur të duash"
+
+msgid "You can always return to complete your purchase when you're ready."
+msgstr "Mund të kthehesh kurdo për të përfunduar blerjen kur të jesh gati."
+
+msgid "Back to Pricing"
+msgstr "Kthehu te çmimet"
+
+msgid "Try Free Content"
+msgstr "Provo përmbajtjen falas"
+
+msgid "Need help choosing the right plan? We're here to help!"
+msgstr "Ke nevojë për ndihmë për të zgjedhur planin? Jemi këtu për të ndihmuar!"
+
+msgid "billing"
+msgstr "faturim"
+
+msgid "Next Billing Date"
+msgstr "Data e ardhshme e faturimit"
+
+msgid "Billing Cycle"
+msgstr "Cikli i faturimit"
+
+msgid "Subscription Started"
+msgstr "Abonimi filloi"
+
+msgid "Cancellation"
+msgstr "Anulimi"
+
+msgid "Ends"
+msgstr "Mbaron"
+
+msgid "What's Included:"
+msgstr "Çfarë përfshihet:"
+
+msgid "Access Content"
+msgstr "Hyr te përmbajtja"
+
+msgid "Are you sure you want to cancel your subscription? You will lose access at the end of your current billing period."
+msgstr "Je i sigurt që do ta anulosh abonimin? Do ta humbasësh qasjen në fund të periudhës aktuale të faturimit."
+
+msgid "Cancel Subscription"
+msgstr "Anulo abonimin"
+
+msgid "Cancelled"
+msgstr "Anuluar"
+
+msgid "ends"
+msgstr "mbaron"
+
+msgid "No Active Subscription"
+msgstr "Nuk ka abonim aktiv"
+
+msgid "You don't have an active subscription. Choose a plan to get started with your dance journey!"
+msgstr "Nuk ke një abonim aktiv. Zgjidh një plan për të filluar udhëtimin tënd!"
+
+msgid "View Pricing Plans"
+msgstr "Shiko planet e çmimeve"
+
+msgid "Need Help?"
+msgstr "Ke nevojë për ndihmë?"
+
+msgid "Have questions about your subscription or need assistance? We're here to help!"
+msgstr "Ke pyetje për abonimin ose të duhet ndihmë? Jemi këtu për ty!"
+
+msgid "Billing Questions"
+msgstr "Pyetje për faturimin"
+
+msgid "Questions about charges, refunds, or billing cycles."
+msgstr "Pyetje për tarifa, rimbursime ose cikle faturimi."
+
+msgid "Technical Support"
+msgstr "Mbështetje teknike"
+
+msgid "Issues with accessing content or account problems."
+msgstr "Probleme me qasjen te përmbajtja ose llogaria."
+
+msgid "Complete Your Purchase"
+msgstr "Përfundo blerjen"
+
+msgid "Email Address"
+msgstr "Adresa e emailit"
+
+msgid "Enter your email address"
+msgstr "Shkruaj adresën e emailit"
+
+msgid "Payment Information"
+msgstr "Informacioni i pagesës"
+
+msgid "Name on Card"
+msgstr "Emri në kartë"
+
+msgid "Full name as it appears on card"
+msgstr "Emri i plotë siç shfaqet në kartë"
+
+msgid "I agree to the"
+msgstr "Pranoj"
+
+msgid "and"
+msgstr "dhe"
+
+msgid "Complete Purchase"
+msgstr "Përfundo blerjen"
+
+msgid "Payment processing failed:"
+msgstr "Përpunimi i pagesës dështoi:"
+
+msgid "Repeat password"
+msgstr "Përsërit fjalëkalimin"
+
+msgid "Watch"
+msgstr "Shiko"
+
+msgid "You haven't bought a course yet. After you buy, it will show up here."
+msgstr "Nuk ke blerë ende një kurs. Pasi të blesh, shfaqet këtu."
+
+msgid "Download failed. Try right-clicking and \"Save as...\""
+msgstr "Shkarkimi dështoi. Provo klikun e djathtë dhe \"Ruaj si...\""
+
+msgid "Create a profile"
+msgstr "Krijo një profil"
+
+msgid "Create this profile"
+msgstr "Krijo këtë profil"
+
+msgid "Only for Tio Academy. This is not a Google or Gmail login."
+msgstr "Vetëm për Tio Academy. Kjo nuk është hyrje me Google ose Gmail."
+
+msgid "Use the email and password you created for Tio Academy — not your Gmail password."
+msgstr "Përdor emailin dhe fjalëkalimin që krijove për Tio Academy — jo fjalëkalimin e Gmail."
+
+msgid "Your email address"
+msgstr "Adresa e emailit"
+
+msgid "Password for this account"
+msgstr "Fjalëkalimi për këtë llogari"
+
+msgid "Pick a password only for this site — not your Gmail password."
+msgstr "Zgjidh një fjalëkalim vetëm për këtë faqe — jo fjalëkalimin e Gmail."
+
+msgid "This password is only for this site."
+msgstr "Ky fjalëkalim është vetëm për këtë faqe."
+
+msgid "Repeat that password"
+msgstr "Përsërit atë fjalëkalim"
+
+msgid "Already have this profile?"
+msgstr "Ke tashmë këtë profil?"
+
+msgid "Download failed. Try right-clicking and \"Save as...\""
+msgstr "Shkarkimi dështoi. Provo klikun e djathtë dhe \"Ruaj si...\""

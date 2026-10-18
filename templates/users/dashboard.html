@@ -2,641 +2,175 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}{% trans "Dashboard" %} - {% trans "Tio Academy" %}{% endblock %}
+{% block title %}{% trans "My Profile" %} - {% trans "Tio Academy" %}{% endblock %}
 
-{% block content %}
+{% block extra_css %}
+{{ block.super }}
 <style>
-.dashboard-container {
-    max-width: 1400px;
+.library-page {
+    max-width: 980px;
     margin: 0 auto;
-    padding: 2rem;
-    font-family: var(--font-family-primary);
+    padding: 2rem 1.25rem 4rem;
 }
-
-.dashboard-header {
-    margin-bottom: 3rem;
-}
-
-.dashboard-title {
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-4xl);
-    font-weight: var(--font-weight-light);
-    color: var(--color-gray-900);
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.025em;
-}
-
-.profile-card {
-    background: var(--color-white);
-    border: 1px solid var(--color-gray-200);
-    border-radius: var(--radius-lg);
-    padding: 2rem;
-    margin-bottom: 2rem;
-    box-shadow: var(--shadow-sm);
-}
-
-.profile-header {
+.library-head {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-}
-
-.profile-info h2 {
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-light);
-    color: var(--color-gray-900);
-    margin: 0 0 1rem 0;
-}
-
-.profile-detail {
-    margin: 0.75rem 0;
-    font-size: var(--font-size-sm);
-    color: var(--color-gray-600);
-}
-
-.profile-detail strong {
-    color: var(--color-gray-900);
-    font-weight: var(--font-weight-medium);
-    margin-right: 0.5rem;
-}
-
-.status-badge {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.status-active {
-    background: rgba(201, 169, 110, 0.1);
-    color: var(--color-accent-dark);
-}
-
-.status-inactive {
-    background: var(--color-gray-100);
-    color: var(--color-gray-600);
-}
-
-.logout-btn {
-    padding: 0.75rem 1.5rem;
-    background: transparent;
-    color: var(--color-gray-700);
-    border: 1px solid var(--color-gray-300);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    font-size: var(--font-size-sm);
-    transition: var(--transition-fast);
-    display: inline-block;
-}
-
-.logout-btn:hover {
-    background: var(--color-gray-50);
-    border-color: var(--color-gray-400);
-}
-
-.premium-cta {
-    background: var(--color-white);
-    border: 1px solid var(--color-gray-200);
-    border-radius: var(--radius-lg);
-    padding: 2rem;
-    margin-bottom: 3rem;
-    box-shadow: var(--shadow-sm);
-}
-
-.premium-cta h3 {
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-light);
-    color: var(--color-gray-900);
-    margin: 0 0 0.75rem 0;
-}
-
-.premium-cta p {
-    color: var(--color-gray-600);
-    margin-bottom: 1.5rem;
-    font-size: var(--font-size-sm);
-}
-
-.premium-buttons {
-    display: flex;
     gap: 1rem;
+    margin-bottom: 1.75rem;
     flex-wrap: wrap;
 }
-
-.btn-premium {
-    padding: 0.875rem 1.75rem;
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    cursor: pointer;
-    transition: var(--transition-fast);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+.library-head__who {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
 }
-
-.btn-subscribe {
-    background: var(--color-accent);
-    color: var(--color-white);
+.library-head .profile-icon {
+    width: 52px;
+    height: 52px;
 }
-
-.btn-subscribe:hover {
-    background: var(--color-accent-dark);
-}
-
-.btn-lifetime {
-    background: var(--color-gray-900);
-    color: var(--color-white);
-}
-
-.btn-lifetime:hover {
-    background: var(--color-primary-light);
-}
-
-.courses-section {
-    margin-top: 3rem;
-}
-
-.section-title {
+.library-head h1 {
+    margin: 0;
     font-family: var(--font-family-display);
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-light);
+    font-weight: 400;
+    font-size: 1.6rem;
     color: var(--color-gray-900);
-    margin-bottom: 2rem;
-    letter-spacing: -0.025em;
 }
-
-.courses-grid {
+.library-head p {
+    margin: 0.15rem 0 0;
+    color: var(--color-gray-600);
+    font-size: 0.92rem;
+}
+.library-logout {
+    padding: 0.6rem 1.1rem;
+    border: 1px solid var(--color-gray-300);
+    border-radius: 10px;
+    color: var(--color-gray-700);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+.library-logout:hover { background: var(--color-gray-50); }
+.library-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.15rem;
 }
-
-.course-card {
-    background: var(--color-white);
-    border: 1px solid var(--color-gray-200);
-    border-radius: var(--radius-lg);
+.library-card {
+    background: #fff;
+    border: 1px solid #ece4d8;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition-normal);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 20px rgba(0,0,0,.04);
+    transition: transform .15s ease;
 }
-
-.course-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+.library-card:hover { transform: translateY(-3px); }
+.library-card__cover {
+    aspect-ratio: 16 / 10;
+    background: #efe8dc;
+    overflow: hidden;
 }
-
-.course-image {
+.library-card__cover img {
     width: 100%;
-    height: 220px;
+    height: 100%;
     object-fit: cover;
     display: block;
 }
-
-.course-content {
-    padding: 1.5rem;
+.library-card__body { padding: 1rem 1rem 1.1rem; }
+.library-card__kicker {
+    margin: 0 0 0.25rem;
+    font-size: 0.75rem;
+    color: #8a6a3b;
+    text-transform: uppercase;
+    letter-spacing: .04em;
 }
-
-.course-title {
-    font-family: var(--font-family-display);
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-light);
-    color: var(--color-gray-900);
-    margin: 0 0 0.75rem 0;
+.library-card h2 {
+    margin: 0 0 0.7rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.3;
 }
-
-.course-description {
-    color: var(--color-gray-600);
-    font-size: var(--font-size-sm);
-    line-height: 1.6;
-    margin-bottom: 1.25rem;
-}
-
-.access-badge {
+.library-card__cta {
     display: inline-block;
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    background: #8a6a3b;
+    color: #fff;
+    padding: 0.45rem 0.85rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 650;
 }
-
-.access-unlocked {
-    background: rgba(201, 169, 110, 0.1);
-    color: var(--color-accent-dark);
-    border: 1px solid rgba(201, 169, 110, 0.2);
+.library-empty {
+    background: #fff;
+    border: 1px solid #ece4d8;
+    border-radius: 16px;
+    padding: 2.25rem 1.5rem;
+    text-align: center;
 }
-
-.access-locked {
-    background: var(--color-gray-100);
-    color: var(--color-gray-600);
-    border: 1px solid var(--color-gray-200);
-}
-
-.progress-section {
-    margin: 1.25rem 0;
-}
-
-.progress-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-    font-size: var(--font-size-xs);
-    color: var(--color-gray-600);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.progress-bar-container {
-    width: 100%;
-    height: 4px;
-    background: var(--color-gray-100);
-    border-radius: var(--radius-full);
-    overflow: hidden;
-    margin-bottom: 0.5rem;
-}
-
-.progress-bar {
-    height: 100%;
-    background: var(--color-accent);
-    transition: width 0.3s ease;
-}
-
-.progress-text {
-    font-size: var(--font-size-xs);
-    color: var(--color-gray-500);
-}
-
-.sessions-list {
-    margin-top: 1.25rem;
-    max-height: 320px;
-    overflow-y: auto;
-    padding-right: 0.5rem;
-}
-
-.sessions-list::-webkit-scrollbar {
-    width: 4px;
-}
-
-.sessions-list::-webkit-scrollbar-track {
-    background: var(--color-gray-50);
-    border-radius: var(--radius-full);
-}
-
-.sessions-list::-webkit-scrollbar-thumb {
-    background: var(--color-gray-300);
-    border-radius: var(--radius-full);
-}
-
-.sessions-title {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-gray-900);
-    margin-bottom: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.session-item {
-    padding: 0.875rem;
-    background: var(--color-gray-50);
-    border-left: 2px solid var(--color-gray-300);
-    border-radius: var(--radius-sm);
-    margin-bottom: 0.5rem;
-    transition: var(--transition-fast);
-}
-
-.session-item:hover {
-    background: var(--color-gray-100);
-}
-
-.session-item.completed {
-    background: rgba(201, 169, 110, 0.05);
-    border-left-color: var(--color-accent);
-}
-
-.session-item.available {
-    background: rgba(201, 169, 110, 0.05);
-    border-left-color: var(--color-accent-light);
-}
-
-.session-item.locked {
-    background: var(--color-gray-50);
-    border-left-color: var(--color-gray-300);
-    opacity: 0.7;
-}
-
-.session-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.375rem;
-}
-
-.session-icon {
-    font-size: var(--font-size-sm);
-}
-
-.session-title {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-gray-900);
-    flex: 1;
-}
-
-.free-badge {
-    font-size: var(--font-size-xs);
-    background: var(--color-accent);
-    color: var(--color-white);
-    padding: 0.125rem 0.5rem;
-    border-radius: var(--radius-sm);
-    font-weight: var(--font-weight-medium);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.session-meta {
-    font-size: var(--font-size-xs);
-    color: var(--color-gray-500);
-    margin-bottom: 0.5rem;
-}
-
-.session-link {
-    font-size: var(--font-size-xs);
-    color: var(--color-accent);
+.library-empty p { margin: 0 0 1.1rem; color: var(--color-gray-600); }
+.library-empty a {
+    display: inline-block;
+    background: #8a6a3b;
+    color: #fff;
+    padding: 0.8rem 1.25rem;
+    border-radius: 10px;
     text-decoration: none;
-    font-weight: var(--font-weight-medium);
-    transition: var(--transition-fast);
+    font-weight: 650;
 }
-
-.session-link:hover {
-    color: var(--color-accent-dark);
-    text-decoration: underline;
-}
-
-.view-course-btn {
-    display: block;
+.library-more {
     margin-top: 1.5rem;
-    padding: 0.875rem;
-    background: var(--color-gray-900);
-    color: var(--color-white);
     text-align: center;
-    text-decoration: none;
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: var(--transition-fast);
 }
-
-.view-course-btn:hover {
-    background: var(--color-primary-light);
-}
-
-.empty-state {
-    padding: 3rem;
-    background: var(--color-gray-50);
-    border-radius: var(--radius-lg);
-    text-align: center;
-    color: var(--color-gray-600);
-}
+.library-more a { color: #8a6a3b; font-weight: 650; }
 </style>
+{% endblock %}
 
-<div class="dashboard-container">
-    {% csrf_token %}
-    <div class="dashboard-header">
-        <h1 class="dashboard-title">{% trans "My Profile" %}</h1>
-    </div>
-    
-    <!-- User Profile Section -->
-    <div class="profile-card">
-        <div class="profile-header">
-            <div class="profile-info">
-                <h2>{{ user.email }}</h2>
-                <div class="profile-detail">
-                    <strong>{% trans "Subscription Status:" %}</strong>
-                    <span class="status-badge {% if profile.subscription_status == 'active' %}status-active{% else %}status-inactive{% endif %}">
-                        {{ profile.subscription_status|default:"inactive"|capfirst }}
-                    </span>
-                </div>
-                <div class="profile-detail">
-                    <strong>{% trans "Lifetime Access:" %}</strong>
-                    {% if profile.has_lifetime_access %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}
-                </div>
-                <div class="profile-detail">
-                    <strong>{% trans "Premium Access:" %}</strong>
-                    {% if has_premium_access %}
-                        <span class="status-badge status-active">{% trans "Active" %}</span>
-                    {% else %}
-                        <span class="status-badge status-inactive">{% trans "Not Active" %}</span>
-                    {% endif %}
-                </div>
+{% block content %}
+<div class="library-page">
+    <div class="library-head">
+        <div class="library-head__who">
+            {% include 'components/profile_icon.html' %}
+            <div>
+                <h1>{% trans "My Profile" %}</h1>
+                <p>{{ user.email }}</p>
             </div>
-            <a href="{% url 'users:logout' %}" class="logout-btn">
-                {% trans "Logout" %}
-            </a>
         </div>
+        <a class="library-logout" href="{% url 'users:logout' %}">{% trans "Logout" %}</a>
     </div>
-    
-    <!-- Premium Access CTA -->
-    {% if not has_premium_access %}
-    <div class="premium-cta">
-        <h3>{% trans "Get Premium Access" %}</h3>
-        <p>{% trans "You need premium access to view all courses. Choose an option:" %}</p>
-        <div class="premium-buttons">
-            <form method="POST" action="{% url 'payments:checkout_subscription' %}" style="display: inline;">
-                {% csrf_token %}
-                <button type="submit" class="btn-premium btn-subscribe">
-                    {% trans "Subscribe" %} ($0.50/{% trans "month" %})
-                </button>
-            </form>
-            <form method="POST" action="{% url 'payments:checkout_onetime' %}" style="display: inline;">
-                {% csrf_token %}
-                <button type="submit" class="btn-premium btn-lifetime">
-                    {% trans "Buy Lifetime" %} ($0)
-                </button>
-            </form>
-        </div>
-    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p class="auth-alert {% if message.tags == 'error' %}auth-alert--error{% else %}auth-alert--success{% endif %}" style="margin-bottom:1rem;">{{ message }}</p>
+        {% endfor %}
     {% endif %}
-    
-    <!-- Courses Section -->
-    <div class="courses-section">
-        <h2 class="section-title">{% trans "My Courses" %}</h2>
-        {% if course_access %}
-            <div class="courses-grid">
-                {% for item in course_access %}
-                <div class="course-card">
-                    {% if item.course.image %}
-                        <img src="{{ item.course.image.url }}" alt="{{ item.course.title }}" class="course-image">
+
+    {% if library %}
+        <div class="library-grid">
+            {% for item in library %}
+            <a class="library-card" href="{{ item.url }}">
+                <div class="library-card__cover">
+                    {% if item.cover_url %}
+                        <img src="{{ item.cover_url }}" alt="{{ item.title }}">
                     {% endif %}
-                    <div class="course-content">
-                        <h3 class="course-title">{{ item.course.title }}</h3>
-                        <p class="course-description">{{ item.course.description|truncatewords:25 }}</p>
-                        
-                        <!-- Access Status -->
-                        <div class="access-badge {% if item.has_access %}access-unlocked{% else %}access-locked{% endif %}">
-                            {% if item.has_access %}
-                                ✓ {% trans "Unlocked" %}
-                            {% else %}
-                                ✗ {% trans "Locked" %}
-                            {% endif %}
-                        </div>
-                        
-                        <!-- Progress Bar -->
-                        {% if item.has_access %}
-                        <div class="progress-section">
-                            <div class="progress-header">
-                                <span>{% trans "Progress" %}</span>
-                                <span>{{ item.course_progress }}%</span>
-                            </div>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar" style="width: {{ item.course_progress }}%;"></div>
-                            </div>
-                            <p class="progress-text">
-                                {{ item.completed_sessions }} / {{ item.total_sessions }} {% trans "sessions completed" %}
-                            </p>
-                        </div>
-                        {% endif %}
-                        
-                        <!-- Sessions/Videos List -->
-                        <div class="sessions-list">
-                            <h4 class="sessions-title">{% trans "Videos & Materials" %}</h4>
-                            <div>
-                                {% for session_data in item.sessions %}
-                                <div class="session-item {% if session_data.is_completed %}completed{% elif session_data.has_access %}available{% else %}locked{% endif %}">
-                                    <div class="session-header">
-                                        {% if session_data.is_completed %}
-                                            <span class="session-icon" style="color: var(--color-accent);">✓</span>
-                                        {% elif session_data.has_access %}
-                                            <span class="session-icon" style="color: var(--color-accent-light);">▶</span>
-                                        {% else %}
-                                            <span class="session-icon" style="color: var(--color-gray-400);">🔒</span>
-                                        {% endif %}
-                                        <strong class="session-title">{{ session_data.session.title }}</strong>
-                                        {% if session_data.is_free_preview %}
-                                            <span class="free-badge">{% trans "FREE" %}</span>
-                                        {% endif %}
-                                    </div>
-                                    <p class="session-meta">
-                                        {{ session_data.level.name }} • {{ session_data.session.duration }} {% trans "min" %}
-                                    </p>
-                                    {% if session_data.has_access and session_data.has_video %}
-                                        <a href="{% url 'course_detail' item.course.id %}?session={{ session_data.session.id }}" class="session-link">
-                                            ▶ {% trans "Watch Video" %}
-                                        </a>
-                                    {% elif not session_data.has_access %}
-                                        <span style="font-size: var(--font-size-xs); color: var(--color-gray-400);">{% trans "Purchase course to unlock" %}</span>
-                                    {% endif %}
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        
-                        <!-- View Course Button -->
-                        <a href="{% url 'course_detail' item.course.id %}" class="view-course-btn">
-                            {% trans "View Course" %} →
-                        </a>
-                    </div>
                 </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="empty-state">
-                <p>{% trans "No courses available." %}</p>
-            </div>
-        {% endif %}
-    </div>
+                <div class="library-card__body">
+                    {% if item.subtitle %}<p class="library-card__kicker">{{ item.subtitle }}</p>{% endif %}
+                    <h2>{{ item.title }}</h2>
+                    <span class="library-card__cta">{% trans "Watch" %}</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <p class="library-more">
+            <a href="{% url 'courses' %}">{% trans "Browse Courses" %}</a>
+        </p>
+    {% else %}
+        <div class="library-empty">
+            <p>{% trans "You haven't bought a course yet. After you buy, it will show up here." %}</p>
+            <a href="{% url 'courses' %}">{% trans "Browse Courses" %}</a>
+        </div>
+    {% endif %}
 </div>
-
-<script>
-// Make functions globally available immediately
-window.handleSubscriptionCheckout = function(e) {
-    if (e) e.preventDefault();
-    console.log('handleSubscriptionCheckout called');
-    
-    // Create a form and submit it to trigger the backend redirect
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '{% url "payments:checkout_subscription" %}';
-    
-    // Add CSRF token
-    const csrfInput = document.createElement('input');
-    csrfInput.type = 'hidden';
-    csrfInput.name = 'csrfmiddlewaretoken';
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || getCookie('csrftoken');
-    if (!csrfToken) {
-        alert('CSRF token not found. Please refresh the page.');
-        console.error('CSRF token not found');
-        return;
-    }
-    csrfInput.value = csrfToken;
-    form.appendChild(csrfInput);
-    
-    console.log('Submitting form to:', form.action);
-    // Submit form (will redirect to Stripe checkout via backend, or to login if not authenticated)
-    document.body.appendChild(form);
-    form.submit();
-};
-
-window.handleLifetimeCheckout = function(e) {
-    if (e) e.preventDefault();
-    console.log('handleLifetimeCheckout called');
-    
-    // Create a form and submit it to trigger the backend redirect
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '{% url "payments:checkout_onetime" %}';
-    
-    // Add CSRF token
-    const csrfInput = document.createElement('input');
-    csrfInput.type = 'hidden';
-    csrfInput.name = 'csrfmiddlewaretoken';
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || getCookie('csrftoken');
-    if (!csrfToken) {
-        alert('CSRF token not found. Please refresh the page.');
-        console.error('CSRF token not found');
-        return;
-    }
-    csrfInput.value = csrfToken;
-    form.appendChild(csrfInput);
-    
-    console.log('Submitting form to:', form.action);
-    // Submit form (will redirect to Stripe checkout via backend, or to login if not authenticated)
-    document.body.appendChild(form);
-    form.submit();
-};
-
-// Helper function to get CSRF token from cookies
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-// Test on page load
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Dashboard page loaded');
-    console.log('handleSubscriptionCheckout available:', typeof window.handleSubscriptionCheckout);
-    console.log('handleLifetimeCheckout available:', typeof window.handleLifetimeCheckout);
-});
-</script>
 {% endblock %}

@@ -3,6 +3,7 @@ Django settings for Latina Dance Academy project.
 """
 
 import os
+import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -13,12 +14,24 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-0558k^nz=coqjw)15it-8444p=6y1=@(ixj4e_u7bwp^pqke8c')
+# No hardcoded fallback — forged sessions are possible if a known default is used.
+SECRET_KEY = os.environ.get('SECRET_KEY')
+if not SECRET_KEY:
+    print(
+        "FATAL: SECRET_KEY environment variable is not set. Refusing to start.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+# Default is False — must explicitly set DEBUG=True in .env for local dev.
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0').split(',')
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+    if host.strip()
+]
 
 # File upload settings for massive bulk uploads (30-100+ files)
 DATA_UPLOAD_MAX_MEMORY_SIZE = 524288000  # 500MB
@@ -39,7 +52,8 @@ INSTALLED_APPS = [
     'multiupload',
     'django_cleanup.apps.CleanupConfig',
     'storages',  # for AWS S3 storage
-    'courses',
+    'courses.apps.CoursesConfig',
+    'catalog.apps.CatalogConfig',
     'gallery',
     'newsletter',
     'users',
@@ -150,13 +164,23 @@ EMAIL_HOST_PASSWORD = 'your-app-password'  # ← REPLACE WITH GMAIL APP PASSWORD
 
 DEFAULT_FROM_EMAIL = 'your-gmail@gmail.com'  # ← REPLACE WITH YOUR GMAIL ADDRESS
 
+def _env_value(key, default=''):
+    """Read env var and strip inline comments / extra whitespace."""
+    raw = os.environ.get(key, default) or default
+    return raw.split('#', 1)[0].strip()
+
+
 # Stripe configuration
-STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
-STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
-STRIPE_PRICE_SUB = os.environ.get('STRIPE_PRICE_SUB', '')
-STRIPE_PRICE_ONE_TIME = os.environ.get('STRIPE_PRICE_ONE_TIME', '')
+STRIPE_SECRET_KEY = _env_value('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = _env_value('STRIPE_WEBHOOK_SECRET')
+STRIPE_PRICE_SUB = _env_value('STRIPE_PRICE_SUB')
+STRIPE_PRICE_ONE_TIME = _env_value('STRIPE_PRICE_ONE_TIME')
 # For frontend - try both VITE and NEXT_PUBLIC prefixes
-STRIPE_PUBLISHABLE_KEY = os.environ.get('VITE_STRIPE_PUBLISHABLE_KEY') or os.environ.get('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY') or os.environ.get('STRIPE_PUBLISHABLE_KEY', '')
+STRIPE_PUBLISHABLE_KEY = (
+    _env_value('VITE_STRIPE_PUBLISHABLE_KEY')
+    or _env_value('NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY')
+    or _env_value('STRIPE_PUBLISHABLE_KEY')
+)
 
 # SETUP INSTRUCTIONS:
 # 1. Go to Gmail → Settings → Security → 2-Step Verification

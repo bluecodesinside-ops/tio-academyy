@@ -1,0 +1,37 @@
+<div class="insight-toplist" data-insight-tabs>
+  <h2>Top list</h2>
+  <div class="insight-tabs">
+    <button type="button" class="is-on" data-tab="countries">Countries</button>
+    <button type="button" data-tab="devices">Devices</button>
+    <button type="button" data-tab="pages">Requests</button>
+    <button type="button" data-tab="buy">Buy clicks</button>
+  </div>
+  {% for key, rows, empty in toplist_tabs %}
+  <div data-panel="{{ key }}" {% if key != 'countries' %}hidden{% endif %}>
+    {% for row in rows %}
+    <div class="insight-row">
+      <span class="n">{{ forloop.counter }}</span>
+      <span class="label">{% if key == 'devices' %}{{ row.label|title }}{% else %}{{ row.label }}{% endif %}</span>
+      <strong>{{ row.count }}</strong>
+    </div>
+    {% empty %}
+    <p class="empty">{{ empty }}</p>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+<script>
+(function(){
+  document.querySelectorAll('[data-insight-tabs]').forEach(function(root){
+    var tabs = root.querySelectorAll('[data-tab]');
+    var panels = root.querySelectorAll('[data-panel]');
+    tabs.forEach(function(tab){
+      tab.addEventListener('click', function(){
+        var key = tab.getAttribute('data-tab');
+        tabs.forEach(function(item){ item.classList.toggle('is-on', item === tab); });
+        panels.forEach(function(panel){ panel.hidden = panel.getAttribute('data-panel') !== key; });
+      });
+    });
+  });
+})();
+</script>

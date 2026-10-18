@@ -1,0 +1,7 @@
+{% if now %}
+<span class="sale-price">
+  {% if was %}<s class="sale-price__was">{{ currency }}{{ was }}</s>{% endif %}
+  <strong class="sale-price__now">{{ currency }}{{ now }}</strong>
+  {% if was %}<span class="sale-price__off">-{{ off|floatformat:0 }}%</span>{% endif %}
+</span>
+{% endif %}

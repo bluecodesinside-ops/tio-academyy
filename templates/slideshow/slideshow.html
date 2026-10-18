@@ -1,30 +1,56 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+{% load static %}
+{% load i18n %}
 
-<div class="luxury-video-slideshow-wrap">
-    {% if slideshow_youtube_slides %}
-    <div class="splide luxury-video-splide" id="luxury-video-splide" aria-label="Featured videos">
+<div class="tio-showcase-wrap">
+    {% if slideshow_slides %}
+    <div class="splide tio-showcase-splide" id="tio-showcase-splide" aria-label="Tio Academy showcase">
         <div class="splide__track">
             <ul class="splide__list">
-                {% for item in slideshow_youtube_slides %}
+                {% for item in slideshow_slides %}
                 <li class="splide__slide">
-                    <div class="luxury-video-slide">
-                        <div class="luxury-video-frame">
+                    <div class="tio-showcase-slide">
+                        <div class="tio-showcase-frame">
+                            {% if item.slide_kind == 'video_file' %}
+                            <video
+                                class="tio-showcase-video"
+                                {% if item.poster_url %}poster="{{ item.poster_url }}"{% endif %}
+                                autoplay
+                                muted
+                                loop
+                                playsinline
+                                webkit-playsinline
+                                x5-playsinline
+                                preload="metadata">
+                                <source src="{{ item.media_url }}" type="video/mp4">
+                            </video>
+                            {% elif item.slide_kind == 'youtube' %}
                             <iframe
-                                class="luxury-video-iframe"
-                                src="{{ item.youtube_embed_src }}"
+                                class="tio-showcase-iframe"
+                                src="{{ item.media_url }}"
                                 title="{{ item.title|striptags|truncatechars:120 }}"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                                 allowfullscreen
+                                webkitallowfullscreen
+                                playsinline
                                 referrerpolicy="strict-origin-when-cross-origin"
                                 loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
                             </iframe>
+                            {% else %}
+                            <img
+                                class="tio-showcase-image"
+                                src="{{ item.media_url }}"
+                                alt="{{ item.title|striptags|truncatechars:120 }}"
+                                loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+                            {% endif %}
+                            <div class="tio-showcase-overlay"></div>
+                            {% if item.title or item.description %}
+                            <div class="tio-showcase-caption">
+                                {% if item.title %}<h2 class="tio-showcase-caption__title">{{ item.title }}</h2>{% endif %}
+                                {% if item.description %}<p class="tio-showcase-caption__text">{{ item.description }}</p>{% endif %}
+                                <a href="{% url 'courses' %}" class="tio-showcase-caption__cta">{% trans "Explore Courses" %}</a>
+                            </div>
+                            {% endif %}
                         </div>
-                        {% if item.title or item.description %}
-                        <div class="luxury-video-caption">
-                            {% if item.title %}<h2 class="luxury-video-caption__title">{{ item.title }}</h2>{% endif %}
-                            {% if item.description %}<p class="luxury-video-caption__text">{{ item.description }}</p>{% endif %}
-                        </div>
-                        {% endif %}
                     </div>
                 </li>
                 {% endfor %}
@@ -32,74 +58,99 @@
         </div>
     </div>
     {% else %}
-    <div class="luxury-video-slideshow-empty" role="status">
-        <p class="luxury-video-slideshow-empty__title">Video showcase</p>
-        <p class="luxury-video-slideshow-empty__hint">Add active slideshow items with <strong>Video</strong> type and a <strong>YouTube</strong> URL in the admin.</p>
+    <div class="tio-showcase-empty" role="status">
+        <p class="tio-showcase-empty__title">{% trans "Tio Academy Showcase" %}</p>
+        <p class="tio-showcase-empty__hint">{% trans "Add slideshow images or videos in the admin." %}</p>
     </div>
     {% endif %}
 </div>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
 <style>
-.luxury-video-slideshow-wrap {
+.tio-showcase-wrap {
     max-width: 1100px;
     margin: var(--spacing-4xl) auto;
 }
 
-.luxury-video-splide {
-    padding: 0 3rem 3rem;
+.tio-showcase-splide {
+    padding: 0 3rem 2.75rem;
 }
 
-.luxury-video-slide {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-xl);
-}
-
-.luxury-video-frame {
+.tio-showcase-frame {
     position: relative;
     width: 100%;
-    max-width: 100%;
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    border-radius: 12px;
-    background: #0a0a0a;
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
+    border-radius: 14px;
+    background: #111;
+    box-shadow: 0 28px 56px rgba(0, 0, 0, 0.28);
 }
 
-.luxury-video-iframe {
+.tio-showcase-video,
+.tio-showcase-image,
+.tio-showcase-iframe {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     border: 0;
+    object-fit: cover;
+    background: #111 center / cover no-repeat;
 }
 
-.luxury-video-caption {
-    text-align: center;
+.tio-showcase-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10,10,10,0.15) 0%, rgba(10,10,10,0.25) 45%, rgba(10,10,10,0.72) 100%);
+    pointer-events: none;
+}
+
+.tio-showcase-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1.5rem 1.75rem 1.75rem;
+    color: #fafafa;
+    z-index: 2;
     max-width: 640px;
-    padding: 0 var(--spacing-lg);
 }
 
-.luxury-video-caption__title {
+.tio-showcase-caption__title {
     font-family: var(--font-family-display, 'Playfair Display', Georgia, serif);
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-semibold);
-    color: #0a0a0a;
-    margin: 0 0 var(--spacing-sm);
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    font-weight: 600;
+    margin: 0 0 0.4rem;
     letter-spacing: -0.02em;
 }
 
-.luxury-video-caption__text {
-    font-family: var(--font-family-primary, system-ui, sans-serif);
-    font-size: var(--font-size-base);
-    color: #525252;
-    line-height: 1.6;
-    margin: 0;
+.tio-showcase-caption__text {
+    margin: 0 0 0.9rem;
+    color: rgba(250, 250, 250, 0.88);
+    font-size: 0.98rem;
+    line-height: 1.55;
 }
 
-/* Splide arrows — minimal monochrome circles */
-.luxury-video-splide .splide__arrow {
+.tio-showcase-caption__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.1rem;
+    border-radius: 999px;
+    background: #fafafa;
+    color: #0a0a0a;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.tio-showcase-caption__cta:hover {
+    transform: translateY(-1px);
+    background: #fff;
+}
+
+.tio-showcase-splide .splide__arrow {
     background: #fff;
     border: 1px solid #e5e5e5;
     width: 44px;
@@ -109,34 +160,28 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-.luxury-video-splide .splide__arrow:hover {
+.tio-showcase-splide .splide__arrow:hover {
     background: #0a0a0a;
     border-color: #0a0a0a;
 }
 
-.luxury-video-splide .splide__arrow svg {
+.tio-showcase-splide .splide__arrow svg {
     fill: #0a0a0a;
 }
 
-.luxury-video-splide .splide__arrow:hover svg {
+.tio-showcase-splide .splide__arrow:hover svg {
     fill: #fff;
 }
 
-.luxury-video-splide .splide__arrow--prev {
-    left: 0;
-}
+.tio-showcase-splide .splide__arrow--prev { left: 0; }
+.tio-showcase-splide .splide__arrow--next { right: 0; }
 
-.luxury-video-splide .splide__arrow--next {
-    right: 0;
-}
-
-/* Pagination dots */
-.luxury-video-splide .splide__pagination {
-    bottom: 0.5rem;
+.tio-showcase-splide .splide__pagination {
+    bottom: 0.35rem;
     gap: 0.5rem;
 }
 
-.luxury-video-splide .splide__pagination__page {
+.tio-showcase-splide .splide__pagination__page {
     background: #d4d4d4;
     opacity: 1;
     width: 8px;
@@ -144,15 +189,15 @@
     margin: 0;
 }
 
-.luxury-video-splide .splide__pagination__page.is-active {
+.tio-showcase-splide .splide__pagination__page.is-active {
     background: #0a0a0a;
     transform: scale(1.25);
 }
 
-.luxury-video-slideshow-empty {
+.tio-showcase-empty {
     aspect-ratio: 16 / 9;
     max-height: 420px;
-    border-radius: 12px;
+    border-radius: 14px;
     background: #f5f5f5;
     border: 1px solid #e5e5e5;
     display: flex;
@@ -163,14 +208,14 @@
     padding: var(--spacing-4xl);
 }
 
-.luxury-video-slideshow-empty__title {
+.tio-showcase-empty__title {
     font-family: var(--font-family-display, Georgia, serif);
     font-size: var(--font-size-xl);
     color: #0a0a0a;
     margin: 0 0 var(--spacing-md);
 }
 
-.luxury-video-slideshow-empty__hint {
+.tio-showcase-empty__hint {
     font-size: var(--font-size-sm);
     color: #525252;
     max-width: 400px;
@@ -179,41 +224,61 @@
 }
 
 @media (max-width: 768px) {
-    .luxury-video-splide {
+    .tio-showcase-splide {
         padding: 0 0 2.5rem;
     }
 
-    .luxury-video-splide .splide__arrow {
+    .tio-showcase-caption {
+        padding: 1rem 1.1rem 1.2rem;
+    }
+
+    .tio-showcase-splide .splide__arrow {
         width: 38px;
         height: 38px;
     }
 
-    .luxury-video-splide .splide__arrow--prev {
-        left: 0.25rem;
-    }
-
-    .luxury-video-splide .splide__arrow--next {
-        right: 0.25rem;
-    }
+    .tio-showcase-splide .splide__arrow--prev { left: 0.25rem; }
+    .tio-showcase-splide .splide__arrow--next { right: 0.25rem; }
 }
 </style>
 
-{% if slideshow_youtube_slides %}
+{% if slideshow_slides %}
 <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    var root = document.getElementById('luxury-video-splide');
+    var root = document.getElementById('tio-showcase-splide');
     if (!root || typeof Splide === 'undefined') return;
-    new Splide(root, {
+
+    var splide = new Splide(root, {
         type: 'fade',
         rewind: true,
-        speed: 600,
+        speed: 700,
+        autoplay: true,
+        interval: 7000,
+        pauseOnHover: true,
+        pauseOnFocus: true,
         easing: 'cubic-bezier(0.25, 1, 0.3, 1)',
         pagination: true,
         arrows: true,
         drag: true,
         keyboard: true,
-    }).mount();
+    });
+
+    function syncVideos(activeIndex) {
+        root.querySelectorAll('.tio-showcase-video').forEach(function (video, index) {
+            if (index === activeIndex) {
+                video.play().catch(function () {});
+            } else {
+                video.pause();
+            }
+        });
+    }
+
+    splide.on('mounted move', function () {
+        syncVideos(splide.index);
+    });
+
+    splide.mount();
 });
 </script>
 {% endif %}

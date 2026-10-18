@@ -325,7 +325,7 @@ class Video(models.Model):
         else:
             return None
         
-        return f"https://www.youtube.com/embed/{video_id}"
+        return f"https://www.youtube.com/embed/{video_id}?playsinline=1&rel=0"
 
     def get_duration_display(self):
         """Format duration as MM:SS or HH:MM:SS"""

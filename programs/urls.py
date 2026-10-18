@@ -1,28 +1,34 @@
+"""
+Explore Programs URLs now redirect to /courses/.
+
+Legacy path names are preserved so old links and reverse() still resolve,
+then bounce users to the unified Courses catalog.
+"""
+from django.shortcuts import redirect
 from django.urls import path
-from . import views
 
 app_name = 'programs'
 
+
+def redirect_to_courses(request, **kwargs):
+    """Ignore legacy hierarchy kwargs; always send users to /courses/."""
+    return redirect('courses')
+
+
 urlpatterns = [
-    # Level 1: Dance Styles
-    path('', views.explore_programs, name='explore_programs'),
-    
-    # Level 2: Categories
-    path('<str:style_slug>/', views.dance_style_detail, name='dance_style'),
-    
-    # Level 3: Skill Levels
-    path('<str:style_slug>/<str:category_slug>/', views.category_detail, name='category'),
-    
-    # Level 4: Videos
-    path('<str:style_slug>/<str:category_slug>/<str:level>/', views.skill_level_detail, name='skill_level'),
-    path('<str:style_slug>/<str:category_slug>/<str:level>/<str:video_slug>/', views.video_detail, name='video_detail'),
-    
-    # Additional functionality
-    path('search/', views.search_programs, name='search'),
-    path('purchase/<int:video_id>/', views.purchase_video, name='purchase_video'),
+    path('', redirect_to_courses, name='explore_programs'),
+    path('search/', redirect_to_courses, name='search'),
+    path('purchase/<int:video_id>/', redirect_to_courses, name='purchase_video'),
+    path('<str:style_slug>/', redirect_to_courses, name='dance_style'),
+    path('<str:style_slug>/<str:category_slug>/', redirect_to_courses, name='category'),
+    path(
+        '<str:style_slug>/<str:category_slug>/<str:level>/',
+        redirect_to_courses,
+        name='skill_level',
+    ),
+    path(
+        '<str:style_slug>/<str:category_slug>/<str:level>/<str:video_slug>/',
+        redirect_to_courses,
+        name='video_detail',
+    ),
 ]
-
-
-
-
-

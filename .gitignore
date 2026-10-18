@@ -77,3 +77,7 @@ Thumbs.db
 static/videos/
 *.mp4
 
+# IP-to-country lookup tables (downloaded on the server)
+users/data/*.csv
+users/data/*.tmp
+

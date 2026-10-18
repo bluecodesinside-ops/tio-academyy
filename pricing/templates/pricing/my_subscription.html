@@ -279,7 +279,7 @@
     <div class="subscription-card">
         <div class="subscription-header">
             <div>
-                <h1 class="subscription-title">{{ subscription.package.name }} Package</h1>
+                <h1 class="subscription-title">{{ subscription.package.name }} {% trans "Package" %}</h1>
                 <span class="status-badge status-{{ subscription.status }}">
                     {{ subscription.get_status_display }}
                 </span>
@@ -288,13 +288,13 @@
                 <div class="subscription-price">
                     ${{ subscription.package.monthly_price|floatformat:0 }}
                     {% if subscription.billing_cycle == 'yearly' %}
-                        / year
+                        {% trans "/ year" %}
                     {% else %}
-                        / month
+                        {% trans "/ month" %}
                     {% endif %}
                 </div>
                 <div class="subscription-period">
-                    {{ subscription.billing_cycle|title }} billing
+                    {{ subscription.billing_cycle|title }} {% trans "billing" %}
                 </div>
             </div>
         </div>
@@ -304,21 +304,21 @@
         <!-- Subscription Details -->
         <div class="subscription-info">
             <div class="info-item">
-                <div class="info-label">Next Billing Date</div>
+                <div class="info-label">{% trans "Next Billing Date" %}</div>
                 <div class="info-value">
                     {{ subscription.current_period_end|date:"F j, Y" }}
                 </div>
             </div>
             
             <div class="info-item">
-                <div class="info-label">Billing Cycle</div>
+                <div class="info-label">{% trans "Billing Cycle" %}</div>
                 <div class="info-value">
                     {{ subscription.billing_cycle|title }}
                 </div>
             </div>
             
             <div class="info-item">
-                <div class="info-label">Subscription Started</div>
+                <div class="info-label">{% trans "Subscription Started" %}</div>
                 <div class="info-value">
                     {{ subscription.created_at|date:"F j, Y" }}
                 </div>
@@ -326,9 +326,9 @@
             
             {% if subscription.cancel_at_period_end %}
             <div class="info-item">
-                <div class="info-label">Cancellation</div>
+                <div class="info-label">{% trans "Cancellation" %}</div>
                 <div class="info-value" style="color: var(--color-accent);">
-                    Ends {{ subscription.current_period_end|date:"F j, Y" }}
+                    {% trans "Ends" %} {{ subscription.current_period_end|date:"F j, Y" }}
                 </div>
             </div>
             {% endif %}
@@ -336,7 +336,7 @@
         
         <!-- Features -->
         <div>
-            <h3 style="font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold); color: var(--color-primary); margin-bottom: var(--spacing-lg);">What's Included:</h3>
+            <h3 style="font-size: var(--font-size-xl); font-weight: var(--font-weight-semibold); color: var(--color-primary); margin-bottom: var(--spacing-lg);">{% trans "What's Included:" %}</h3>
             <ul class="subscription-features">
                 {% for feature in subscription.package.get_features_list %}
                 <li>{{ feature }}</li>
@@ -346,24 +346,24 @@
         
         <!-- Action Buttons -->
         <div class="action-buttons">
-            <a href="{% url 'programs:explore_programs' %}" class="action-button action-button--primary">
+            <a href="{% url 'courses' %}" class="action-button action-button--primary">
                 <i class="fas fa-play" style="margin-right: var(--spacing-sm);"></i>
-                Access Content
+                {% trans "Access Content" %}
             </a>
             
             {% if not subscription.cancel_at_period_end %}
             <form method="post" action="{% url 'pricing:cancel_subscription' %}" style="display: inline;">
                 {% csrf_token %}
                 <button type="submit" class="action-button action-button--danger" 
-                        onclick="return confirm('Are you sure you want to cancel your subscription? You will lose access at the end of your current billing period.')">
+                        onclick="return confirm('{% filter escapejs %}{% trans "Are you sure you want to cancel your subscription? You will lose access at the end of your current billing period." %}{% endfilter %}')">
                     <i class="fas fa-times" style="margin-right: var(--spacing-sm);"></i>
-                    Cancel Subscription
+                    {% trans "Cancel Subscription" %}
                 </button>
             </form>
             {% else %}
             <span class="action-button action-button--secondary">
                 <i class="fas fa-info-circle" style="margin-right: var(--spacing-sm);"></i>
-                Cancelled (ends {{ subscription.current_period_end|date:"M j" }})
+                {% trans "Cancelled" %} ({% trans "ends" %} {{ subscription.current_period_end|date:"M j" }})
             </span>
             {% endif %}
         </div>
@@ -375,20 +375,20 @@
         <div class="no-subscription__icon">
             <i class="fas fa-user-slash"></i>
         </div>
-        <h1 class="no-subscription__title">No Active Subscription</h1>
+        <h1 class="no-subscription__title">{% trans "No Active Subscription" %}</h1>
         <p class="no-subscription__message">
-            You don't have an active subscription. Choose a plan to get started with your dance journey!
+            {% trans "You don't have an active subscription. Choose a plan to get started with your dance journey!" %}
         </p>
         
         <div class="action-buttons">
             <a href="{% url 'pricing:pricing_page' %}" class="action-button action-button--primary">
                 <i class="fas fa-credit-card" style="margin-right: var(--spacing-sm);"></i>
-                View Pricing Plans
+                {% trans "View Pricing Plans" %}
             </a>
             
-            <a href="{% url 'programs:explore_programs' %}" class="action-button action-button--secondary">
+            <a href="{% url 'courses' %}" class="action-button action-button--secondary">
                 <i class="fas fa-play" style="margin-right: var(--spacing-sm);"></i>
-                Try Free Content
+                {% trans "Try Free Content" %}
             </a>
         </div>
     </div>
@@ -396,21 +396,21 @@
     
     <!-- Help Section -->
     <div class="help-section">
-        <h3 class="help-title">Need Help?</h3>
+        <h3 class="help-title">{% trans "Need Help?" %}</h3>
         <p class="help-description">
-            Have questions about your subscription or need assistance? We're here to help!
+            {% trans "Have questions about your subscription or need assistance? We're here to help!" %}
         </p>
         
         <div class="help-grid">
             <div class="help-item">
-                <h4>Billing Questions</h4>
-                <p>Questions about charges, refunds, or billing cycles.</p>
+                <h4>{% trans "Billing Questions" %}</h4>
+                <p>{% trans "Questions about charges, refunds, or billing cycles." %}</p>
                 <a href="mailto:billing@tioacademy.com">billing@tioacademy.com</a>
             </div>
             
             <div class="help-item">
-                <h4>Technical Support</h4>
-                <p>Issues with accessing content or account problems.</p>
+                <h4>{% trans "Technical Support" %}</h4>
+                <p>{% trans "Issues with accessing content or account problems." %}</p>
                 <a href="mailto:support@tioacademy.com">support@tioacademy.com</a>
             </div>
         </div>

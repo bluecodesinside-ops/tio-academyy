@@ -1,33 +1,32 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}FAQ - Latina Dance Academy{% endblock %}
+{% block title %}{% trans "FAQ" %} - {% trans "Tio Academy" %}{% endblock %}
 
 {% block content %}
-<!-- Page Header -->
 <section class="page-header">
     <div class="container">
-        <h1>Frequently Asked Questions</h1>
-        <p>Find answers to common questions about our courses</p>
+        <h1>{% trans "Frequently Asked Questions" %}</h1>
+        <p>{% trans "Find answers to common questions about our courses" %}</p>
     </div>
 </section>
 
-<!-- FAQ Content -->
 <section class="faq-content">
     <div class="container">
         <div class="faq-item">
-            <h3>How do I get started with the courses?</h3>
-            <p>Simply browse our course catalog and choose the dance style that interests you. Each course is designed for beginners and progresses to advanced levels.</p>
+            <h3>{% trans "How do I get started with the courses?" %}</h3>
+            <p>{% trans "Simply browse our course catalog and choose the dance style that interests you. Each course is designed for beginners and progresses to advanced levels." %}</p>
         </div>
-        
+
         <div class="faq-item">
-            <h3>Do I need any special equipment?</h3>
-            <p>No special equipment is required. Just wear comfortable clothing and shoes that allow you to move freely. A dance floor or open space is recommended.</p>
+            <h3>{% trans "Do I need any special equipment?" %}</h3>
+            <p>{% trans "No special equipment is required. Just wear comfortable clothing and shoes that allow you to move freely. A dance floor or open space is recommended." %}</p>
         </div>
-        
+
         <div class="faq-item">
-            <h3>Can I learn at my own pace?</h3>
-            <p>Absolutely! All our courses are self-paced, so you can learn whenever it's convenient for you. You have lifetime access to the course materials.</p>
+            <h3>{% trans "Can I learn at my own pace?" %}</h3>
+            <p>{% trans "Absolutely! All our courses are self-paced, so you can learn whenever it's convenient for you. You have lifetime access to the course materials." %}</p>
         </div>
     </div>
 </section>
